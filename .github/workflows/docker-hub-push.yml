@@ -39,3 +39,6 @@ jobs:
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: Trigger Azure WebHook
+        run: 'curl "https://%24test-2-fml:$AZURE_WEBAPP_MASTER_PASSWORD@test-2-fml.scm.azurewebsites.net/docker/hook" -X POST --data "{}" --header "Content-Type: application/json" -v'
