@@ -36,14 +36,27 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Build and push
-        id: docker_build
+      - name: Build and push (Push)
+        id: docker_build_push
+        if: ${{ github.event.issue.push }}
         uses: docker/build-push-action@v2
         with:
           context: ./
           file: ./src/main/docker/Dockerfile.jvm
           push: true
           tags: jb4adopt/adopt-test:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          
+      - name: Build and push (PR)
+        id: docker_build_pr
+        if: ${{ github.event.issue.pull_request }}
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./src/main/docker/Dockerfile.jvm
+          push: true
+          tags: jb4adopt/adopt-test:pr-${{github.event.number}}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 
