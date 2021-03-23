@@ -10,12 +10,22 @@ import static org.hamcrest.CoreMatchers.is;
 public class GreetingResourceTest {
 
     @Test
-    public void testHelloEndpoint() {
-        given()
+    public void testHelloEndpointEnglish() {
+        given().header("Accept-Language", "en-US") //chrome and edge sends with a "-"
           .when().get("/hello")
           .then()
              .statusCode(200)
-             .body(is("Hello World"));
+             .body(is("Hello World!"));
     }
+
+    @Test
+    public void testHelloEndpointGerman() {
+        given().header("Accept-Language", "de,en-US;q=0.7,en;q=0.3") //chrome and edge sends with a "-"
+                .when().get("/hello")
+                .then()
+                .statusCode(200)
+                .body(is("Hallo Welt!"));
+    }
+
 
 }

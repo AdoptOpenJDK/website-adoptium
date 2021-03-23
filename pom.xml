@@ -52,6 +52,15 @@
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>io.quarkus.resteasy.reactive</groupId>
+          <artifactId>resteasy-reactive-common</artifactId>
+          <version>1.12.2.Final</version>
+      </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
