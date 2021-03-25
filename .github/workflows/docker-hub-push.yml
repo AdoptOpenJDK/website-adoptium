@@ -92,6 +92,9 @@ jobs:
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_APP: adoptium-staging
+    
+    - name: Retag image for Heroku
+      run: docker tag jb4adopt/adopt-test registry.heroku.com/adoptium-staging/web
 
     - name: Build and Push to Heroku Registry
       uses: actions/heroku@master
