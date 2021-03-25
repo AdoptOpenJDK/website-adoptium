@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Build app
-        run: ./mvnw package
+        run: ./mvnw verify
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1

@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Build app
-        run: ./mvnw package
+        run: ./mvnw verify
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
