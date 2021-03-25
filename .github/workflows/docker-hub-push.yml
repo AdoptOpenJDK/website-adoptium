@@ -44,7 +44,7 @@ jobs:
           context: ./
           file: ./src/main/docker/Dockerfile.jvm
           push: true
-          tags: jb4adopt/adopt-test:latest, registry.heroku.com/adoptium-staging/web:latest
+          tags: jb4adopt/adopt-test:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           
