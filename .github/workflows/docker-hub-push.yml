@@ -44,7 +44,7 @@ jobs:
           context: ./
           file: ./src/main/docker/Dockerfile.jvm
           push: true
-          tags: jb4adopt/adopt-test:latest
+          tags: jb4adopt/adopt-test:latest, registry.heroku.com/adoptium-staging/web:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           
@@ -96,7 +96,7 @@ jobs:
     - name: Build and Push to Heroku Registry
       uses: actions/heroku@master
       with:
-        args: container:push web
+        args: container:push registry.heroku.com/adoptium-staging/web
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_APP: adoptium-staging
