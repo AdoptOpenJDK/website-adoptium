@@ -91,7 +91,7 @@ jobs:
         args: container:login
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        HEROKU_APP: adoptium-test
+        HEROKU_APP: adoptium-staging
 
     - name: Build and Push to Heroku Registry
       uses: actions/heroku@master
@@ -99,7 +99,7 @@ jobs:
         args: container:push web
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        HEROKU_APP: adoptium-test
+        HEROKU_APP: adoptium-staging
 
     - name: Trigger release in Heroku
       uses: actions/heroku@master
@@ -107,4 +107,4 @@ jobs:
         args: container:release web
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        HEROKU_APP: adoptium-test
+        HEROKU_APP: adoptium-staging
