@@ -1,5 +1,0 @@
-build:
-  docker:
-    web: src/main/docker/Dockerfile.jvm
-run:
-  web: /deployments/run-java.sh

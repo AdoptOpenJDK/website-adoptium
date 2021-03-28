@@ -70,44 +70,6 @@ jobs:
           name: target
           path: target
 
-#      - name: Trigger Azure Deployment WebHook
-#        run: 'curl "https://%24test-2-fml:${{ secrets.AZURE_WEBAPP_MASTER_PASSWORD }}@test-2-fml.scm.azurewebsites.net/docker/hook" -X POST --data "{}" --header "Content-Type: application/json" -v --fail'
-
-  deploy_to_heroku:
-    name: Deploy to Heroku
-    runs-on: ubuntu-latest
-    needs: [build]
-    if: ${{ github.event_name == 'push' }}
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Download target from previous job
-      uses: actions/download-artifact@v1
-      with:
-        name: target
-    - name: Login into Heroku
-      uses: actions/heroku@master
-      with:
-        args: container:login
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        HEROKU_APP: adoptium-staging
-    
-    - name: Retag image for Heroku
-      run: docker tag jb4adopt/adopt-test registry.heroku.com/adoptium-staging/web
-
-    - name: Build and Push to Heroku Registry
-      uses: actions/heroku@master
-      with:
-        args: container:push registry.heroku.com/adoptium-staging/web
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        HEROKU_APP: adoptium-staging
-
-    - name: Trigger release in Heroku
-      uses: actions/heroku@master
-      with:
-        args: container:release web
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        HEROKU_APP: adoptium-staging
+      - name: Trigger Azure Staging Deployment WebHook
+        if: ${{ github.event_name == 'push' }}
+        run: 'curl "https://$adoptium-staging:${{ secrets.AZURE_WEBAPP_STAGING_WEBHOOK_SECRET }}@adoptium-staging.scm.azurewebsites.net/docker/hook" -X POST --data "{}" --header "Content-Type: application/json" -v --fail'
