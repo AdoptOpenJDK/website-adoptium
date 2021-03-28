@@ -72,4 +72,4 @@ jobs:
 
       - name: Trigger Azure Staging Deployment WebHook
         if: ${{ github.event_name == 'push' }}
-        run: 'curl "https://$adoptium-staging:${{ secrets.AZURE_WEBAPP_STAGING_WEBHOOK_SECRET }}@adoptium-staging.scm.azurewebsites.net/docker/hook" -X POST --data "{}" --header "Content-Type: application/json" -v --fail'
+        run: 'curl "https://\$adoptium-staging:${{ secrets.AZURE_WEBAPP_STAGING_WEBHOOK_SECRET }}@adoptium-staging.scm.azurewebsites.net/docker/hook" -X POST --data "{}" --header "Content-Type: application/json" -v --fail'
