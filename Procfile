@@ -1,0 +1,1 @@
+web: ./mvnw quarkus:dev
