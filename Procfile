@@ -1,1 +1,1 @@
-web: ./mvnw quarkus:dev
+web: /deployments/run-java.sh
