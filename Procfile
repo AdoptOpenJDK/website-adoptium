@@ -1,2 +1,1 @@
-web: /deployments/run-java.sh
--XX:+UseContainerSupport
+web: java -jar target/quarkus-app/quarkus-run.jar
