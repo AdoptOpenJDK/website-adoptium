@@ -1,42 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{acceptLanguage}">
 <head>
     <meta charset="UTF-8">
     <title>website-adoptium - 1.0.0-SNAPSHOT</title>
 </head>
 <body>
-    <div class="banner lead">
-        OpenJDK Download
-    </div>
+<div class="banner lead">
+    Adoptium
+</div>
 
-    <div class="container">
-        <div class="left-column">
-            <!-- hardcoded: {msg:hello_name('name')} -->
-            <p class="lead">{msg:hello}</p>
+<div class="container">
+    <div class="left-column">
+        <h2>{msg:download_header}</h2>
 
-            <h2>What is this page?</h2>
+        <form method="get" action="/">
 
-            <p>Here you can download <code>Java</code>.</p>
-            <code>{msg:hello_name(name)}</code> (Name: {name})
+            <!-- autodetected, can be changes by the user -->
+            <select name="os">
+                <option disabled value="">Operating System</option>
+                {#for os in operatingSystems}
+                <option value="{os}" {#if clientOS == os}selected{/if}>{os}</option>
+                {/for}
+            </select>
 
-            <h2>What are your next steps?</h2>h
+            <select name="arch">
+                <option disabled value="">Architecture</option>
+                {#for arch in architectures}
+                <option value="{arch}" {#if clientArch == arch}selected{/if}>{arch}</option>
+                {/for}
+            </select>
 
-            <p>If not already done, run the application in <em>dev mode</em> using: <code>./mvnw compile quarkus:dev</code>.</p>
-            <ul>
-                <li>Choose a <code>Java Version</code>.</li>
-                <li>Choose an <code>Architecture</code>.</li>
-            </ul>
+            <select name="locale">
+                <option disabled value="">Language</option>
+                {#for locale in locales}
+                <option value="{locale}" {#if acceptLanguage == locale.getLanguage()}selected{/if}>{locale}</option>
+                {/for}
+            </select>
 
-            <!-- TODO loop over jdk types -->
-            <div class="example-code">
-                <h3>Prebuilt OpenJDK</h3>
-                <p>Just the best.</p>
-                <p><code>v1.2</code></p>
-                <p><a href="" class="guide-link" target="_blank">Related guide section...</a></p>
-            </div>
+            <button type="submit">Go</button>
+
+        </form>
+
+        <!-- downloads: ordered by their suitable for the client -->
+        {#for download in downloads}
+        <div class="example-code">
+            <p>{download.name} <code>v{download.version}</code></p>
+            <a href="{download.url}" class="guide-link" target="_blank">download</a>
         </div>
+        {/for}
     </div>
-    <style type="text/css" scoped>
+</div>
+<style type="text/css" scoped>
         h1, h2, h3, h4, h5, h6 {
             margin-bottom: 0.5rem;
             font-weight: 400;
@@ -113,6 +127,7 @@
         .example-code h3 {
             font-weight: 200;
         }
-    </style>
+
+</style>
 </body>
 </html>

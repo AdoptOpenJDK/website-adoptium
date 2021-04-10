@@ -3,6 +3,7 @@ package net.adoptium;
 import io.quarkus.qute.i18n.Message;
 import io.quarkus.qute.i18n.MessageBundle;
 import io.quarkus.qute.i18n.MessageParam;
+import org.jboss.resteasy.annotations.providers.jaxb.WrappedMap;
 
 @MessageBundle
 public interface AppMessages {
@@ -14,5 +15,8 @@ public interface AppMessages {
 
     @Message("Hello")
     String hello();
+
+    @Message("Download Java")
+    String download_header();
 
 }
