@@ -31,7 +31,6 @@ public class IndexResource {
         return index.data("userAgent", userAgent)
                 .data("os", osArch[0])
                 .data("arch", osArch[1]);
-
     }
 
     private String[] getOsAndArch(String userAgent){
