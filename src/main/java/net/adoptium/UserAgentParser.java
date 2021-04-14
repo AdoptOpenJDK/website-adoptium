@@ -29,7 +29,6 @@ public class UserAgentParser {
         archMap.put("sparcv9", new String[]{});
         archMap.put("riscv64", new String[]{});
     }
-    private String[] supportedArchitectureStrings = new String[]{"x64", "x32", "ppc64", "ppc64le", "s390x", "aarch64", "arm", "sparcv9", "riscv64"};
 
     public static String[] getOsAndArch(String userAgent){
         userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko)";
