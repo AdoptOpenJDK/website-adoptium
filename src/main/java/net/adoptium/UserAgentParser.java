@@ -30,21 +30,46 @@ public class UserAgentParser {
         archMap.put("riscv64", new String[]{});
     }
 
+    public static Map<String, String> defaultArchOfOS;
+    static {
+        defaultArchOfOS = new HashMap<>();
+        defaultArchOfOS.put("linux", "x64");
+        defaultArchOfOS.put("windows", "x64");
+        defaultArchOfOS.put("mac", "x64");
+        defaultArchOfOS.put("solaris", "x64");
+        defaultArchOfOS.put("aix", "ppc64");
+        defaultArchOfOS.put("alpine-linux", "x64");
+    }
+
     public static String[] getOsAndArch(String userAgent){
-        userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko)";
         userAgent = userAgent.toLowerCase();
         String os;
-        String arch;
+        String arch = null;
 
         os = parseOS(userAgent);
 
-        arch = parseArch(userAgent);
+        if(os != null) {
+            arch = parseArch(userAgent, os);
+        }
 
         return new String[]{os, arch};
     }
 
-    private static String parseArch(String ua) {
-        return getSupportedOsArchFromMap(ua, archMap);
+    private static String parseArch(String ua, String os) {
+        String arch = getSupportedOsArchFromMap(ua, archMap);
+        if(arch == null) {
+            arch = setDefaultArchOfOS(os);
+        }
+        return arch;
+    }
+
+    private static String setDefaultArchOfOS(String os) {
+        for (Map.Entry<String, String> defaultEntry : defaultArchOfOS.entrySet()) {
+            if(os.equals(defaultEntry.getKey())){
+                return defaultEntry.getValue();
+            }
+        }
+        return null;
     }
 
 
@@ -52,13 +77,13 @@ public class UserAgentParser {
         return getSupportedOsArchFromMap(ua, osMap);
     }
 
-    private static String getSupportedOsArchFromMap(String ua, Map<String, String[]> archMap) {
-        for (Map.Entry<String, String[]> archEntry : archMap.entrySet()) {
-            for(int i =0; i < archEntry.getValue().length; i++)
+    private static String getSupportedOsArchFromMap(String ua, Map<String, String[]> map) {
+        for (Map.Entry<String, String[]> entry : map.entrySet()) {
+            for(int i =0; i < entry.getValue().length; i++)
             {
-                if(ua.contains(archEntry.getValue()[i]))
+                if(ua.contains(entry.getValue()[i]))
                 {
-                    return archEntry.getKey();
+                    return entry.getKey();
                 }
             }
         }
