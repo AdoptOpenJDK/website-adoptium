@@ -3,7 +3,6 @@ package net.adoptium;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
