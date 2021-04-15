@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class UserAgentParser {
 
-    public static Map<String, String[]> osMap;
+    public static final Map<String, String[]> osMap;
     static {
         osMap = new HashMap<>();
         osMap.put("linux", new String[]{"linux"});
@@ -16,7 +16,7 @@ public class UserAgentParser {
         osMap.put("alpine-linux", new String[]{});
     }
 
-    public static Map<String, String[]> archMap;
+    public static final Map<String, String[]> archMap;
     static {
         archMap = new HashMap<>();
         archMap.put("x64", new String[]{"x64", "win64", "wow64", "x86_64", "x86-64", "amd64"});
@@ -30,7 +30,7 @@ public class UserAgentParser {
         archMap.put("riscv64", new String[]{});
     }
 
-    public static Map<String, String> defaultArchOfOS;
+    public static final Map<String, String> defaultArchOfOS;
     static {
         defaultArchOfOS = new HashMap<>();
         defaultArchOfOS.put("linux", "x64");
