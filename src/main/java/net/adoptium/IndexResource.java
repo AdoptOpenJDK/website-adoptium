@@ -16,15 +16,6 @@ public class IndexResource {
     Template index;
 
     @GET
-    @Path("/useragent")
-    @Produces(MediaType.TEXT_HTML)
-    public Response testGettingUserSystemInformation(@HeaderParam("user-agent") String userAgent) {
-        return Response.status(200)
-                .entity("userAgent : " + userAgent)
-                .build();
-    }
-
-    @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance testGettingUserSystemInformation2(@HeaderParam("user-agent") String userAgent) {
         String[] osArch = UserAgentParser.getOsAndArch(userAgent);
