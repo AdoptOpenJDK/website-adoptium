@@ -18,6 +18,8 @@ public class IndexResourceTest {
              .body(containsString("<p class=\"lead\">Hello</p>"));
     }
 
+
+
     @Test
     public void testHelloEndpointGerman() {
         given().header("Accept-Language", "de,en-US;q=0.7,en;q=0.3") //chrome and edge sends with a "-"
@@ -26,6 +28,4 @@ public class IndexResourceTest {
                 .statusCode(200)
                 .body(containsString("<p class=\"lead\">Hallo</p>"));
     }
-
-
 }
