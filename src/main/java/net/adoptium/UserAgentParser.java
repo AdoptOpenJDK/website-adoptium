@@ -20,7 +20,7 @@ public class UserAgentParser {
     static {
         archMap = new HashMap<>();
         archMap.put("x64", new String[]{"x64", "win64", "wow64", "x86_64", "x86-64", "amd64"});
-        archMap.put("x32", new String[]{"x32", "win32"});
+        archMap.put("x32", new String[]{"x32", "win32", "x86_32"});
         archMap.put("ppc64", new String[]{"ppc64"});
         archMap.put("ppc64le", new String[]{"ppc64le"});
         archMap.put("s390x", new String[]{});
