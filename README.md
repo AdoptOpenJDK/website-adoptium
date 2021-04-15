@@ -1,4 +1,4 @@
-# website-adoptium project
+# website-adoptium project (trigger PR)
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
