@@ -23,6 +23,5 @@ public class IndexResource {
                 .data("arch", osArch[1]);
     }
 
-
 }
 

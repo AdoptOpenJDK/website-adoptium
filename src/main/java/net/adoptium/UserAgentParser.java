@@ -1,13 +1,14 @@
 package net.adoptium;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class UserAgentParser {
 
-    public static final Map<String, String[]> osMap;
+    private static final Map<String, String[]> osMap;
     static {
-        osMap = new HashMap<>();
+        osMap = new LinkedHashMap<>();
         osMap.put("linux", new String[]{"linux"});
         osMap.put("windows", new String[]{"windows"});
         osMap.put("mac", new String[]{"mac"});
@@ -16,9 +17,9 @@ public class UserAgentParser {
         osMap.put("alpine-linux", new String[]{});
     }
 
-    public static final Map<String, String[]> archMap;
+    private static final Map<String, String[]> archMap;
     static {
-        archMap = new HashMap<>();
+        archMap = new LinkedHashMap<>();
         archMap.put("x64", new String[]{"x64", "win64", "wow64", "x86_64", "x86-64", "amd64"});
         archMap.put("x32", new String[]{"x32", "win32", "x86_32"});
         archMap.put("ppc64", new String[]{"ppc64"});
@@ -30,9 +31,9 @@ public class UserAgentParser {
         archMap.put("riscv64", new String[]{});
     }
 
-    public static final Map<String, String> defaultArchOfOS;
+    private static final Map<String, String> defaultArchOfOS;
     static {
-        defaultArchOfOS = new HashMap<>();
+        defaultArchOfOS = new LinkedHashMap<>();
         defaultArchOfOS.put("linux", "x64");
         defaultArchOfOS.put("windows", "x64");
         defaultArchOfOS.put("mac", "x64");
@@ -41,8 +42,8 @@ public class UserAgentParser {
         defaultArchOfOS.put("alpine-linux", "x64");
     }
 
-    public static String[] getOsAndArch(String userAgent){
-        userAgent = userAgent.toLowerCase();
+    public static String[] getOsAndArch(String userAgent) {
+        userAgent = userAgent.toLowerCase(Locale.ENGLISH);
         String os;
         String arch = null;
 
