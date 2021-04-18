@@ -42,8 +42,9 @@ public class IndexResource {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get(@QueryParam("name") String name) {
-        System.out.println("Binary: " + getUserDownload(OperatingSystem.windows, Architecture.x64));
+    public TemplateInstance get(@QueryParam("name") String name, @HeaderParam("user-agent") String ua) {
+        UserSystem user = UserAgentParser.getOsAndArch(ua);
+        System.out.println("Binary: " + getUserDownload(user.getOs(), user.getArch()));
         return index.data("name", name);
     }
 
