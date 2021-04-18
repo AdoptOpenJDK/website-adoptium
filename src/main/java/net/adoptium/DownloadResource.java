@@ -7,35 +7,42 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
+import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+//import com.fasterxml.jackson.;
 
-//import net.adoptopenjdk.api.v3.models;
+import net.adoptopenjdk.api.v3.models.*;
+
 
 //import org.json.*;
 
 @Path("/download/")
 public class DownloadResource {
 
-    private static final Pattern pattern = Pattern.compile("^(?<test>\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)$", Pattern.CASE_INSENSITIVE);
+    // os-arch-jvm_impl-image_type-heap_size-project-release_type-vendor-version
+    private static final Pattern pattern = Pattern.compile("^(?<os>\\w*)-(?<arch>\\w*)-(?<jvmImpl>\\w*)-(?<imageType>\\w*)-(?<heapSize>\\w*)-(?<project>\\w*)-(?<releaseType>\\w*)-(?<vendor>\\w*)-(?<version>\\w*)$", Pattern.CASE_INSENSITIVE);
 
+    //TODO: Ask andreas (https://github.com/quarkusio/quarkus/issues/7883)
     public class NotFoundException extends RuntimeException {
         public final String msg;
         public NotFoundException(String msg) {
             this.msg = msg;
         }
     }
-
 
     @ServerExceptionMapper
     public Response mapException(NotFoundException x) {
@@ -63,31 +70,44 @@ public class DownloadResource {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Path("/{file:(\\w*!)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)}")
-    public TemplateInstance get(@PathParam("file") String file) {
+    @Path("/{file:(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)}")
+    public TemplateInstance get(@PathParam("file") String file) throws IOException, InterruptedException {
         Matcher matcher = pattern.matcher(file);
-        if (matcher.find()) {
-            System.out.println(matcher.group("test"));
-        } else {
+        if (!matcher.find()) {
             throw new NotFoundException("version 11 not found!");
         }
+        String os = matcher.group("os"),
+                arch = matcher.group("arch"),
+                jvmImpl = matcher.group("jvmImpl"),
+                imageType = matcher.group("imageType"),
+                heapSize = matcher.group("heapSize"),
+                project = matcher.group("project"),
+                releaseType = matcher.group("releaseType"),
+                vendor = matcher.group("vendor"),
+                version = matcher.group("version");
         //String installerType = BinaryType.valueOf(binaryType.toUpperCase(Locale.ROOT)).getType();
         String downloadLink = "https://google.com";
         String checksumAlgo = "sha512";
         String checksum = "sdklfjskj8z32w92kj3n19283zhjfw";
-        String imageType = "Temurin";
-        String os = "ubuntu";
-        String arch = "x86";
-        String version = "11";
         String installerType = "installer";
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("https://api.adoptopenjdk.net/v3/assets/version/" + version))
-                .setHeader("User-Agent", "Java 11 HttpClient Bot") // add request header
-                .build();
-        /*HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        JSONObject obj = new JSONObject(response);
-        String pageName = obj.getJSONObject("pageInfo").getString("pageName");*/
+                .uri(URI.create("https://staging-api.adoptopenjdk.net/v3/assets/version/" + version
+                        + "?architecture=" + arch
+                        + "&heap_size=" + heapSize
+                        + "&image_type=" + imageType
+                        + "&jvm_impl=" + jvmImpl
+                        + "&os=" + os
+                        + "&project=" + project
+                        + "&release_type=" + releaseType
+                        + "&vendor=" + vendor)
+                ).build();
+        System.out.println(request.uri());
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonResponse = mapper.readTree(response.body());
+        //jsonResponse.get(1).get("binaries").
         return download
                 .data("downloadLink", downloadLink)
                 .data("imageType", imageType)
