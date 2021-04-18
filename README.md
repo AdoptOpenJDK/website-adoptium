@@ -1,4 +1,19 @@
-# website-adoptium project
+Currently, [openjdk-api-v3](https://github.com/AdoptOpenJDK/openjdk-api-v3) needs to be compiled locally:
+$ git clone https://github.com/AdoptOpenJDK/openjdk-api-v3.git
+$ cd openjdk-api-v3
+$ git branch production
+$ ./mvnw -DskipTests=true clean install
+
+
+# For New Contributors
+
+## GitHub Organization using ZenHub
+
+- [How to view the ZenHub board](https://github.com/AdoptOpenJDK/website-adoptium/wiki/ZENHUB:-Creating-and-Working-with-Issues#working-with-issues-using-zenhub)
+- [Sprints using ZenHub pipelines](https://github.com/AdoptOpenJDK/website-adoptium/wiki/ZENHUB:-Creating-and-Working-with-Issues#sprints-using-zenhub-pipelines)
+- [Creating issues](https://github.com/AdoptOpenJDK/website-adoptium/wiki/ZENHUB:-Creating-and-Working-with-Issues#creating-issues) (templates, labels and more...)
+
+# Website-Adoptium Project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
