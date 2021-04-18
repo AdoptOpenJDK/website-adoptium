@@ -17,10 +17,10 @@ public class IndexResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance testGettingUserSystemInformation2(@HeaderParam("user-agent") String userAgent) {
-        String[] osArch = UserAgentParser.getOsAndArch(userAgent);
+        UserSystem osArch = UserAgentParser.getOsAndArch(userAgent);
         return index.data("userAgent", userAgent)
-                .data("os", osArch[0])
-                .data("arch", osArch[1]);
+                .data("os", osArch.getOs().name())
+                .data("arch", osArch.getArch().name());
     }
 
 }

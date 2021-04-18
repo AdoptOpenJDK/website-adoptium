@@ -1,71 +1,74 @@
 package net.adoptium;
 
+import net.adoptopenjdk.api.v3.models.Architecture;
+import net.adoptopenjdk.api.v3.models.OperatingSystem;
+
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
 public class UserAgentParser {
 
-    private static final Map<String, String[]> osMap;
+    private static final Map<OperatingSystem, String[]> osMap;
+
     static {
         osMap = new LinkedHashMap<>();
-        osMap.put("linux", new String[]{"linux"});
-        osMap.put("windows", new String[]{"windows"});
-        osMap.put("mac", new String[]{"mac"});
-        osMap.put("solaris", new String[]{});
-        osMap.put("aix", new String[]{"aix"});
-        osMap.put("alpine-linux", new String[]{});
+        osMap.put(OperatingSystem.linux, new String[]{"linux"});
+        osMap.put(OperatingSystem.windows, new String[]{"windows"});
+        osMap.put(OperatingSystem.mac, new String[]{"mac"});
+        osMap.put(OperatingSystem.solaris, new String[]{"sunos"});
+        osMap.put(OperatingSystem.aix, new String[]{"aix"});
+        osMap.put(OperatingSystem.valueOf("alpine-linux"), new String[]{});
     }
 
-    private static final Map<String, String[]> archMap;
+    private static final Map<Architecture, String[]> archMap;
     static {
         archMap = new LinkedHashMap<>();
-        archMap.put("x64", new String[]{"x64", "win64", "wow64", "x86_64", "x86-64", "amd64"});
-        archMap.put("x32", new String[]{"x32", "win32", "x86_32"});
-        archMap.put("ppc64", new String[]{"ppc64"});
-        archMap.put("ppc64le", new String[]{"ppc64le"});
-        archMap.put("s390x", new String[]{});
-        archMap.put("aarch64", new String[]{"arch64"});
-        archMap.put("arm", new String[]{"arm"});
-        archMap.put("sparcv9", new String[]{});
-        archMap.put("riscv64", new String[]{});
+        archMap.put(Architecture.x64, new String[]{"x64", "win64", "wow64", "x86_64", "x86-64", "amd64"});
+        archMap.put(Architecture.x32, new String[]{"x32", "win32", "x86_32"});
+        archMap.put(Architecture.ppc64, new String[]{"ppc64"});
+        archMap.put(Architecture.ppc64le, new String[]{"ppc64le"});
+        archMap.put(Architecture.s390x, new String[]{});
+        archMap.put(Architecture.aarch64, new String[]{"arch64"});
+        archMap.put(Architecture.arm, new String[]{"arm"});
+        archMap.put(Architecture.sparcv9, new String[]{});
+        archMap.put(Architecture.riscv64, new String[]{});
     }
 
-    private static final Map<String, String> defaultArchOfOS;
+    private static final Map<OperatingSystem, Architecture> defaultArchOfOS;
     static {
         defaultArchOfOS = new LinkedHashMap<>();
-        defaultArchOfOS.put("linux", "x64");
-        defaultArchOfOS.put("windows", "x64");
-        defaultArchOfOS.put("mac", "x64");
-        defaultArchOfOS.put("solaris", "x64");
-        defaultArchOfOS.put("aix", "ppc64");
-        defaultArchOfOS.put("alpine-linux", "x64");
+        defaultArchOfOS.put(OperatingSystem.linux, Architecture.x64);
+        defaultArchOfOS.put(OperatingSystem.windows, Architecture.x64);
+        defaultArchOfOS.put(OperatingSystem.mac, Architecture.x64);
+        defaultArchOfOS.put(OperatingSystem.solaris, Architecture.x64);
+        defaultArchOfOS.put(OperatingSystem.aix, Architecture.ppc64);
+        defaultArchOfOS.put(OperatingSystem.valueOf("alpine-linux"), Architecture.x64);
     }
 
-    public static String[] getOsAndArch(String userAgent) {
+    public static UserSystem getOsAndArch(String userAgent) {
         userAgent = userAgent.toLowerCase(Locale.ENGLISH);
-        String os;
-        String arch = null;
+        UserSystem user = new UserSystem();
 
-        os = parseOS(userAgent);
+        user.setOs(parseOS(userAgent));
 
-        if(os != null) {
-            arch = parseArch(userAgent, os);
+        if(user.getOs() != null) {
+            user.setArch(parseArch(userAgent, user.getOs()));
         }
 
-        return new String[]{os, arch};
+        return user;
     }
 
-    private static String parseArch(String ua, String os) {
-        String arch = getSupportedOsArchFromMap(ua, archMap);
+    private static Architecture parseArch(String ua, OperatingSystem os) {
+        Architecture arch = (Architecture)getSupportedOsArchFromMap(ua, archMap);
         if(arch == null) {
             arch = setDefaultArchOfOS(os);
         }
         return arch;
     }
 
-    private static String setDefaultArchOfOS(String os) {
-        for (Map.Entry<String, String> defaultEntry : defaultArchOfOS.entrySet()) {
+    private static Architecture setDefaultArchOfOS(OperatingSystem os) {
+        for (Map.Entry<OperatingSystem, Architecture> defaultEntry : defaultArchOfOS.entrySet()) {
             if(os.equals(defaultEntry.getKey())){
                 return defaultEntry.getValue();
             }
@@ -74,12 +77,12 @@ public class UserAgentParser {
     }
 
 
-    private static String parseOS(String ua) {
-        return getSupportedOsArchFromMap(ua, osMap);
+    private static OperatingSystem parseOS(String ua) {
+        return (OperatingSystem)getSupportedOsArchFromMap(ua, osMap);
     }
 
-    private static String getSupportedOsArchFromMap(String ua, Map<String, String[]> map) {
-        for (Map.Entry<String, String[]> entry : map.entrySet()) {
+    private static Object getSupportedOsArchFromMap(String ua, Map<?, String[]> map) {
+        for (Map.Entry<?, String[]> entry : map.entrySet()) {
             for(int i =0; i < entry.getValue().length; i++)
             {
                 if(ua.contains(entry.getValue()[i]))
