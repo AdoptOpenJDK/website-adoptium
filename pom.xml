@@ -33,6 +33,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.asciidoctor</groupId>
+      <artifactId>asciidoctorj</artifactId>
+      <version>1.5.5</version>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-qute</artifactId>
     </dependency>
