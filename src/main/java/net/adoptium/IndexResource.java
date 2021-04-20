@@ -25,15 +25,14 @@ public class IndexResource {
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get() {
         String output = convertHtml();
-        return index.data("asciidoc", output);
+        return index.data("jam", output);
     }
 
     public String convertHtml() {
         Asciidoctor asciidoctor = Asciidoctor.Factory.create();
         OptionsBuilder options = options();
         options.toFile(false);
-        String results = asciidoctor.convertFile(new File("C:\\Users\\hirsc\\OneDrive\\04_Code\\01_ZHAW\\website-adoptium\\src\\main\\resources\\documentation\\test.adoc"), options);
-        System.out.println(results);
+        String results = asciidoctor.convertFile(new File("classes/META-INF/resources/docs/index.html"), options);
         return results;
     }
 }
