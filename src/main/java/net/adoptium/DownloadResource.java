@@ -30,11 +30,11 @@ import net.adoptopenjdk.api.v3.models.*;
 
 //import org.json.*;
 
-@Path("/download/")
+@Path("/download")
 public class DownloadResource {
 
     // os-arch-jvm_impl-image_type-heap_size-project-release_type-vendor-version
-    private static final Pattern pattern = Pattern.compile("^(?<os>\\w*)-(?<arch>\\w*)-(?<jvmImpl>\\w*)-(?<imageType>\\w*)-(?<heapSize>\\w*)-(?<project>\\w*)-(?<releaseType>\\w*)-(?<vendor>\\w*)-(?<version>\\w*)$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern pattern = Pattern.compile("^(?<os>\\w*)-(?<arch>\\w*)-(?<jvmImpl>\\w*)-(?<imageType>\\w*)-(?<heapSize>\\w*)-(?<project>\\w*)-(?<releaseType>\\w*)-(?<vendor>\\w*)-(?<version>[^-]*)$", Pattern.CASE_INSENSITIVE); //[^-]
 
     //TODO: Ask andreas (https://github.com/quarkusio/quarkus/issues/7883)
     public class NotFoundException extends RuntimeException {
@@ -46,6 +46,7 @@ public class DownloadResource {
 
     @ServerExceptionMapper
     public Response mapException(NotFoundException x) {
+        System.out.println("I was in public Response mapException");
         return Response.status(Response.Status.NOT_FOUND)
                 .entity("NOT FOUND!: " + x.msg)
                 .build();
@@ -70,8 +71,10 @@ public class DownloadResource {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Path("/{file:(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)}")
+    @Path("thank-you/{file:(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-([^-]*)}") //[^-]
     public TemplateInstance get(@PathParam("file") String file) throws IOException, InterruptedException {
+        //TODO: Ask if we first should check if file matches an existing version in the api. or if we directly should send the request to the api and let the api check the version
+        System.out.println("I was in public TemplateInstance get");
         Matcher matcher = pattern.matcher(file);
         if (!matcher.find()) {
             throw new NotFoundException("version 11 not found!");
