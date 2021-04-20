@@ -32,7 +32,7 @@ public class IndexResource {
         Asciidoctor asciidoctor = Asciidoctor.Factory.create();
         OptionsBuilder options = options();
         options.toFile(false);
-        String results = asciidoctor.convertFile(new File("classes/META-INF/resources/docs/index.html"), options);
+        String results = asciidoctor.convertFile(new File("classes/META-INF/resources/docs/index.html"), options); //
         return results;
     }
 }
