@@ -1,10 +1,3 @@
-Currently, [openjdk-api-v3](https://github.com/AdoptOpenJDK/openjdk-api-v3) needs to be compiled locally:
-$ git clone https://github.com/AdoptOpenJDK/openjdk-api-v3.git
-$ cd openjdk-api-v3
-$ git branch production
-$ ./mvnw -DskipTests=true clean install
-
-
 # For New Contributors
 
 ## GitHub Organization using ZenHub
