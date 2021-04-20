@@ -18,10 +18,8 @@ public class IndexResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get() {
-
         return index.data("jam", "Hi");
     }
-
 
 }
 
