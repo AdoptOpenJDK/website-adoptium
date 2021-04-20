@@ -26,10 +26,9 @@ public class IndexResource {
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get() {
         Asciidoctor asciidoctor = create();
-        String output = asciidoctor.convertFile(new File("resources/documentation/test.adoc"), new HashMap<String, Object>());
+        String output = asciidoctor.convertFile(new File("/documentation/test.adoc"), new HashMap<String, Object>());
         return index.data("asciidoc", output);
     }
-
 
 }
 
