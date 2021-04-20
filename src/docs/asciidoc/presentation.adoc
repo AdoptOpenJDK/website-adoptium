@@ -18,15 +18,22 @@ _These are the things I like and I don't like_
 
 === Cute dog pictures because I don't like cats
 
+[.float-group]
 .My Dog Aaron as a pupper
-image::pictures/presentation/Aaron.jpg[I am the image alt text.]
-.My Dog Aaron as an adult
-image::pictures/presentation/Aaron2.jpg[I am the image alt text.]
-.Cute dog from the Internet
-image::pictures/presentation/cute_pupper.jpg[I am the image alt text.]
-.Another Cute Dog from the Internet
-image::pictures/presentation/cute_pupper2.jpg[I am the image alt text.]
+image::presentation/Aaron.jpg[Dog,300,300,float="left"]
 
+.My Dog Aaron as an adult
+image::presentation/Aaron2.jpg[Dog,300,300,float="left"]
+
+.Cute dog from the Internet
+image::presentation/cute_pupper.jpg[Dog,300,300]
+
+
+---
+==== You can embed cute dog videos
+video::1HygThMLzGs[youtube]
+
+---
 [quote, Aaron Büchi]
 ____
 Dogs are better than cats, maybe I only say that because I'm a dog...
