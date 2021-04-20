@@ -10,11 +10,10 @@ import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.OptionsBuilder;
+import static org.asciidoctor.OptionsBuilder.options;
 
 import java.io.File;
-import java.util.HashMap;
-
-import static org.asciidoctor.Asciidoctor.Factory.create;
 
 @Path("/")
 public class IndexResource {
@@ -25,10 +24,17 @@ public class IndexResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get() {
-        Asciidoctor asciidoctor = create();
-        String output = asciidoctor.convertFile(new File("/documentation/test.adoc"), new HashMap<String, Object>());
+        String output = convertHtml();
         return index.data("asciidoc", output);
     }
 
+    public String convertHtml() {
+        Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+        OptionsBuilder options = options();
+        options.toFile(false);
+        String results = asciidoctor.convertFile(new File("C:\\Users\\hirsc\\OneDrive\\04_Code\\01_ZHAW\\website-adoptium\\src\\main\\resources\\documentation\\test.adoc"), options);
+        System.out.println(results);
+        return results;
+    }
 }
 
