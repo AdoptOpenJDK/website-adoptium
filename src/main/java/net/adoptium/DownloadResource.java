@@ -4,8 +4,6 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,12 +18,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.util.Locale;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-//import com.fasterxml.jackson.;
 
-import net.adoptopenjdk.api.v3.models.*;
+//import com.fasterxml.jackson.;
 
 
 //import org.json.*;
@@ -33,10 +29,38 @@ import net.adoptopenjdk.api.v3.models.*;
 @Path("/download")
 public class DownloadResource {
 
-    // os-arch-jvm_impl-image_type-heap_size-project-release_type-vendor-version
-    private static final Pattern pattern = Pattern.compile("^(?<os>\\w*)-(?<arch>\\w*)-(?<jvmImpl>\\w*)-(?<imageType>\\w*)-(?<heapSize>\\w*)-(?<project>\\w*)-(?<releaseType>\\w*)-(?<vendor>\\w*)-(?<version>[^-]*)$", Pattern.CASE_INSENSITIVE); //[^-]
+    private static final String RELEASE_TYPE = "releaseType";
+    private static final String IMAGE_TYPE = "imageType";
+    private static final String HEAP_SIZE = "heapSize";
+    private static final String JVM_IMPL = "jvmImpl";
+    private static final String PROJECT = "project";
+    private static final String VERSION = "version";
+    private static final String VENDOR = "vendor";
+    private static final String ARCH = "arch";
+    private static final String OS = "os";
+    /*
+    This Pattern is used to extract the details from the path parameter {file} in the GET-method
+    to download the wanted version.
 
-    //TODO: Ask andreas (https://github.com/quarkusio/quarkus/issues/7883)
+    Groups:  os, arch, jvm_impl, image_type, heap_size, project, release_type, vendor, version
+    Pattern: [^-] accept anything except the - symbol
+    Group example: (?<os>[^-]*) -> accept anything except the - symbol and put the found substring in the Group os
+
+    The pattern matches for a string like:
+        os-arch-jvm_impl-image_type-heap_size-project-release_type-vendor-version
+        windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9
+    */
+    public static final Pattern PATTERN = Pattern.compile("^(?<" + OS + ">[^-]*)-" +
+                                                        "(?<" + ARCH + ">[^-]*)-" +
+                                                        "(?<" + JVM_IMPL + ">[^-]*)-" +
+                                                        "(?<" + IMAGE_TYPE + ">[^-]*)-" +
+                                                        "(?<" + HEAP_SIZE + ">[^-]*)-" +
+                                                        "(?<" + PROJECT + ">[^-]*)-" +
+                                                        "(?<" + RELEASE_TYPE + ">[^-]*)-" +
+                                                        "(?<" + VENDOR + ">[^-]*)-" +
+                                                        "(?<" + VERSION + ">[^-]*)$", Pattern.CASE_INSENSITIVE);
+
+    //TODO: Problem with error handling (https://github.com/quarkusio/quarkus/issues/7883)
     public class NotFoundException extends RuntimeException {
         public final String msg;
         public NotFoundException(String msg) {
@@ -52,42 +76,27 @@ public class DownloadResource {
                 .build();
     }
 
-    private enum BinaryType {
-        INSTALLER("INSTALLER"),
-        BINARY("BINARY");
-
-        String type;
-        BinaryType(String type) {
-            this.type = type;
-        }
-
-        public String getType() {
-            return this.type;
-        }
-    }
-
     @Inject
     Template download;
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Path("thank-you/{file:(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-(\\w*)-([^-]*)}") //[^-]
+    @Path("thank-you/{file}")
     public TemplateInstance get(@PathParam("file") String file) throws IOException, InterruptedException {
-        //TODO: Ask if we first should check if file matches an existing version in the api. or if we directly should send the request to the api and let the api check the version
-        System.out.println("I was in public TemplateInstance get");
-        Matcher matcher = pattern.matcher(file);
+        Matcher matcher = PATTERN.matcher(file);
         if (!matcher.find()) {
-            throw new NotFoundException("version 11 not found!");
+            //TODO: In the future better exception message -> Something like: Version pattern is not valid.
+            throw new NotFoundException("version not found!");
         }
-        String os = matcher.group("os"),
-                arch = matcher.group("arch"),
-                jvmImpl = matcher.group("jvmImpl"),
-                imageType = matcher.group("imageType"),
-                heapSize = matcher.group("heapSize"),
-                project = matcher.group("project"),
-                releaseType = matcher.group("releaseType"),
-                vendor = matcher.group("vendor"),
-                version = matcher.group("version");
+        String os = matcher.group(OS),
+                arch = matcher.group(ARCH),
+                jvmImpl = matcher.group(JVM_IMPL),
+                imageType = matcher.group(IMAGE_TYPE),
+                heapSize = matcher.group(HEAP_SIZE),
+                project = matcher.group(PROJECT),
+                releaseType = matcher.group(RELEASE_TYPE),
+                vendor = matcher.group(VENDOR),
+                version = matcher.group(VERSION);
         //String installerType = BinaryType.valueOf(binaryType.toUpperCase(Locale.ROOT)).getType();
         String downloadLink = "https://google.com";
         String checksumAlgo = "sha512";
