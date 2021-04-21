@@ -19,7 +19,7 @@ public class AsciiDocTest {
         try (Playwright playwright = Playwright.create()) {
             List<BrowserType> browserTypes = Arrays.asList(
                     playwright.chromium(),
-                    playwright.webkit(),
+                    //playwright.webkit(),
                     playwright.firefox()
             );
             for (BrowserType browserType : browserTypes) {
