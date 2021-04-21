@@ -22,9 +22,9 @@ public class IndexResource {
         this.api = api;
     }
 
-    Template index;
+    private final Template index;
 
-    ApiService api;
+    private final ApiService api;
 
     /**
      * getUserDownload queries the openjdk-api-v3 to find all suitable releases
@@ -33,7 +33,7 @@ public class IndexResource {
      * @param arch
      * @return
      */
-    Binary getUserDownload(OperatingSystem os, Architecture arch) {
+    public Binary getUserDownload(OperatingSystem os, Architecture arch) {
         List<BinaryAssetView> availableReleaseList = api.getAvailableReleases(RECOMMENDED_JAVA_VERSION, JvmImpl.hotspot);
         Binary response = null;
 
@@ -56,7 +56,7 @@ public class IndexResource {
         UserSystem user = UserAgentParser.getOsAndArch(ua);
         System.out.println("Binary: " + getUserDownload(user.getOs(), user.getArch()));
         Binary dl = getUserDownload(OperatingSystem.linux, Architecture.x64);
+        System.err.println("index: " + index.instance());
         return index.data("version", dl.getScm_ref()).data("thank-you-version", dl.getScm_ref().split("_")[0]);
     }
 }
-
