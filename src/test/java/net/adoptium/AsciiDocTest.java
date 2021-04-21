@@ -31,10 +31,12 @@ public class AsciiDocTest {
                         BrowserContext context = browser.newContext();
                         Page page = context.newPage();
                         try {
-                            page.navigate(("https://pr-review-pr-75.herokuapp.com/docs/" + file.getName()).replaceFirst("[.][^.]+$", "") + ".html");
+                            page.navigate(("http://localhost:8081/docs/" + file.getName()).replaceFirst("[.][^.]+$", "") + ".html");
                         } catch (PlaywrightException e) {
-                            fail("Failed because https://pr-review-pr-75.herokuapp.com/docs/" + file.getName().replaceFirst("[.][^.]+$", "") + ".html does not exist", e);
+                            fail("Failed because http://localhost:8081/docs/" + file.getName().replaceFirst("[.][^.]+$", "") + ".html does not exist", e);
                         }
+                    } catch (PlaywrightException e){
+                        fail("failed to lauch browser");
                     }
                 }
             }
