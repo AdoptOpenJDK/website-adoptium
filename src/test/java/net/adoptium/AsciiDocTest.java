@@ -33,10 +33,10 @@ public class AsciiDocTest {
                         try {
                             page.navigate(("http://localhost:8081/docs/" + file.getName()));
                         } catch (PlaywrightException e) {
-                            fail("Failed because http://localhost:8081/docs/" + file.getName() + "does not exist", e);
+                            fail("Failed because http://localhost:8081/docs/" + file.getName() + "does not exist when opened with browser", e);
                         }
                     } catch (PlaywrightException e){
-                        fail("failed to lauch browser");
+                        fail("failed to lauch browser " + browserType.name());
                     }
                 }
             }
