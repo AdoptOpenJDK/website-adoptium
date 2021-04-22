@@ -62,7 +62,8 @@ public class IndexResource {
 
     private String buildThankYouURL(Binary binary) {
         // download URL does not like the _adopt suffix
-        String version = binary.getScm_ref().split("_")[0];
+        String version = binary.getScm_ref().split("_")[0].split("-")[1];
+        System.out.println("vendor: " + Vendor.adoptopenjdk);
         return String.format("%s-%s-%s-%s-%s-%s-%s-%s-%s", binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(), binary.getImage_type(), binary.getHeap_size(), binary.getProject(), RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, version);
     }
 
