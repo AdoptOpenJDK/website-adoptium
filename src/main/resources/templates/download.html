@@ -33,7 +33,7 @@
             document.querySelector("#countdown").innerHTML = countdown / 10;
             --countdown;
             if (countdown <= 0) {
-                window.open('{downloadLink}');
+                window.open('{downloadLink}', '_self');
                 clearInterval(interval);
             }
         }, 100);
