@@ -1,21 +1,19 @@
 package net.adoptium;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.ext.auth.User;
+import net.adoptium.api.ApiMockServer;
 import net.adoptium.api.ApiService;
 import net.adoptopenjdk.api.v3.models.Architecture;
 import net.adoptopenjdk.api.v3.models.Binary;
 import net.adoptopenjdk.api.v3.models.OperatingSystem;
 import okhttp3.HttpUrl;
-import okhttp3.internal.io.FileSystem;
-import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import okio.BufferedSource;
-import okio.Okio;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -27,7 +25,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * \@QuarkusTest annotation required so JacksonKotlinModule gets initialized.
  */
 @QuarkusTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IndexResourceTest {
+
+    private MockWebServer mockWebServer;
+    private ApiService remoteApi;
+
+    @BeforeAll
+    public void setupMockServer() throws IOException {
+        mockWebServer = new MockWebServer();
+        mockWebServer.setDispatcher(new ApiMockServer());
+        mockWebServer.start();
+
+        // all paths are registered as absolute paths
+        HttpUrl baseUrl = mockWebServer.url("/");
+
+        remoteApi = RestClientBuilder.newBuilder()
+                .baseUri(baseUrl.uri())
+                .build(ApiService.class);
+    }
 
     @Test
     public void testUserDownload() throws IOException {
@@ -47,24 +63,6 @@ public class IndexResourceTest {
             put(new UserSystem(OperatingSystem.mac, Architecture.x64), "5c9a54d3bbed00d993183dc4b7bcbc305e2e6ab1bbf48c57dea7fea6c47cb9d2");
             put(new UserSystem(OperatingSystem.mac, Architecture.aarch64), null); // TODO M1 = aarch64?
         }};
-
-        MockWebServer server = new MockWebServer();
-        BufferedSource source = Okio.buffer(FileSystem.SYSTEM.source(new File("src/test/resources/api-staging/v3_assets_latest_11_hotspot.json")));
-        String v3_assets_latest_11_hotspot = source.readUtf8();
-        source.close();
-
-        // TODO improve usage of MockWebServer (eg always return same response)
-        for (int i = 0; i < tests.size(); i++) {
-            server.enqueue(new MockResponse().setHeader("Content-Type", "application/json").setBody(v3_assets_latest_11_hotspot));
-        }
-
-        server.start();
-
-        HttpUrl baseUrl = server.url("/v3/assets/latest/11/hotspot");
-
-        ApiService remoteApi = RestClientBuilder.newBuilder()
-                .baseUri(baseUrl.uri())
-                .build(ApiService.class);
 
         IndexResource r = new IndexResource(remoteApi);
 
@@ -95,5 +93,10 @@ public class IndexResourceTest {
                 .then()
                 .statusCode(200)
                 .body(containsString("<p class=\"lead\">Hallo</p>"));
+    }
+
+    @AfterAll
+    public void shutdownMockServer() throws IOException {
+        mockWebServer.shutdown();
     }
 }
