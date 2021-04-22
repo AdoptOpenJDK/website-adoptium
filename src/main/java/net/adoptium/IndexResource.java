@@ -3,7 +3,6 @@ package net.adoptium;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import net.adoptium.api.ApiService;
-import net.adoptium.configuration.JacksonKotlinModule;
 import net.adoptopenjdk.api.v3.models.*;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
@@ -16,7 +15,11 @@ import java.util.List;
 // index.html in META-INF.resources is used as static resource (not template)
 @Path("/")
 public class IndexResource {
+    // TODO where to define these? custom struct?
     public static final int RECOMMENDED_JAVA_VERSION = 11;
+    public static final HeapSize RECOMMENDED_HEAP_SIZE = HeapSize.normal;
+    public static final ReleaseType RECOMMENDED_RELEASE_TYPE = ReleaseType.ga;
+    public static final Vendor RECOMMENDED_VENDOR = Vendor.adoptopenjdk;
 
     private static final Logger LOG = Logger.getLogger(IndexResource.class);
 
@@ -57,6 +60,12 @@ public class IndexResource {
         return response;
     }
 
+    private String buildThankYouURL(Binary binary) {
+        // download URL does not like the _adopt suffix
+        String version = binary.getScm_ref().split("_")[0];
+        return String.format("%s-%s-%s-%s-%s-%s-%s-%s-%s", binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(), binary.getImage_type(), binary.getHeap_size(), binary.getProject(), RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, version);
+    }
+
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get(@QueryParam("name") String name, @HeaderParam("user-agent") String ua) {
@@ -70,7 +79,12 @@ public class IndexResource {
             LOG.warnf("no binary found for user: %s, redirecting...", user);
             // TODO redirect
         }
-        LOG.infof("user: %s -> binary: %s", user, recommended);
-        return index.data("version", recommended.getScm_ref()).data("thank-you-version", recommended.getScm_ref().split("_")[0]);
+        String thankYouURL = buildThankYouURL(recommended);
+        LOG.infof("user: %s -> [%s] binary: %s", user, thankYouURL, recommended);
+        return index
+                .data("version", recommended.getScm_ref())
+                .data("thank-you-version", thankYouURL)
+                .data("os", recommended.getOs())
+                .data("arch", recommended.getArchitecture());
     }
 }
