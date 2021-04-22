@@ -22,7 +22,7 @@ class DownloadResourceRegexExtractionTest {
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10-+9";
         Pattern pattern = Pattern.compile(DownloadResource.ARGS_REGEX, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(testString);
-        assertEquals(false, matcher.find());
+        assertEquals(true, matcher.find());
     }
 
 
