@@ -3,20 +3,17 @@ package net.adoptium;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
 
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import net.adoptium.api.ApiService;
+import net.adoptium.exceptions.DownloadBinaryNotFoundException;
+import net.adoptium.exceptions.DownloadInvalidArgumentException;
 import net.adoptopenjdk.api.v3.models.Package;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
-import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -55,63 +52,9 @@ public class DownloadResource {
             "(?<" + PROJECT + ">[^-\\/]*)-" +
             "(?<" + RELEASE_TYPE + ">[^-\\/]*)-" +
             "(?<" + VENDOR + ">[^-\\/]*)-" +
-            "(?<" + VERSION + ">[^\\/]*)$";
+            "(?<" + VERSION + ">[^\\/!]*)$";
 
     private static final Logger LOG = Logger.getLogger(DownloadResource.class);
-
-    //TODO: https://github.com/quarkusio/quarkus/issues/7883
-    public class NotFoundException extends RuntimeException {
-        public final String msg;
-        public NotFoundException(String msg) {
-            this.msg = msg;
-        }
-    }
-
-    /*@ServerExceptionMapper
-    public Response mapException(NotFoundException x) {
-        return Response.status(Response.Status.NOT_FOUND)
-                .entity("NOT FOUND!: " + x.msg)
-                .build();
-    }*/
-
-    /*@Provider
-    public class NotFoundExceptionHandler implements ExceptionMapper<Exception> {
-
-        NotFoundExceptionHandler() {
-
-        }
-
-        @Override
-        public Response toResponse(Exception exception) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("exception.getMessage()").build();
-        }
-
-    }*/
-
-    /*public static class NotFoundException extends Exception implements Serializable {
-
-        public NotFoundException() {
-            super();
-        }
-
-        public NotFoundException(String msg)   {
-            super(msg);
-        }
-
-        public NotFoundException(String msg, Exception e)  {
-            super(msg, e);
-        }
-    }
-
-    @Provider
-    public class NotFoundExceptionHandler implements ExceptionMapper<NotFoundException> {
-
-        @Override
-        public Response toResponse(NotFoundException exception) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(exception.getMessage()).build();
-        }
-
-    }*/
 
     @Inject
     Template download;
@@ -128,24 +71,25 @@ public class DownloadResource {
         Pattern pattern = Pattern.compile(ARGS_REGEX, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(args);
         if (!matcher.find()) {
-            throw new NotFoundException("version 11 not found!");
+            throw new DownloadInvalidArgumentException("version 11 not found!", "Try to access this page from: LINK");
         }
-        String os = matcher.group("os"),
-                arch = matcher.group("arch"),
-                jvmImpl = matcher.group("jvmImpl"),
-                imageType = matcher.group("imageType"),
-                heapSize = matcher.group("heapSize"),
-                project = matcher.group("project"),
-                releaseType = matcher.group("releaseType"),
-                vendor = matcher.group("vendor"),
-                version = matcher.group("version");
+        String os = matcher.group(OS),
+                arch = matcher.group(ARCH),
+                jvmImpl = matcher.group(JVM_IMPL),
+                imageType = matcher.group(IMAGE_TYPE),
+                heapSize = matcher.group(HEAP_SIZE),
+                project = matcher.group(PROJECT),
+                releaseType = matcher.group(RELEASE_TYPE),
+                vendor = matcher.group(VENDOR),
+                version = matcher.group(VERSION);
         String downloadLink;
         String checksum;
         List<Release> releaseList = api.getRelease(version, arch, heapSize, imageType, jvmImpl, os, project, releaseType, vendor);
         List<Binary> binaryList = Arrays.asList(releaseList.get(0).getBinaries());
-        if (binaryList.size() != 1) {
-            LOG.error("There are " + binaryList.size() + " binaries available! Expected just 1");
-            throw new Exception("Unexpected number of binaries!");
+        if (binaryList.size() == 0) {
+            throw new DownloadBinaryNotFoundException("Binary not found!", "Try to access this page from: LINK");
+        } else if (binaryList.size() > 1) {
+            LOG.error("There are " + binaryList.size() + " binaries available for " + args + "! Expected just 1");
         }
         Binary binary = binaryList.get(0);
         if (binary.getInstaller() != null) {

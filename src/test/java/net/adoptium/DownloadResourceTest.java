@@ -24,12 +24,12 @@ public class DownloadResourceTest {
                 .statusCode(200);
     }
 
-    /*@Test
+    @Test
     public void testArgParsingMissingArg() {
         given().when().get("/download/thank-you/windows-x64-hotspot-jdk-jdk-ga-adoptopenjdk-11.0.10+9")
                 .then()
                 .statusCode(404);
-    }*/
+    }
 
     @Test
     public void testArgParsingInvalidVersion() {

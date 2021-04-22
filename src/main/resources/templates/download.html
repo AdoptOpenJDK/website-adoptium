@@ -6,28 +6,28 @@
     <title>Download</title>
 </head>
 <body>
-    <div class="banner lead">
-        Adoptium
-    </div>
+<div class="banner lead">
+    Adoptium
+</div>
 
-    <div class="container">
-        <div class="left-column">
-            <h2>Download starting...</h2>
-            <p>Thank you for downloading</p>
-            <a href="{downloadLink}">
-                {vendor} {imageType} {version}<br>
-                for {os} {arch}
-            </a>
-            <button id="btn-copy-dll">Copy</button>
-            <p>
-                If the downlaod does not start within 10 seconds,<br>
-                <a href="{downloadLink}">try again to download manually</a>
-            </p>
-            <p>checksum (sha256): {checksum}</p>
-            <button id="btn-copy-chksm">Copy</button>
-        </div>
+<div class="container">
+    <div class="left-column">
+        <h2>Download starting...</h2>
+        <p>Thank you for downloading</p>
+        <a href="{downloadLink}">
+            {vendor} {imageType} {version}<br>
+            for {os} {arch}
+        </a>
+        <button id="btn-copy-dll">Copy</button>
+        <p>
+            If the downlaod does not start within 10 seconds,<br>
+            <a href="{downloadLink}">try again to download manually</a>
+        </p>
+        <p>checksum (sha256): {checksum}</p>
+        <button id="btn-copy-chksm">Copy</button>
     </div>
-    <style type="text/css" scoped>
+</div>
+<style type="text/css" scoped>
         h1, h2, h3, h4, h5, h6 {
             margin-bottom: 0.5rem;
             font-weight: 400;
@@ -105,7 +105,7 @@
             font-weight: 200;
         }
     </style>
-    <script type="text/javascript" scoped>
+<script type="text/javascript" scoped>
         window.open('{downloadLink}', '_self');
         function fallbackCopyTextToClipboard(text) {
           var textArea = document.createElement("textarea");
