@@ -9,7 +9,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 @QuarkusTest
 public class IndexResourceTest {
 
-    /*@Test
+    @Test
     public void testHelloEndpointEnglish() {
         given().header("Accept-Language", "en-US") //chrome and edge sends with a "-"
           .when().get("/")
@@ -27,5 +27,5 @@ public class IndexResourceTest {
                 .then()
                 .statusCode(200)
                 .body(containsString("<p class=\"lead\">Hallo</p>"));
-    }*/
+    }
 }

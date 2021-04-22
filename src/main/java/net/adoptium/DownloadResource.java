@@ -144,7 +144,7 @@ public class DownloadResource {
         List<Release> releaseList = api.getRelease(version, arch, heapSize, imageType, jvmImpl, os, project, releaseType, vendor);
         List<Binary> binaryList = Arrays.asList(releaseList.get(0).getBinaries());
         if (binaryList.size() != 1) {
-            LOG.error("There are " + releaseList.size() + " binaries available! Expected just 1");
+            LOG.error("There are " + binaryList.size() + " binaries available! Expected just 1");
             throw new Exception("Unexpected number of binaries!");
         }
         Binary binary = binaryList.get(0);
@@ -157,38 +157,6 @@ public class DownloadResource {
             downloadLink = pkg.getLink();
             checksum = pkg.getChecksum();
         }
-        /*HttpRequest request = HttpRequest.newBuilder()
-                .GET()
-                .uri(URI.create("https://staging-api.adoptopenjdk.net/v3/assets/version/" + version
-                        + "?architecture=" + arch
-                        + "&heap_size=" + heapSize
-                        + "&image_type=" + imageType
-                        + "&jvm_impl=" + jvmImpl
-                        + "&os=" + os
-                        + "&project=" + project
-                        + "&release_type=" + releaseType
-                        + "&vendor=" + vendor)
-                ).build();
-        LOG.debug(request.uri());
-        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        LOG.debug(response.body());
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonResponse = mapper.readTree(response.body());
-        JsonNode binaries = jsonResponse.get(0).get("binaries");
-        if (binaries.size() != 1) {
-            LOG.error("There are " + binaries.size() + " binaries available! Expected just 1");
-            throw new Exception("Unexpected number of binaries!");
-        }
-        Binary binary = mapper.convertValue(binaries.get(0), Binary.class);
-        if (binary.getInstaller() != null) {
-            Installer installer = binary.getInstaller();
-            downloadLink = installer.getLink();
-            checksum = installer.getChecksum();
-        } else {
-            Package pkg = binary.getPackage();
-            downloadLink = pkg.getLink();
-            checksum = pkg.getChecksum();
-        }*/
         return download
                 .data("downloadLink", downloadLink)
                 .data("imageType", imageType)
