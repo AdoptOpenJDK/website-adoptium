@@ -28,6 +28,7 @@ image::presentation/Aaron2.jpg[Dog,300,300,float="left"]
 .Cute dog from the Internet
 image::presentation/cute_pupper.jpg[Dog,300,300]
 
+More https://pixabay.com/images/search/dog/[Cute Dog Pictures].
 
 ---
 ==== You can embed cute dog videos
