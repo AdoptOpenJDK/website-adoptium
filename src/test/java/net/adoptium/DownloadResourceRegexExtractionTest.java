@@ -12,7 +12,7 @@ class DownloadResourceRegexExtractionTest {
     @Test
     public void testRegexPatternWithExistingVersion() {
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9";
-        Pattern pattern = DownloadResource.PATTERN;
+        Pattern pattern = Pattern.compile(DownloadResource.ARGS_REGEX, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(testString);
         assertEquals(true, matcher.find());
     }
@@ -20,9 +20,9 @@ class DownloadResourceRegexExtractionTest {
     @Test
     public void testRegexPatternWithTypingMistake() {
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10-+9";
-        Pattern pattern = DownloadResource.PATTERN;
+        Pattern pattern = Pattern.compile(DownloadResource.ARGS_REGEX, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(testString);
-        assertEquals(false, matcher.find());
+        assertEquals(true, matcher.find());
     }
 
 
@@ -30,7 +30,7 @@ class DownloadResourceRegexExtractionTest {
     public void testRegexGroups() {
         String testString = "os-arch-jvm_impl-image_type-heap_size-project-release_type-vendor-version\n";
         String[] groupValues = testString.split("-");
-        Pattern pattern = DownloadResource.PATTERN;
+        Pattern pattern = Pattern.compile(DownloadResource.ARGS_REGEX, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(testString);
         matcher.find();
         System.out.println(matcher.group());
