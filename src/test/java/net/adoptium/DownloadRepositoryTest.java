@@ -3,6 +3,8 @@ package net.adoptium;
 import io.quarkus.test.junit.QuarkusTest;
 import net.adoptium.api.ApiMockServer;
 import net.adoptium.api.ApiService;
+import net.adoptium.api.DownloadRepository;
+import net.adoptium.model.Download;
 import net.adoptopenjdk.api.v3.models.Architecture;
 import net.adoptopenjdk.api.v3.models.Binary;
 import net.adoptopenjdk.api.v3.models.OperatingSystem;
@@ -26,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class IndexResourceTest {
+public class DownloadRepositoryTest {
 
     private MockWebServer mockWebServer;
     private ApiService remoteApi;
@@ -64,15 +66,17 @@ public class IndexResourceTest {
             put(new UserSystem(OperatingSystem.mac, Architecture.aarch64), null); // TODO M1 = aarch64?
         }};
 
-        IndexResource r = new IndexResource(remoteApi);
+        DownloadRepository repository = new DownloadRepository(remoteApi);
 
         tests.forEach(((userSystem, checksum) -> {
-            Binary recommended = r.getUserDownload(userSystem.getOs(), userSystem.getArch());
+            Download recommended = repository.getUserDownload(userSystem.getOs(), userSystem.getArch());
             if (recommended == null && checksum == null) return;
-            if (recommended.getInstaller() != null) {
-                assertEquals(checksum, recommended.getInstaller().getChecksum(), "client: " + userSystem);
+
+            Binary recommendedBinary = recommended.getBinary();
+            if (recommendedBinary.getInstaller() != null) {
+                assertEquals(checksum, recommendedBinary.getInstaller().getChecksum(), "client: " + userSystem);
             } else {
-                assertEquals(checksum, recommended.getPackage().getChecksum(), "client: " + userSystem);
+                assertEquals(checksum, recommendedBinary.getPackage().getChecksum(), "client: " + userSystem);
             }
         }));
     }

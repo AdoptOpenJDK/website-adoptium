@@ -2,87 +2,28 @@ package net.adoptium;
 
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
-import net.adoptium.api.ApiService;
-import net.adoptopenjdk.api.v3.models.*;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
+import net.adoptium.api.DownloadRepository;
+import net.adoptium.model.Download;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 // index.html in META-INF.resources is used as static resource (not template)
 @Path("/")
 public class IndexResource {
-    // TODO where to define these? custom struct?
-    public static final int RECOMMENDED_JAVA_VERSION = 11;
-    public static final JvmImpl RECOMMENDED_JVM_IMPL = JvmImpl.hotspot;
-    public static final ImageType RECOMMENDED_IMAGE_TYPE = ImageType.jdk;
-    public static final Project RECOMMENDED_PROJECT = Project.jdk;
-    public static final HeapSize RECOMMENDED_HEAP_SIZE = HeapSize.normal;
-    public static final ReleaseType RECOMMENDED_RELEASE_TYPE = ReleaseType.ga;
-    public static final Vendor RECOMMENDED_VENDOR = Vendor.adoptopenjdk;
-
-    /**
-     * requires project 'jdk' and vendor 'adopt'
-     * the latest API returns it, but the feature_releases API doesn't like it
-     */
-    public static final Pattern SCM_REF_PATTERN = Pattern.compile("jdk-(\\S+)_adopt");
 
     private static final Logger LOG = Logger.getLogger(IndexResource.class);
 
     @Inject
-    public IndexResource(@RestClient ApiService api) {
-        this.api = api;
-    }
-
-    @Inject
     public Template index;
 
-    private final ApiService api;
+    private final DownloadRepository repository;
 
-    /**
-     * getUserDownload queries the openjdk-api-v3 to find all suitable releases
-     *
-     * @param os Operating System on which the binary is to be run
-     * @param arch Architecture on which the binary is to be run
-     * @return a binary, preferably with installer, but this isn't available for all os/arch combinations. Nullable.
-     */
-    public Binary getUserDownload(OperatingSystem os, Architecture arch) {
-        List<BinaryAssetView> availableReleaseList = api.getAvailableReleases(RECOMMENDED_JAVA_VERSION, JvmImpl.hotspot);
-        Binary response = null;
-
-        for (BinaryAssetView release : availableReleaseList) {
-            if (release.getBinary().getJvm_impl() != RECOMMENDED_JVM_IMPL) continue;
-            if (release.getBinary().getImage_type() != RECOMMENDED_IMAGE_TYPE) continue;
-            if (release.getBinary().getProject() != RECOMMENDED_PROJECT) continue;
-            if (release.getBinary().getHeap_size() != RECOMMENDED_HEAP_SIZE) continue;
-            if (release.getVendor() != RECOMMENDED_VENDOR) continue;
-
-            if (release.getBinary().getOs() == os && release.getBinary().getArchitecture() == arch) {
-                response = release.getBinary();
-                if (release.getBinary().getInstaller() != null) {
-                    break;
-                }
-            }
-        }
-        return response;
-    }
-
-    private String buildThankYouURL(Binary binary) {
-        // download URL does not like the _adopt suffix
-        Matcher m;
-        // TODO exception?
-        if (binary.getScm_ref() == null || !(m = SCM_REF_PATTERN.matcher(binary.getScm_ref())).matches()) {
-            LOG.warnf("git-scm does not match pattern: %s", binary.getScm_ref());
-            return null;
-        }
-        String version = m.group(1);
-        LOG.infof("stripped version for thank-you page: %s", version);
-        return String.format("%s-%s-%s-%s-%s-%s-%s-%s-%s", binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(), binary.getImage_type(), binary.getHeap_size(), binary.getProject(), RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, version);
+    @Inject
+    public IndexResource(DownloadRepository repository) {
+        this.repository = repository;
     }
 
     @GET
@@ -93,17 +34,17 @@ public class IndexResource {
             LOG.warnf("no OS detected for ua: %s, redirecting...", ua);
             // TODO redirect
         }
-        Binary recommended = getUserDownload(user.getOs(), user.getArch());
+        Download recommended = repository.getUserDownload(user.getOs(), user.getArch());
         if (recommended == null) {
             LOG.warnf("no binary found for user: %s, redirecting...", user);
             // TODO redirect
         }
-        String thankYouURL = buildThankYouURL(recommended);
+        String thankYouURL = repository.buildRedirectArgs(recommended);
         LOG.infof("user: %s -> [%s] binary: %s", user, thankYouURL, recommended);
         return index
-                .data("version", recommended.getScm_ref())
+                .data("version", recommended.getSemver())
                 .data("thank-you-version", thankYouURL)
-                .data("os", recommended.getOs())
-                .data("arch", recommended.getArchitecture());
+                .data("os", recommended.getBinary().getOs())
+                .data("arch", recommended.getBinary().getArchitecture());
     }
 }
