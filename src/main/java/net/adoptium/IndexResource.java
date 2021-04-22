@@ -11,15 +11,26 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // index.html in META-INF.resources is used as static resource (not template)
 @Path("/")
 public class IndexResource {
     // TODO where to define these? custom struct?
     public static final int RECOMMENDED_JAVA_VERSION = 11;
+    public static final JvmImpl RECOMMENDED_JVM_IMPL = JvmImpl.hotspot;
+    public static final ImageType RECOMMENDED_IMAGE_TYPE = ImageType.jdk;
+    public static final Project RECOMMENDED_PROJECT = Project.jdk;
     public static final HeapSize RECOMMENDED_HEAP_SIZE = HeapSize.normal;
     public static final ReleaseType RECOMMENDED_RELEASE_TYPE = ReleaseType.ga;
     public static final Vendor RECOMMENDED_VENDOR = Vendor.adoptopenjdk;
+
+    /**
+     * requires project 'jdk' and vendor 'adopt'
+     * the latest API returns it, but the feature_releases API doesn't like it
+     */
+    public static final Pattern SCM_REF_PATTERN = Pattern.compile("jdk-(\\S+)_adopt");
 
     private static final Logger LOG = Logger.getLogger(IndexResource.class);
 
@@ -45,10 +56,11 @@ public class IndexResource {
         Binary response = null;
 
         for (BinaryAssetView release : availableReleaseList) {
-            if (release.getBinary().getHeap_size() != HeapSize.normal) continue;
-            if (release.getBinary().getProject() != Project.jdk) continue;
-            if (release.getVendor() != Vendor.adoptopenjdk) continue;
-            if (release.getBinary().getImage_type() != ImageType.jdk) continue;
+            if (release.getBinary().getJvm_impl() != RECOMMENDED_JVM_IMPL) continue;
+            if (release.getBinary().getImage_type() != RECOMMENDED_IMAGE_TYPE) continue;
+            if (release.getBinary().getProject() != RECOMMENDED_PROJECT) continue;
+            if (release.getBinary().getHeap_size() != RECOMMENDED_HEAP_SIZE) continue;
+            if (release.getVendor() != RECOMMENDED_VENDOR) continue;
 
             if (release.getBinary().getOs() == os && release.getBinary().getArchitecture() == arch) {
                 response = release.getBinary();
@@ -62,8 +74,14 @@ public class IndexResource {
 
     private String buildThankYouURL(Binary binary) {
         // download URL does not like the _adopt suffix
-        String version = binary.getScm_ref().split("_")[0].split("-")[1];
-        System.out.println("vendor: " + Vendor.adoptopenjdk);
+        Matcher m;
+        // TODO exception?
+        if (binary.getScm_ref() == null || !(m = SCM_REF_PATTERN.matcher(binary.getScm_ref())).matches()) {
+            LOG.warnf("git-scm does not match pattern: %s", binary.getScm_ref());
+            return null;
+        }
+        String version = m.group(1);
+        LOG.infof("stripped version for thank-you page: %s", version);
         return String.format("%s-%s-%s-%s-%s-%s-%s-%s-%s", binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(), binary.getImage_type(), binary.getHeap_size(), binary.getProject(), RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, version);
     }
 
@@ -73,7 +91,7 @@ public class IndexResource {
         UserSystem user = UserAgentParser.getOsAndArch(ua);
         if (user.getOs() == null) {
             LOG.warnf("no OS detected for ua: %s, redirecting...", ua);
-            // TODO redirect :)
+            // TODO redirect
         }
         Binary recommended = getUserDownload(user.getOs(), user.getArch());
         if (recommended == null) {
