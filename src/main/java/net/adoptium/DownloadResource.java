@@ -55,7 +55,7 @@ public class DownloadResource {
             "(?<" + PROJECT + ">[^-\\/]*)-" +
             "(?<" + RELEASE_TYPE + ">[^-\\/]*)-" +
             "(?<" + VENDOR + ">[^-\\/]*)-" +
-            "(?<" + VERSION + ">[^-\\/!]*)$";
+            "(?<" + VERSION + ">[^\\/]*)$";
 
     private static final Logger LOG = Logger.getLogger(DownloadResource.class);
 
