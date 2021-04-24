@@ -41,6 +41,40 @@ public class IndexResource {
         this.repository = repository;
     }
 
+    @RouteFilter
+    void localeMiddleware(RoutingContext rc) {
+        // @CookieParam(ATTRIBUTE_LOCALE) String locale
+        // order: query, cookie, header
+        // if query parameter `locale` is set, update cookie and Accept-Language header
+        // qute uses the Accept-Language header
+        String defaultLocale = appConfig.getDefaultLocale().getLanguage();
+        Cookie localeCookie = rc.getCookie(ATTRIBUTE_LOCALE);
+
+        List<String> localeQuery = rc.queryParam(ATTRIBUTE_LOCALE);
+        if (localeQuery.size() > 0)
+            localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, localeQuery.get(0));
+
+        // if cookie & query-param aren't set, use header
+        if (localeCookie == null || localeCookie.getValue().equals("")) {
+            String acceptLanguage = rc.request().getHeader("Accept-Language");
+            if (acceptLanguage == null) {
+                LOG.info("locale - using default");
+                localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, defaultLocale);
+            } else {
+                LOG.info("locale - using Accept-Default");
+                acceptLanguage = new LocaleConverter().convert(acceptLanguage).getLanguage();
+                localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, acceptLanguage);
+            }
+        }
+
+        // qute did the Accept-Language parsing for us, but to set the correct cookie we need to parse it outselves
+        // how does quarks/qute do it'
+        LOG.info("locale - using: " + localeCookie.getValue());
+        rc.response().addCookie(localeCookie);
+        rc.request().headers().set("Accept-Language", localeCookie.getValue());
+        rc.next();
+    }
+
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get(@QueryParam("name") String name, @HeaderParam("user-agent") String ua) {

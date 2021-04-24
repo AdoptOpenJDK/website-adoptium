@@ -32,13 +32,55 @@ public class IndexResourceTest {
     URL indexUrl;
 
     @Test
+    public void testIndexLocale() {
+        // q: relative preference
+        final Map<Locale, String[]> languages = new HashMap<>() {{
+            put(Locale.ENGLISH, new String[]{"en", "en-US", "en-US,en", "en-GB,en;q=0.5,de;q=0.3"});
+            // no q means q=1
+            put(Locale.GERMAN, new String[]{"de", "de-CH", "de-CH,de", "de-DE,de;q=0.9,en;q=0.4", "de,en-GB;q=0.9"});
+        }};
+
+        languages.forEach((locale, headers) -> {
+            // MessageBundle > ResourceBundle as it also supports the values defined using @Message
+            // MessageBundle gets Locale from default locale
+            // ResourceBundle bundle = ResourceBundle.getBundle("messages/msg", locale);
+            Locale.setDefault(locale);
+            AppMessages bundle = MessageBundles.get(AppMessages.class);
+
+            for (String header : headers) {
+                try {
+                    Request request = new Request.Builder()
+                            .header("Accept-Language", header)
+                            .header("User-Agent", "Windows")
+                            .url(indexUrl)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    ResponseBody body = response.body();
+
+                    assert body != null;
+                    Assertions.assertEquals(200, response.code(), "locale: " + locale);
+
+                    // we need a constant string (no {variable} input)
+                    Assertions.assertTrue(body.string().contains(bundle.main_text()), "locale: " + locale);
+                } catch (IOException e) {
+                    fail("locale: " + locale + ", header: " + header, e);
+                }
+            }
+        });
+    }
+
+    @Test
     public void testDownloadRedirect() {
         Playwright playwright = Playwright.create();
 
         // TODO use global config
         BrowserType browserType = playwright.firefox();
         try (Browser browser = browserType.launch()) {
-            BrowserContext context = browser.newContext();
+            BrowserContext context = browser.newContext(new Browser.NewContextOptions()
+                    // any Windows
+                    .setUserAgent("Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.7113.93 Safari/537.36")
+                    .setLocale("en-US")
+            );
             Page page = context.newPage();
             page.navigate(indexUrl.toString());
 
