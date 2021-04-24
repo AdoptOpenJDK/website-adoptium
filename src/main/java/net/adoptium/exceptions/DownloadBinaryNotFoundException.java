@@ -17,7 +17,7 @@ public class DownloadBinaryNotFoundException extends WebApplicationException {
     }
 
     public String getSuggestion() {
-        return this.msg;
+        return this.suggestion;
     }
 
 }

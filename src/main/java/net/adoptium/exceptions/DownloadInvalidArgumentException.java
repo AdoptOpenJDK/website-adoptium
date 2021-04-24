@@ -17,7 +17,7 @@ public class DownloadInvalidArgumentException extends WebApplicationException {
     }
 
     public String getSuggestion() {
-        return this.msg;
+        return this.suggestion;
     }
 
 }

@@ -52,7 +52,7 @@ public class DownloadResource {
             "(?<" + PROJECT + ">[^-\\/]*)-" +
             "(?<" + RELEASE_TYPE + ">[^-\\/]*)-" +
             "(?<" + VENDOR + ">[^-\\/]*)-" +
-            "(?<" + VERSION + ">[^\\/!]*)$";
+            "(?<" + VERSION + ">[^\\/]*)$";
 
     private static final Logger LOG = Logger.getLogger(DownloadResource.class);
 
@@ -67,11 +67,10 @@ public class DownloadResource {
     @Produces(MediaType.TEXT_HTML)
     @Path("thank-you/{args}")
     public TemplateInstance get(@PathParam("args") String args) throws Exception {
-        //TODO: Ask if we first should check if file matches an existing version in the api. or if we directly should send the request to the api and let the api check the version
         Pattern pattern = Pattern.compile(ARGS_REGEX, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(args);
         if (!matcher.find()) {
-            throw new DownloadInvalidArgumentException("version 11 not found!", "Try to access this page from: LINK");
+            throw new DownloadInvalidArgumentException("Version not found!", "Try to access this page from the root route.");
         }
         String os = matcher.group(OS),
                 arch = matcher.group(ARCH),
@@ -87,7 +86,7 @@ public class DownloadResource {
         List<Release> releaseList = api.getRelease(version, arch, heapSize, imageType, jvmImpl, os, project, releaseType, vendor);
         List<Binary> binaryList = Arrays.asList(releaseList.get(0).getBinaries());
         if (binaryList.size() == 0) {
-            throw new DownloadBinaryNotFoundException("Binary not found!", "Try to access this page from: LINK");
+            throw new DownloadBinaryNotFoundException("Binary not found!", "Try to access this page from the root route.");
         } else if (binaryList.size() > 1) {
             LOG.error("There are " + binaryList.size() + " binaries available for " + args + "! Expected just 1");
         }

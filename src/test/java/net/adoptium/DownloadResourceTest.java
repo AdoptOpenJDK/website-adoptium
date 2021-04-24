@@ -11,10 +11,10 @@ public class DownloadResourceTest {
 
     @Test
     public void testDownloadLink() {
-        given().header("Accept-Language", "en-US").when().get("/download/thank-you/windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9")
+        given().when().get("/download/thank-you/windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9")
                 .then()
                 .statusCode(200)
-                .body(containsString("<a href=\"https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/"));
+                .body(containsString("https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/OpenJDK11U-jdk_x64_windows_hotspot_11.0.10_9.msi"));
     }
 
     @Test
