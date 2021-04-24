@@ -19,8 +19,6 @@ import org.junit.jupiter.api.TestInstance;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -48,7 +46,7 @@ public class DownloadRepositoryTest {
     }
 
     @Test
-    public void testUserDownload() throws IOException {
+    public void testUserDownload() {
         // current procedure for determining the correct binary: manually searching for it based on the criteria used in getUserDownload (CTRL-F "linux")
         // NOTE: for OS.windows (which usually includes installers) the first match will be used,
         //       while OS.linux generally accepts the last one (since it's trying to find an installer)
@@ -68,7 +66,7 @@ public class DownloadRepositoryTest {
 
         DownloadRepository repository = new DownloadRepository(remoteApi);
 
-        tests.forEach(((userSystem, checksum) -> {
+        tests.forEach((userSystem, checksum) -> {
             Download recommended = repository.getUserDownload(userSystem.getOs(), userSystem.getArch());
             if (recommended == null && checksum == null) return;
 
@@ -78,25 +76,7 @@ public class DownloadRepositoryTest {
             } else {
                 assertEquals(checksum, recommendedBinary.getPackage().getChecksum(), "client: " + userSystem);
             }
-        }));
-    }
-
-    @Test
-    public void testHelloEndpointEnglish() {
-        given().header("Accept-Language", "en-US") //chrome and edge sends with a "-"
-                .when().get("/")
-                .then()
-                .statusCode(200)
-                .body(containsString("<p class=\"lead\">Hello</p>"));
-    }
-
-    @Test
-    public void testHelloEndpointGerman() {
-        given().header("Accept-Language", "de,en-US;q=0.7,en;q=0.3") //chrome and edge sends with a "-"
-                .when().get("/")
-                .then()
-                .statusCode(200)
-                .body(containsString("<p class=\"lead\">Hallo</p>"));
+        });
     }
 
     @AfterAll

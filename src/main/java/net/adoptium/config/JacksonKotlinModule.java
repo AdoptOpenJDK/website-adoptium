@@ -1,4 +1,4 @@
-package net.adoptium.configuration;
+package net.adoptium.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -7,12 +7,16 @@ import io.quarkus.qute.i18n.MessageParam;
 @MessageBundle
 public interface AppMessages {
 
-    // MessageParam:
-    //@Message("Hello {name ?: 'world'}")
-    @Message("Hello {name}")
-    String hello_name(@MessageParam("name") String name);
+    @Message("adoptium")
+    String adoptium();
 
-    @Message("Hello")
-    String hello();
+    @Message("Download Java for free")
+    String main_text();
+
+    @Message("download {download_name ?: 'Java'}")
+    String download_java(@MessageParam("download_name") String download_name);
+
+    @Message("Download starting...")
+    String download_starting();
 
 }
