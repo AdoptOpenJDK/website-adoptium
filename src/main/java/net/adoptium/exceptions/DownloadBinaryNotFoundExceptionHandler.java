@@ -1,7 +1,6 @@
 package net.adoptium.exceptions;
 
 import io.quarkus.qute.Template;
-import io.quarkus.qute.api.ResourcePath;
 
 import javax.inject.Inject;
 import javax.ws.rs.Produces;

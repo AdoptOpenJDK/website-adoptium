@@ -1,7 +1,9 @@
 package net.adoptium;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import io.quarkus.qute.Template;
@@ -19,7 +21,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.adoptopenjdk.api.v3.models.*;
+import net.adoptopenjdk.api.v3.models.Binary;
+import net.adoptopenjdk.api.v3.models.Release;
+import net.adoptopenjdk.api.v3.models.Installer;
 
 @Path("/download")
 public class DownloadResource {

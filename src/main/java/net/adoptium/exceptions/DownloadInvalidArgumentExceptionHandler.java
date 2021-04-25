@@ -1,13 +1,9 @@
 package net.adoptium.exceptions;
 
 import io.quarkus.qute.Template;
-import io.quarkus.qute.api.ResourcePath;
 
 import javax.inject.Inject;
-import javax.inject.Qualifier;
-import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
