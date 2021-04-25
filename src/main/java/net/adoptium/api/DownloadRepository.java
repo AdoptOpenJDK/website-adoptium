@@ -46,8 +46,9 @@ public class DownloadRepository {
 
             if (release.getBinary().getOs() == os && release.getBinary().getArchitecture() == arch) {
                 response = new Download(release.getBinary(), release.getVersion().getSemver());
+                // if an installer is found, return here and don't search for other binaries
                 if (release.getBinary().getInstaller() != null) {
-                    break;
+                    return response;
                 }
             }
         }
