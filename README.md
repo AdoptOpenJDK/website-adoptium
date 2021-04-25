@@ -1,10 +1,3 @@
-Currently, [openjdk-api-v3](https://github.com/AdoptOpenJDK/openjdk-api-v3) needs to be compiled locally:
-$ git clone https://github.com/AdoptOpenJDK/openjdk-api-v3.git
-$ cd openjdk-api-v3
-$ git branch production
-$ ./mvnw -DskipTests=true clean install
-
-
 # For New Contributors
 
 ## GitHub Organization using ZenHub
@@ -14,10 +7,6 @@ $ ./mvnw -DskipTests=true clean install
 - [Creating issues](https://github.com/AdoptOpenJDK/website-adoptium/wiki/ZENHUB:-Creating-and-Working-with-Issues#creating-issues) (templates, labels and more...)
 
 # Website-Adoptium Project
-
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
-
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
 ## Running the application in dev mode
 
@@ -43,6 +32,11 @@ If you want to build an _über-jar_, execute the following command:
 ```
 
 The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+
+## Updating test api
+```shell
+curl https://staging-api.adoptopenjdk.net/v3/assets/latest/11/hotspot -o src/test/resources/api-staging/v3_assets_latest_11_hotspot.json
+```
 
 ## Creating a native executable
 
