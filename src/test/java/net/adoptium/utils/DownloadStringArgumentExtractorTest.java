@@ -13,7 +13,7 @@ class DownloadStringArgumentExtractorTest {
     @Test
     public void testArgumentGroups() {
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9";
-        Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionArguments(testString);
+        Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionDetails(testString);
 
         assertEquals(DownloadArgumentGroup.values().length, arguments.size());
 
@@ -31,7 +31,7 @@ class DownloadStringArgumentExtractorTest {
     @Test
     public void testStringWithMinusSymbol() {
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10-9";
-        Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionArguments(testString);
+        Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionDetails(testString);
 
         assertEquals(DownloadArgumentGroup.values().length, arguments.size());
         assertEquals("11.0.10-9", arguments.get(VERSION));
@@ -41,7 +41,7 @@ class DownloadStringArgumentExtractorTest {
     public void testFindsGroupsWithEnoughArgumentsAlthoughNotValidArguments() {
         //The DownloadStringArgumentExtractor should not check if the arguments are valid
         String testString = "windows-x-64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10-9";
-        Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionArguments(testString);
+        Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionDetails(testString);
 
         assertEquals(DownloadArgumentGroup.values().length, arguments.size());
         assertEquals("x", arguments.get(ARCH));
@@ -54,7 +54,7 @@ class DownloadStringArgumentExtractorTest {
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk";
 
         assertThrows(DownloadInvalidArgumentException.class, () -> {
-           DownloadStringArgumentExtractor.getVersionArguments(testString);
+           DownloadStringArgumentExtractor.getVersionDetails(testString);
         });
     }
 }

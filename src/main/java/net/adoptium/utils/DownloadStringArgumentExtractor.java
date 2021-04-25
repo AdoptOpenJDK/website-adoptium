@@ -38,21 +38,21 @@ public class DownloadStringArgumentExtractor {
 
     private static final Pattern DOWNLOAD_PATTERN = Pattern.compile(REGEX_DOWNLOAD, Pattern.CASE_INSENSITIVE);
 
-    public static Map<DownloadArgumentGroup, String> getVersionArguments(String stringVersionArguments) throws DownloadInvalidArgumentException {
+    public static Map<DownloadArgumentGroup, String> getVersionDetails(String stringVersionArguments) throws DownloadInvalidArgumentException {
         Matcher matcher = DOWNLOAD_PATTERN.matcher(stringVersionArguments);
         if(!matcher.find()) {
             throw new DownloadInvalidArgumentException("Version not found!", "Try to access this page from the root route.");
         }
-        Map<DownloadArgumentGroup, String> versionArguments = extractArgumentsToMap(matcher);
-        return versionArguments;
+        Map<DownloadArgumentGroup, String> versionDetails = extractArgumentsToMap(matcher);
+        return versionDetails;
     }
 
     private static Map<DownloadArgumentGroup, String> extractArgumentsToMap(Matcher matcher) {
-        Map<DownloadArgumentGroup, String> versionArguments = new HashMap<>();
+        Map<DownloadArgumentGroup, String> versionDetails = new HashMap<>();
         for(DownloadArgumentGroup downloadArgGroup : DownloadArgumentGroup.values()) {
             String argument = matcher.group(downloadArgGroup.toString());
-            versionArguments.put(downloadArgGroup, argument);
+            versionDetails.put(downloadArgGroup, argument);
         }
-        return versionArguments;
+        return versionDetails;
     }
 }

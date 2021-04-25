@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DownloadResourceRegexExtractionTest {
-
+/*
     @Test
     public void testRegexPatternWithExistingVersion() {
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9";
@@ -35,5 +35,5 @@ class DownloadResourceRegexExtractionTest {
         matcher.find();
         System.out.println(matcher.group());
         assertEquals(groupValues.length, matcher.groupCount());
-    }
+    }*/
 }
