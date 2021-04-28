@@ -48,18 +48,6 @@ public class DownloadResource {
         return downloadPage;
     }
 
-    private List<Release> requestDownloadVersion(Map<DownloadArgumentGroup, String> versionArguments) {
-        return api.getRelease(versionArguments.get(VERSION),
-                versionArguments.get(ARCH),
-                versionArguments.get(HEAP_SIZE),
-                versionArguments.get(IMAGE_TYPE),
-                versionArguments.get(JVM_IMPL),
-                versionArguments.get(OS),
-                versionArguments.get(PROJECT),
-                versionArguments.get(RELEASE_TYPE),
-                versionArguments.get(VENDOR));
-    }
-
     private Binary getBinary(Map<DownloadArgumentGroup, String> versionDetails) throws DownloadBinaryNotFoundException {
         List<Release> releaseList = requestDownloadVersion(versionDetails);
         List<Binary> binaryList = Arrays.asList(releaseList.get(0).getBinaries());
@@ -70,6 +58,18 @@ public class DownloadResource {
             LOG.error("There are " + binaryList.size() + " binaries available! Expected just 1");
         }
         return binaryList.get(0);
+    }
+
+    private List<Release> requestDownloadVersion(Map<DownloadArgumentGroup, String> versionArguments) {
+        return api.getRelease(versionArguments.get(VERSION),
+                versionArguments.get(ARCH),
+                versionArguments.get(HEAP_SIZE),
+                versionArguments.get(IMAGE_TYPE),
+                versionArguments.get(JVM_IMPL),
+                versionArguments.get(OS),
+                versionArguments.get(PROJECT),
+                versionArguments.get(RELEASE_TYPE),
+                versionArguments.get(VENDOR));
     }
 
     private TemplateInstance fillHTMLVariables(DownloadResourceHTMLData htmlData) {
