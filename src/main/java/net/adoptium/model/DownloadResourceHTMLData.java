@@ -10,13 +10,13 @@ import java.util.Map;
 import static net.adoptium.utils.DownloadArgumentGroup.*;
 
 public class DownloadResourceHTMLData {
-    private String downloadLink;
-    private String imageType;
-    private String checksum;
-    private String version;
-    private String vendor;
-    private String arch;
-    private String os;
+    private final String downloadLink;
+    private final String imageType;
+    private final String checksum;
+    private final String version;
+    private final String vendor;
+    private final String arch;
+    private final String os;
 
     public DownloadResourceHTMLData(Map<DownloadArgumentGroup, String> versionDetails, Binary binary) {
         imageType = versionDetails.get(IMAGE_TYPE);
@@ -39,12 +39,12 @@ public class DownloadResourceHTMLData {
         return downloadLink;
     }
 
-    public String getChecksum() {
-        return checksum;
-    }
-
     public String getImageType() {
         return imageType;
+    }
+
+    public String getChecksum() {
+        return checksum;
     }
 
     public String getVersion() {

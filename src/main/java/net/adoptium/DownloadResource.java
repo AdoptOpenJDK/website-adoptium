@@ -6,7 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import io.quarkus.qute.Template;
+import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import net.adoptium.api.DownloadRepository;
 import net.adoptium.model.DownloadResourceHTMLData;
@@ -23,11 +23,13 @@ import net.adoptopenjdk.api.v3.models.Binary;
 public class DownloadResource {
     private static final Logger LOG = Logger.getLogger(DownloadResource.class);
 
-    @Inject
-    DownloadRepository repository;
-    @Inject
-    Template download;
+    @CheckedTemplate
+    public static class Templates {
+        public static native TemplateInstance download(DownloadResourceHTMLData htmlData);
+    }
 
+    @Inject
+    public DownloadRepository repository;
 
     @GET
     @Produces(MediaType.TEXT_HTML)
@@ -37,18 +39,6 @@ public class DownloadResource {
         Map<DownloadArgumentGroup, String> versionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
         Binary binary = repository.getBinary(versionDetails);
         DownloadResourceHTMLData htmlData = new DownloadResourceHTMLData(versionDetails, binary);
-        TemplateInstance downloadPage = fillHTMLVariables(htmlData);
-        return downloadPage;
-    }
-
-    private TemplateInstance fillHTMLVariables(DownloadResourceHTMLData htmlData) {
-        return download
-                .data("downloadLink", htmlData.getDownloadLink())
-                .data("imageType", htmlData.getImageType())
-                .data("checksum", htmlData.getChecksum())
-                .data("version", htmlData.getVersion())
-                .data("vendor", htmlData.getVendor())
-                .data("arch", htmlData.getArch())
-                .data("os", htmlData.getOs());
+        return Templates.download(htmlData);
     }
 }

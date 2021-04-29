@@ -17,13 +17,10 @@ public class IndexResource {
 
     private static final Logger LOG = Logger.getLogger(IndexResource.class);
 
+    private final DownloadRepository repository;
+
     @Inject
     public Template index;
-
-    @Inject
-    ApplicationConfig appConfig;
-
-    private final DownloadRepository repository;
 
     @Inject
     public IndexResource(DownloadRepository repository) {
