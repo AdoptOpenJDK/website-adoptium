@@ -3,20 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>website-adoptium - 1.0.0-SNAPSHOT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 </head>
 <body>
     <div class="banner lead">
-        OpenJDK Download
+        {msg:adoptium}
     </div>
 
     <div class="container">
-        <div class="left-column">
-            <div class="example-sponsors">
-                <h3>Sponsors</h3>
-                <p><a href="/members">Sponsors section...</a></p>
-            </div>
-        </div>
+        {msg:main_text}
+        <br>
+        {msg:download_java(download_name)}
     </div>
+
+    <div class="container" id="main">
+        <a href="/download/thank-you/{thank-you-version}" class="button" id="download_btn">
+            <div id="dl-version">
+                <i id="dl-icon" class="fa fa-download" aria-hidden="true"></i>
+                <span>Latest release</span>
+                <i id="dl-icon-2" class="fa fa-arrow-circle-o-right hide" aria-hidden="true"></i>
+            </div>
+            <div class="dl-description">
+                {version}<br>
+                for {os} {arch}
+            </div>
+        </a>
+    </div>
+	
+	<div class="example-sponsors">
+			<h3>Sponsors</h3>
+			<p><a href="/members">Sponsors section...</a></p>
+	</div>
+	
     <style type="text/css" scoped>
         h1, h2, h3, h4, h5, h6 {
             margin-bottom: 0.5rem;
@@ -53,6 +71,14 @@
             font-size: 2rem;
         }
 
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
         .banner {
             font-size: 2.7rem;
             margin: 0;
@@ -66,33 +92,18 @@
             font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
 
-        code {
-            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            font-size: 87.5%;
-            color: #e83e8c;
-            word-break: break-word;
-        }
-
-        .left-column {
-            padding: .75rem;
-        }
-
-        .container {
-            display: flex;
-            width: 100%;
-        }
-
-        li {
-            margin: 0.75rem;
-        }
-
-        .example-code {
-            border-left: 0.3rem solid #71aeef;
-            padding-left: 10px;
-        }
-
-        .example-code h3 {
-            font-weight: 200;
+        .button {
+            background-color: #3d70b2;
+            border: none;
+            color: white;
+            padding: 10px 34px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: .2rem;
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 20px;
+            cursor: pointer;
         }
     </style>
 </body>
