@@ -1,15 +1,25 @@
 package net.adoptium.api;
 
+import net.adoptium.DownloadResource;
+import net.adoptium.exceptions.DownloadBinaryNotFoundException;
 import net.adoptium.model.Download;
+import net.adoptium.utils.DownloadArgumentGroup;
 import net.adoptopenjdk.api.v3.models.*;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.logging.Logger;
+import org.jboss.resteasy.client.exception.ResteasyWebApplicationException;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import static net.adoptium.utils.DownloadArgumentGroup.*;
 
 @Dependent
 public class DownloadRepository {
+    private static final Logger LOG = Logger.getLogger(DownloadRepository.class);
     // TODO where to define these? custom struct?
     public static final int RECOMMENDED_JAVA_VERSION = 11;
     public static final JvmImpl RECOMMENDED_JVM_IMPL = JvmImpl.hotspot;
@@ -65,4 +75,32 @@ public class DownloadRepository {
         Binary binary = download.getBinary();
         return String.format("%s-%s-%s-%s-%s-%s-%s-%s-%s", binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(), binary.getImage_type(), binary.getHeap_size(), binary.getProject(), RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, download.getSemver());
     }
+
+    public List<Release> requestDownloadVersion(Map<DownloadArgumentGroup, String> versionArguments) throws DownloadBinaryNotFoundException {
+        try {
+            return api.getRelease(versionArguments.get(VERSION),
+                    versionArguments.get(ARCH),
+                    versionArguments.get(HEAP_SIZE),
+                    versionArguments.get(IMAGE_TYPE),
+                    versionArguments.get(JVM_IMPL),
+                    versionArguments.get(OS),
+                    versionArguments.get(PROJECT),
+                    versionArguments.get(RELEASE_TYPE),
+                    versionArguments.get(VENDOR));
+        } catch (ResteasyWebApplicationException e) {
+            throw new DownloadBinaryNotFoundException("Binary not found!", "Try to access this page from the root route.");
+        }
+    }
+
+    public Binary getBinary(Map<DownloadArgumentGroup, String> versionDetails) throws DownloadBinaryNotFoundException {
+        List<Release> releaseList = requestDownloadVersion(versionDetails);
+        List<Binary> binaryList = Arrays.asList(releaseList.get(0).getBinaries());
+        if (binaryList.size() == 0) {
+            throw new DownloadBinaryNotFoundException("Binary not found!", "Try to access this page from the root route.");
+        } else if (binaryList.size() > 1) {
+            LOG.error("There are " + binaryList.size() + " binaries available! Expected just 1.");
+        }
+        return binaryList.get(0);
+    }
+
 }
