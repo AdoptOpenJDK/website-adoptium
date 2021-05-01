@@ -36,7 +36,7 @@ public class MembersResource {
             List<Member> memberList = getMemberList(json);
 
             for(Member m : memberList){
-                System.out.println(m.getMemberName());
+                // TODO: insert Members into HTML page, for loop probably not needed
             }
         }
     }
