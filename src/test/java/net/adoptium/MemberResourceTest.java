@@ -10,7 +10,7 @@ import java.util.List;
 
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class MembersResourceTest {
+public class MemberResourceTest {
 
 
     @DisplayName("Test loading a JSON file")
@@ -18,7 +18,7 @@ public class MembersResourceTest {
     void parseJSONTest(){
         String json = "{\"memberName\":\"Microsoft\",\"memberLink\":\"https://microsoft.com/\", \"memberLogo\":\"assets/memberLogos/microsoft.svg\", \"memberAltText\":\"Microsoft Logo\", \"organizationType\":\"\"}";
         try {
-            MembersResource memberResource = new MembersResource();
+            MemberResource memberResource = new MemberResource();
             List<Member> memberList = memberResource.getMemberList(json);
             Member testMember = memberList.get(memberList.size() - 1);
             Assert.assertEquals("Microsoft", testMember.getMemberName());

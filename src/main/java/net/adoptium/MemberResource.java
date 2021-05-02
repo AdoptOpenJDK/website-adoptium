@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Path("/members")
-public class MembersResource {
-    private static final Logger LOG = Logger.getLogger(MembersResource.class);
+public class MemberResource {
+    private static final Logger LOG = Logger.getLogger(MemberResource.class);
     private static final String EMPTY_STRING = "";
     private static final String JSON_PATH = "json/members.json";
 
@@ -31,7 +31,7 @@ public class MembersResource {
     @Inject
     Template members;
 
-    public MembersResource() {
+    public MemberResource() {
         InputStream is = loadJSONInputStream(JSON_PATH);
         String json = parseInputStreamToString(is);
 
