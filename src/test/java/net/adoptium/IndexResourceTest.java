@@ -1,6 +1,7 @@
 package net.adoptium;
 
 import com.microsoft.playwright.*;
+import io.quarkus.qute.i18n.Localized;
 import io.quarkus.qute.i18n.MessageBundles;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.common.http.TestHTTPResource;
@@ -25,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IndexResourceTest {
 
+    OkHttpClient client = new OkHttpClient();
+
     @TestHTTPEndpoint(IndexResource.class)
     @TestHTTPResource
     URL indexUrl;
@@ -43,6 +46,7 @@ public class IndexResourceTest {
             // MessageBundle gets Locale from default locale
             // ResourceBundle bundle = ResourceBundle.getBundle("messages/msg", locale);
             Locale.setDefault(locale);
+            // , Localized.Literal.of(locale.getCountry())
             AppMessages bundle = MessageBundles.get(AppMessages.class);
 
             for (String header : headers) {
@@ -56,10 +60,10 @@ public class IndexResourceTest {
                     ResponseBody body = response.body();
 
                     assert body != null;
-                    Assertions.assertEquals(200, response.code(), "locale: " + locale);
+                    Assertions.assertEquals(200, response.code(), "locale: " + locale + ", header: " + header);
 
                     // we need a constant string (no {variable} input)
-                    Assertions.assertTrue(body.string().contains(bundle.main_text()), "locale: " + locale);
+                    Assertions.assertTrue(body.string().contains(bundle.main_text()), "locale: " + locale + ", header: " + header + ", main_text: " + bundle.main_text());
                 } catch (IOException e) {
                     fail("locale: " + locale + ", header: " + header, e);
                 }

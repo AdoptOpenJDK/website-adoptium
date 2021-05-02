@@ -44,7 +44,7 @@ public class IndexResource {
         // order: query, cookie, header
         // if query parameter `locale` is set, update cookie and Accept-Language header
         // qute uses the Accept-Language header
-        String defaultLocale = appConfig.defaultLocale.getLanguage();
+        String defaultLocale = appConfig.getDefaultLocale().getLanguage();
         Cookie localeCookie = rc.getCookie(ATTRIBUTE_LOCALE);
 
         List<String> localeQuery = rc.queryParam(ATTRIBUTE_LOCALE);
@@ -58,7 +58,7 @@ public class IndexResource {
                 LOG.info("locale - using default");
                 localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, defaultLocale);
             } else {
-                LOG.info("locale - using Accept-Default");
+                LOG.info("locale - using Accept-Language: " + acceptLanguage);
                 acceptLanguage = new LocaleConverter().convert(acceptLanguage).getLanguage();
                 localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, acceptLanguage);
             }

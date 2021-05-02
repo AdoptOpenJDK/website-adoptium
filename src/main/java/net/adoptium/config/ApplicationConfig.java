@@ -16,4 +16,8 @@ public class ApplicationConfig {
     @Inject
     @ConfigProperty(name = "quarkus.default-locale")
     public Locale defaultLocale;
+
+    public Locale getDefaultLocale() {
+        return defaultLocale;
+    }
 }
