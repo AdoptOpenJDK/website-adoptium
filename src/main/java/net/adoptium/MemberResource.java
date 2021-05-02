@@ -78,6 +78,7 @@ public class MemberResource {
     }
 
     private InputStream loadJSONInputStream(String path){
+        // TODO: check if file exists, handle error if there is one
         return getClass().getClassLoader().getResourceAsStream(path);
     }
 
