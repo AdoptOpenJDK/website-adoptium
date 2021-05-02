@@ -19,4 +19,8 @@ public interface AppMessages {
     @Message("Download starting...")
     String download_starting();
 
+    @Message("{version}\n for {os} {arch}")
+    String download_version(@MessageParam("version") String version,
+                            @MessageParam("os") String os,
+                            @MessageParam("arch") String arch);
 }
