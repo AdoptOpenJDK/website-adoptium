@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!--<meta http-equiv="refresh" content="0; url={downloadLink}">-->
     <title>Download</title>
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
 <div class="banner lead">
-    Adoptium
+    {msg:adoptium}
 </div>
 
 <div class="container">
@@ -27,128 +27,54 @@
         <button id="btn-copy-chksm">Copy</button>
     </div>
 </div>
-<style type="text/css" scoped>
-        h1, h2, h3, h4, h5, h6 {
-            margin-bottom: 0.5rem;
-            font-weight: 400;
-            line-height: 1.5;
-        }
 
-        h1 {
-            font-size: 2.5rem;
-        }
-
-        h2 {
-            font-size: 2rem
-        }
-
-        h3 {
-            font-size: 1.75rem
-        }
-
-        h4 {
-            font-size: 1.5rem
-        }
-
-        h5 {
-            font-size: 1.25rem
-        }
-
-        h6 {
-            font-size: 1rem
-        }
-
-        .lead {
-            font-weight: 300;
-            font-size: 2rem;
-        }
-
-        .banner {
-            font-size: 2.7rem;
-            margin: 0;
-            padding: 2rem 1rem;
-            background-color: #0d1c2c;
-            color: white;
-        }
-
-        body {
-            margin: 0;
-            font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        }
-
-        code {
-            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            font-size: 87.5%;
-            color: #e83e8c;
-            word-break: break-word;
-        }
-
-        .left-column {
-            padding: .75rem;
-        }
-
-        .container {
-            display: flex;
-            width: 100%;
-        }
-
-        li {
-            margin: 0.75rem;
-        }
-
-        .example-code {
-            border-left: 0.3rem solid #71aeef;
-            padding-left: 10px;
-        }
-
-        .example-code h3 {
-            font-weight: 200;
-        }
-    </style>
 <script type="text/javascript" scoped>
-        window.open('{downloadLink}', '_self');
-        function fallbackCopyTextToClipboard(text) {
-          var textArea = document.createElement("textarea");
-          textArea.value = text;
+    window.open('{downloadLink}', '_self');
 
-          // Avoid scrolling to bottom
-          textArea.style.top = "0";
-          textArea.style.left = "0";
-          textArea.style.position = "fixed";
+    function fallbackCopyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
 
-          document.body.appendChild(textArea);
-          textArea.focus();
-          textArea.select();
+        // Avoid scrolling to bottom
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
 
-          try {
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
             var successful = document.execCommand('copy');
             var msg = successful ? 'successful' : 'unsuccessful';
             console.log('Fallback: Copying text command was ' + msg);
-          } catch (err) {
+        } catch (err) {
             console.error('Fallback: Oops, unable to copy', err);
-          }
-
-          document.body.removeChild(textArea);
         }
-        function copyTextToClipboard(text) {
-          if (!navigator.clipboard) {
+
+        document.body.removeChild(textArea);
+    }
+
+    function copyTextToClipboard(text) {
+        if (!navigator.clipboard) {
             fallbackCopyTextToClipboard(text);
             return;
-          }
-          navigator.clipboard.writeText(text).then(function() {
-            console.log('Async: Copying to clipboard was successful!');
-          }, function(err) {
-            console.error('Async: Could not copy text: ', err);
-          });
         }
-        var btnCopyDll = document.querySelector('#btn-copy-dll'),
-            btnCopyChksm = document.querySelector('#btn-copy-chksm');
-        btnCopyDll.addEventListener('click', function(event) {
-          copyTextToClipboard('{downloadLink}');
+        navigator.clipboard.writeText(text).then(function () {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function (err) {
+            console.error('Async: Could not copy text: ', err);
         });
-        btnCopyChksm.addEventListener('click', function(event) {
-          copyTextToClipboard('{checksum}');
-        });
-    </script>
+    }
+
+    var btnCopyDll = document.querySelector('#btn-copy-dll'),
+        btnCopyChksm = document.querySelector('#btn-copy-chksm');
+    btnCopyDll.addEventListener('click', function (event) {
+        copyTextToClipboard('{downloadLink}');
+    });
+    btnCopyChksm.addEventListener('click', function (event) {
+        copyTextToClipboard('{checksum}');
+    });
+</script>
 </body>
 </html>
