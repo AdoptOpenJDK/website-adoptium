@@ -23,8 +23,17 @@ import net.adoptopenjdk.api.v3.models.Binary;
 public class DownloadResource {
     private static final Logger LOG = Logger.getLogger(DownloadResource.class);
 
+    /**
+     * Checked Templates ensure type-safety in html templating.
+     */
     @CheckedTemplate
     public static class Templates {
+        /**
+         * The method name of a `static native TemplateInstance` refers to the name of a .html file in templates/DownloadResource.
+         *
+         * @param htmlData all data accessible by the template
+         * @return a Template with values from htmlData filled in
+         */
         public static native TemplateInstance download(DownloadResourceHTMLData htmlData);
     }
 
