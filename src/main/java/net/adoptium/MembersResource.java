@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
+import net.adoptium.model.OrganizationType;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
@@ -22,11 +23,6 @@ public class MembersResource {
     private static final Logger LOG = Logger.getLogger(MembersResource.class);
     private static final String EMPTY_STRING = "";
     private static final String JSON_PATH = "json/members.json";
-
-    private static final String STRATEGIC_MEMBER = "strategic";
-    private static final String ENTERPRISE_MEMBER = "enterprise";
-    private static final String PARTICIPANT_MEMBER = "participant";
-
 
     List<Member> strategicMembers = new ArrayList<>();
     List<Member> enterpriseMembers = new ArrayList<>();
@@ -53,18 +49,20 @@ public class MembersResource {
     }
 
     private void addMemberToCorrespondingMemberList(Member member){
-        String orgType = member.getOrganizationType();
-        if(orgType.equals(STRATEGIC_MEMBER)){
-            strategicMembers.add(member);
-        }
-        else if(orgType.equals(ENTERPRISE_MEMBER)){
-            enterpriseMembers.add(member);
-        }
-        else if(orgType.equals(PARTICIPANT_MEMBER)){
-            participantMembers.add(member);
-        }
-        else{
-            LOG.warnf("While filtering members, missing Organization type.");
+        OrganizationType orgType = OrganizationType.valueOf(member.getOrganizationType().toUpperCase());
+        switch (orgType) {
+            case STRATEGIC:
+                strategicMembers.add(member);
+                break;
+            case ENTERPRISE:
+                enterpriseMembers.add(member);
+                break;
+            case PARTICIPANT:
+                participantMembers.add(member);
+                break;
+            default:
+                LOG.warnf("While filtering members, missing Organization type.");
+                break;
         }
     }
 
