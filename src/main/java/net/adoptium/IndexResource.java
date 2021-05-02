@@ -2,6 +2,10 @@ package net.adoptium;
 
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
+import io.quarkus.runtime.configuration.LocaleConverter;
+import io.quarkus.vertx.web.RouteFilter;
+import io.vertx.core.http.Cookie;
+import io.vertx.ext.web.RoutingContext;
 import net.adoptium.api.DownloadRepository;
 import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.Download;
@@ -11,16 +15,23 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import java.util.List;
+
+import static io.quarkus.qute.i18n.MessageBundles.ATTRIBUTE_LOCALE;
+
 // index.html in META-INF.resources is used as static resource (not template)
 @Path("/")
 public class IndexResource {
 
     private static final Logger LOG = Logger.getLogger(IndexResource.class);
 
-    private final DownloadRepository repository;
-
     @Inject
     public Template index;
+
+    @Inject
+    ApplicationConfig appConfig;
+
+    private final DownloadRepository repository;
 
     @Inject
     public IndexResource(DownloadRepository repository) {
@@ -33,7 +44,7 @@ public class IndexResource {
         // order: query, cookie, header
         // if query parameter `locale` is set, update cookie and Accept-Language header
         // qute uses the Accept-Language header
-        String defaultLocale = appConfig.getDefaultLocale().getLanguage();
+        String defaultLocale = appConfig.defaultLocale.getLanguage();
         Cookie localeCookie = rc.getCookie(ATTRIBUTE_LOCALE);
 
         List<String> localeQuery = rc.queryParam(ATTRIBUTE_LOCALE);
