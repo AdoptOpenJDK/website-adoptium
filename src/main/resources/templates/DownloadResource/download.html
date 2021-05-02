@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Download</title>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+<div class="banner lead">
+    Adoptium
+</div>
+
+<div class="container">
+    <div class="left-column">
+        <h2>{msg:download_starting}</h2>
+        <p>Thank you for downloading</p>
+        <a href="{htmlData.getDownloadLink()}">
+            {htmlData.getVendor()} {htmlData.getImageType()} {htmlData.getVersion()}<br>
+            for {htmlData.getOs()} {htmlData.getArch()}
+        </a>
+        <button id="btn-copy-dll">Copy</button>
+        <p>
+            If the downlaod does not start within 10 seconds,<br>
+            <a href="{htmlData.getDownloadLink()}">try again to download manually</a>
+        </p>
+        <p>checksum (sha256): {htmlData.getChecksum()}</p>
+        <button id="btn-copy-chksm">Copy</button>
+    </div>
+</div>
+<script type="text/javascript" scoped>
+    window.open('{htmlData.getDownloadLink()}', '_self');
+    function fallbackCopyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+
+        // Avoid scrolling to bottom
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Fallback: Copying text command was ' + msg);
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
+    }
+    function copyTextToClipboard(text) {
+        if (!navigator.clipboard) {
+            fallbackCopyTextToClipboard(text);
+            return;
+        }
+        navigator.clipboard.writeText(text).then(function() {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    }
+    var btnCopyDll = document.querySelector('#btn-copy-dll'),
+        btnCopyChksm = document.querySelector('#btn-copy-chksm');
+    btnCopyDll.addEventListener('click', function(event) {
+        copyTextToClipboard('{htmlData.getDownloadLink()}');
+    });
+    btnCopyChksm.addEventListener('click', function(event) {
+        copyTextToClipboard('{htmlData.getChecksum()}');
+    });
+</script>
+</body>
+</html>

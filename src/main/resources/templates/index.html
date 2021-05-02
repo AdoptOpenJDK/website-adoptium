@@ -2,117 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>website-adoptium - 1.0.0-SNAPSHOT</title>
+    <title>Website-Adoptium</title>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <div class="banner lead">
-        OpenJDK Download
-    </div>
+<div class="banner lead">
+    {msg:adoptium}
+</div>
 
-    <div class="container">
-        <div class="left-column">
-            <!-- hardcoded: {msg:hello_name('name')} -->
-            <p class="lead">{msg:hello}</p>
+<div class="container">
+    {msg:main_text}
+    <br>
+    {msg:download_java(download_name)}
+</div>
 
-            <h2>What is this page?</h2>
-
-            <p>Here you can download <code>Java</code>.</p>
-            <code>{msg:hello_name(name)}</code> (Name: {name})
-
-            <h2>What are your next steps?</h2>h
-
-            <p>If not already done, run the application in <em>dev mode</em> using: <code>./mvnw compile quarkus:dev</code>.</p>
-            <ul>
-                <li>Choose a <code>Java Version</code>.</li>
-                <li>Choose an <code>Architecture</code>.</li>
-            </ul>
-
-            <!-- TODO loop over jdk types -->
-            <div class="example-code">
-                <h3>Prebuilt OpenJDK</h3>
-                <p>Just the best.</p>
-                <p><code>v1.2</code></p>
-                <p><a href="" class="guide-link" target="_blank">Related guide section...</a></p>
-            </div>
+<div class="container" id="main">
+    <a href="/download/thank-you/{thank-you-version}" class="button" id="download_btn">
+        <div id="dl-version">
+            <i id="dl-icon" class="fa fa-download" aria-hidden="true"></i>
+            <span>Latest release</span>
+            <i id="dl-icon-2" class="fa fa-arrow-circle-o-right hide" aria-hidden="true"></i>
         </div>
-    </div>
-    <style type="text/css" scoped>
-        h1, h2, h3, h4, h5, h6 {
-            margin-bottom: 0.5rem;
-            font-weight: 400;
-            line-height: 1.5;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-        }
-
-        h2 {
-            font-size: 2rem
-        }
-
-        h3 {
-            font-size: 1.75rem
-        }
-
-        h4 {
-            font-size: 1.5rem
-        }
-
-        h5 {
-            font-size: 1.25rem
-        }
-
-        h6 {
-            font-size: 1rem
-        }
-
-        .lead {
-            font-weight: 300;
-            font-size: 2rem;
-        }
-
-        .banner {
-            font-size: 2.7rem;
-            margin: 0;
-            padding: 2rem 1rem;
-            background-color: #0d1c2c;
-            color: white;
-        }
-
-        body {
-            margin: 0;
-            font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        }
-
-        code {
-            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            font-size: 87.5%;
-            color: #e83e8c;
-            word-break: break-word;
-        }
-
-        .left-column {
-            padding: .75rem;
-        }
-
-        .container {
-            display: flex;
-            width: 100%;
-        }
-
-        li {
-            margin: 0.75rem;
-        }
-
-        .example-code {
-            border-left: 0.3rem solid #71aeef;
-            padding-left: 10px;
-        }
-
-        .example-code h3 {
-            font-weight: 200;
-        }
-    </style>
+        <div class="dl-description">
+            {version}<br>
+            for {os} {arch}
+        </div>
+    </a>
+</div>
 </body>
 </html>
