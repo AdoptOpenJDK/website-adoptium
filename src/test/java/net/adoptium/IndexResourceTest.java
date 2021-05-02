@@ -25,8 +25,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IndexResourceTest {
 
-    OkHttpClient client = new OkHttpClient();
-
     @TestHTTPEndpoint(IndexResource.class)
     @TestHTTPResource
     URL indexUrl;

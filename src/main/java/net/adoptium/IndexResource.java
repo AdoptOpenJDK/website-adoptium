@@ -2,10 +2,6 @@ package net.adoptium;
 
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
-import io.quarkus.runtime.configuration.LocaleConverter;
-import io.quarkus.vertx.web.*;
-import io.vertx.core.http.Cookie;
-import io.vertx.ext.web.RoutingContext;
 import net.adoptium.api.DownloadRepository;
 import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.Download;
@@ -15,26 +11,16 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import static io.quarkus.qute.i18n.MessageBundles.ATTRIBUTE_LOCALE;
-
 // index.html in META-INF.resources is used as static resource (not template)
 @Path("/")
 public class IndexResource {
 
     private static final Logger LOG = Logger.getLogger(IndexResource.class);
 
+    private final DownloadRepository repository;
+
     @Inject
     public Template index;
-
-    @Inject
-    ApplicationConfig appConfig;
-
-    private final DownloadRepository repository;
 
     @Inject
     public IndexResource(DownloadRepository repository) {
