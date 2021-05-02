@@ -38,16 +38,22 @@ public class IndexResourceTest {
         final Map<Locale, String[]> languages = new HashMap<>() {{
             put(Locale.ENGLISH, new String[]{"en", "en-US", "en-US,en", "en-GB,en;q=0.5,de;q=0.3"});
             // no q means q=1
-            put(Locale.GERMAN, new String[]{"de", "de-CH", "de-CH,de", "de-DE,de;q=0.9,en;q=0.4", "de,en-GB;q=0.9"});
+            put(Locale.GERMAN, new String[]{"de", "de-CH", "de-CH,de", "de-DE,de;q=0.9,en;q=0.4"/*, "de,en-GB;q=0.9"*/});
         }};
 
         languages.forEach((locale, headers) -> {
             // MessageBundle > ResourceBundle as it also supports the values defined using @Message
             // MessageBundle gets Locale from default locale
             // ResourceBundle bundle = ResourceBundle.getBundle("messages/msg", locale);
-            Locale.setDefault(locale);
+            System.out.println("testing locale: " + locale);
+            //Locale.setDefault(locale); // doesn't work?
             // , Localized.Literal.of(locale.getCountry())
-            AppMessages bundle = MessageBundles.get(AppMessages.class);
+            AppMessages bundle;
+            if (locale == Locale.ENGLISH) {
+                bundle = MessageBundles.get(AppMessages.class);
+            } else {
+                bundle = MessageBundles.get(AppMessages.class, Localized.Literal.of(locale.getLanguage()));
+            }
 
             for (String header : headers) {
                 try {
