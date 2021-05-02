@@ -15,6 +15,11 @@
     <h2>Working Group Members</h2>
 
     <h3>Strategic Members</h3>
+        <ul>
+            {#for strategicMember in strategicMembers}
+                <li>{strategicMember.memberName}</li>
+            {/for}
+        </ul>
 
     <h3>Enterprise Members</h3>
 

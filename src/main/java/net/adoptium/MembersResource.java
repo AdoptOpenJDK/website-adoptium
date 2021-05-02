@@ -23,6 +23,15 @@ public class MembersResource {
     private static final String EMPTY_STRING = "";
     private static final String JSON_PATH = "json/members.json";
 
+    private static final String STRATEGIC_MEMBER = "strategic";
+    private static final String ENTERPRISE_MEMBER = "enterprise";
+    private static final String PARTICIPANT_MEMBER = "participant";
+
+
+    List<Member> strategicMembers = new ArrayList<>();
+    List<Member> enterpriseMembers = new ArrayList<>();
+    List<Member> participantMembers = new ArrayList<>();
+
     @Inject
     Template members;
 
@@ -35,9 +44,27 @@ public class MembersResource {
         }else{
             List<Member> memberList = getMemberList(json);
 
-            for(Member m : memberList){
-                // TODO: insert Members into HTML page, for loop probably not needed
+            for(Member member : memberList){
+                // TODO: this way the json file is read 3 times in total, could maybe improve by filtering on the stream in parseInputStreamToString()
+
+                addMemberToCorrespondingMemberList(member);
             }
+        }
+    }
+
+    private void addMemberToCorrespondingMemberList(Member member){
+        String orgType = member.getOrganizationType();
+        if(orgType.equals(STRATEGIC_MEMBER)){
+            strategicMembers.add(member);
+        }
+        else if(orgType.equals(ENTERPRISE_MEMBER)){
+            enterpriseMembers.add(member);
+        }
+        else if(orgType.equals(PARTICIPANT_MEMBER)){
+            participantMembers.add(member);
+        }
+        else{
+            LOG.warnf("While filtering members, missing Organization type.");
         }
     }
 
@@ -79,6 +106,6 @@ public class MembersResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get() throws Exception {
-        return members.instance();
+        return members.data("strategicMembers", strategicMembers);
     }
 }
