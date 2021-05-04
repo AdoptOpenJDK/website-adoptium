@@ -24,18 +24,18 @@ public class MemberResource {
     private static final String EMPTY_STRING = "";
     private static final String JSON_PATH = "json/members.json";
 
-    List<Member> strategicMembers = new ArrayList<>();
-    List<Member> enterpriseMembers = new ArrayList<>();
-    List<Member> participantMembers = new ArrayList<>();
+    private final List<Member> strategicMembers = new ArrayList<>();
+    private final List<Member> enterpriseMembers = new ArrayList<>();
+    private final List<Member> participantMembers = new ArrayList<>();
 
     @Inject
     Template members;
 
     public MemberResource() {
         InputStream is = loadJSONInputStream(JSON_PATH);
-        String json = parseInputStreamToString(is);
+        String json = parseInputStreamToString(is); // TODO: input stream directly into objectmapper
 
-        if(json.equals(EMPTY_STRING)){
+        if(json.equals(EMPTY_STRING)){ // TODO: if you put input stream directly into object mapper, it gives empty list (test on that)
             throw new IllegalArgumentException("file not found!");
         }else{
             List<Member> memberList = getMemberList(json);
@@ -79,7 +79,7 @@ public class MemberResource {
 
     private InputStream loadJSONInputStream(String path){
         // TODO: check if file exists, handle error if there is one
-        return getClass().getClassLoader().getResourceAsStream(path);
+        return getClass().getClassLoader().getResourceAsStream(path); // getResource() -> URL OR try (InputStream is = new InputStream(...)) { // use is }
     }
 
     private static String parseInputStreamToString(InputStream is) {
