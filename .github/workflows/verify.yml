@@ -16,7 +16,9 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Build app
-        run: ./mvnw verify jacoco:report jacoco:report-aggregate
+        run: ./mvnw verify sonar:sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
       - uses: codecov/codecov-action@v1
         with:
