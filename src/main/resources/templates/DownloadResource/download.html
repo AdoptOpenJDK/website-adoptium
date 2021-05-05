@@ -15,20 +15,20 @@
         <a href="/">Starting Page</a>
         <h2>{msg:thankYouDownloadStarting}</h2>
 
-        <a href="{htmlData.getDownloadLink()}">
-            {msg:thankYouDownloadStartingLink(htmlData.getVendor(),htmlData.getImageType(),htmlData.getVersion(),htmlData.getOs(),htmlData.getArch())}
+        <a href="{template.getDownloadLink()}">
+            {msg:thankYouDownloadStartingLink(template.getVendor(),template.getImageType(),template.getVersion(),template.getOs(),template.getArch())}
         </a>
         <button id="btn-copy-dll">{msg:literalCopy}</button>
         <p>
             {msg:thankYouDownloadTimeout}<br>
-            <a href="{htmlData.getDownloadLink()}">{msg:thankYouDownloadTimoutClickAgain}</a>
+            <a href="{template.getDownloadLink()}">{msg:thankYouDownloadTimoutClickAgain}</a>
         </p>
-        <p>{msg:thankYouChecksum} (SHA-256): {htmlData.getChecksum()}</p>
+        <p>{msg:thankYouChecksum} (SHA-256): {template.getChecksum()}</p>
         <button id="btn-copy-chksm">{msg:literalCopy}</button>
     </div>
 </div>
 <script type="text/javascript" scoped>
-    window.open('{htmlData.getDownloadLink()}', '_self');
+    window.open('{template.getDownloadLink()}', '_self');
 
     function fallbackCopyTextToClipboard(text) {
         var textArea = document.createElement("textarea");
@@ -69,10 +69,10 @@
     var btnCopyDll = document.querySelector('#btn-copy-dll'),
         btnCopyChksm = document.querySelector('#btn-copy-chksm');
     btnCopyDll.addEventListener('click', function (event) {
-        copyTextToClipboard('{htmlData.getDownloadLink()}');
+        copyTextToClipboard('{template.getDownloadLink()}');
     });
     btnCopyChksm.addEventListener('click', function (event) {
-        copyTextToClipboard('{htmlData.getChecksum()}');
+        copyTextToClipboard('{template.getChecksum()}');
     });
 </script>
 </body>

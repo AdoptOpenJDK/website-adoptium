@@ -5,6 +5,7 @@ import net.adoptium.api.ApiMockServer;
 import net.adoptium.api.ApiService;
 import net.adoptium.api.DownloadRepository;
 import net.adoptium.model.Download;
+import net.adoptium.model.UserSystem;
 import net.adoptopenjdk.api.v3.models.Architecture;
 import net.adoptopenjdk.api.v3.models.Binary;
 import net.adoptopenjdk.api.v3.models.OperatingSystem;
@@ -28,6 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DownloadRepositoryTest {
 
+    /**
+     * mockWebServer mocks the api by returning responses from json files in test/resources/api-stating
+     */
     private MockWebServer mockWebServer;
     private ApiService remoteApi;
 
