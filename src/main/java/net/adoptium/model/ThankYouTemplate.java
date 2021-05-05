@@ -1,12 +1,8 @@
 package net.adoptium.model;
 
 import net.adoptium.utils.DownloadArgumentGroup;
-import net.adoptopenjdk.api.v3.models.Architecture;
-import net.adoptopenjdk.api.v3.models.Binary;
-import net.adoptopenjdk.api.v3.models.Installer;
-import net.adoptopenjdk.api.v3.models.OperatingSystem;
 import net.adoptopenjdk.api.v3.models.Package;
-import net.adoptopenjdk.api.v3.models.Vendor;
+import net.adoptopenjdk.api.v3.models.*;
 
 import java.util.Map;
 

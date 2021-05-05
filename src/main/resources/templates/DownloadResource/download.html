@@ -18,12 +18,12 @@
         <a href="{template.getDownloadLink()}">
             {msg:thankYouDownloadStartingLink(template.getVendor(),template.getImageType(),template.getVersion(),template.getOs(),template.getArch())}
         </a>
-        <button id="btn-copy-dll">{msg:literalCopy}</button>
+        &nbsp;<button id="btn-copy-dll">{msg:literalCopy}</button>
         <p>
             {msg:thankYouDownloadTimeout}<br>
-            <a href="{template.getDownloadLink()}">{msg:thankYouDownloadTimoutClickAgain}</a>
+            <a href="{template.getDownloadLink()}">{msg:thankYouDownloadTimeoutClickAgain}</a>
         </p>
-        <p>{msg:thankYouChecksum} (SHA-256): {template.getChecksum()}</p>
+        <p>{msg:literalChecksum} (SHA-256): {template.getChecksum()}</p>
         <button id="btn-copy-chksm">{msg:literalCopy}</button>
     </div>
 </div>

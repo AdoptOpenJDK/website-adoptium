@@ -63,16 +63,17 @@ public class IndexResourceUnitTest {
         HtmlEscaper htmlEscaper = new HtmlEscaper();
 
         // Linux x64: download exists
+        // welcomeMainText and errorText are mutually exclusive, if welcomeMainText is shown there was no error
         TemplateInstance got = index.get("linux x64");
-        assertThat(got.render(), CoreMatchers.containsString(htmlEscaper.map("Latest release", null)));
+        assertThat(got.render(), CoreMatchers.containsString(htmlEscaper.map(bundle.welcomeMainText(), null)));
 
         // Linux x32: OS detected, no download
         got = index.get("linux x32");
-        assertThat(got.render(), CoreMatchers.containsString(htmlEscaper.map(bundle.client_os_unsupported(), null)));
+        assertThat(got.render(), CoreMatchers.containsString(htmlEscaper.map(bundle.welcomeClientOsUnsupported(), null)));
 
         // empty user agent: OS unknown
         got = index.get("");
-        assertThat(got.render(), CoreMatchers.containsString(htmlEscaper.map(bundle.client_os_undetected(), null)));
+        assertThat(got.render(), CoreMatchers.containsString(htmlEscaper.map(bundle.welcomeClientOsUndetected(), null)));
     }
 
     @AfterAll

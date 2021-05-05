@@ -97,14 +97,14 @@ public class IndexResource {
         UserSystem clientSystem = UserAgentParser.getOsAndArch(ua);
         if (clientSystem.getOs() == null) {
             LOG.warnf("no OS detected for ua: %s", ua);
-            IndexTemplate data = new IndexTemplate(bundle.client_os_undetected());
+            IndexTemplate data = new IndexTemplate(bundle.welcomeClientOsUndetected());
             return Templates.index(data);
         }
 
         Download recommended = repository.getUserDownload(clientSystem.getOs(), clientSystem.getArch());
         if (recommended == null) {
             LOG.warnf("no binary found for clientSystem: %s", clientSystem);
-            IndexTemplate data = new IndexTemplate(bundle.client_os_unsupported());
+            IndexTemplate data = new IndexTemplate(bundle.welcomeClientOsUnsupported());
             return Templates.index(data);
         }
 

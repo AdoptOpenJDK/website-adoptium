@@ -3,10 +3,7 @@ package net.adoptium;
 import io.quarkus.qute.i18n.Message;
 import io.quarkus.qute.i18n.MessageBundle;
 import io.quarkus.qute.i18n.MessageParam;
-import net.adoptopenjdk.api.v3.models.Project;
-import net.adoptopenjdk.api.v3.models.Vendor;
-import net.adoptopenjdk.api.v3.models.OperatingSystem;
-import net.adoptopenjdk.api.v3.models.Architecture;
+import net.adoptopenjdk.api.v3.models.*;
 
 @MessageBundle
 public interface AppMessages {
@@ -21,10 +18,20 @@ public interface AppMessages {
     @Message("Download {project ?: 'Java'}")
     String welcomeDownloadButtonHeader(@MessageParam("project") Project project);
 
-    @Message("{version}\n for {os} {arch}")
+    @Message("{version} for {os} {arch}")
     String welcomeDownloadButtonBody(@MessageParam("version") String version,
-                                       @MessageParam("os") OperatingSystem os,
-                                       @MessageParam("arch") Architecture arch);
+                                     @MessageParam("os") OperatingSystem os,
+                                     @MessageParam("arch") Architecture arch);
+
+
+    @Message("We could not detect your OS automatically")
+    String welcomeClientOsUndetected();
+
+    @Message("We don't support  your platform right now")
+    String welcomeClientOsUnsupported();
+
+    @Message("View all releases")
+    String welcomeDownloadButtonFallback();
 
     @Message("Thank you for downloading")
     String thankYouDownloadStarting();
@@ -33,13 +40,7 @@ public interface AppMessages {
     String thankYouDownloadTimeout();
 
     @Message("try again to download manually")
-    String thankYouDownloadTimoutClickAgain();
-
-    @Message("Checksum")
-    String thankYouChecksum();
-
-    @Message("Copy")
-    String literalCopy();
+    String thankYouDownloadTimeoutClickAgain();
 
     @Message("{vendor} {imageType} {version} for {os} {arch}")
     String thankYouDownloadStartingLink(@MessageParam("vendor") Vendor vendor,
@@ -48,12 +49,9 @@ public interface AppMessages {
                                         @MessageParam("os") OperatingSystem os,
                                         @MessageParam("arch") Architecture arch);
 
-    @Message("We could not detect your OS")
-    String client_os_undetected();
+    @Message("Checksum")
+    String literalChecksum();
 
-    @Message("We don't have something for you right now")
-    String client_os_unsupported();
-
-    @Message("View all releases")
-    String download_button_fallback();
+    @Message("Copy")
+    String literalCopy();
 }
