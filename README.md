@@ -1,4 +1,4 @@
-# For New Contributorsa
+# For New Contributors
 
 ## GitHub Organization using ZenHub
 
