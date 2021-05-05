@@ -63,7 +63,7 @@ public class IndexResource {
                 localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, acceptLanguage);
             }
         }
-
+        //localeCookie.setPath("/");
         // qute did the Accept-Language parsing for us, but to set the correct cookie we need to parse it outselves
         // how does quarks/qute do it'
         LOG.info("locale - using: " + localeCookie.getValue());
@@ -88,7 +88,7 @@ public class IndexResource {
         String thankYouURL = repository.buildRedirectArgs(recommended);
         LOG.infof("user: %s -> [%s] binary: %s", user, thankYouURL, recommended);
         return index
-                .data("download_name", recommended.getBinary().getProject().toString())
+                .data("downloadName", recommended.getBinary().getProject().toString())
                 .data("version", recommended.getSemver())
                 .data("thank-you-version", thankYouURL)
                 .data("os", recommended.getBinary().getOs())

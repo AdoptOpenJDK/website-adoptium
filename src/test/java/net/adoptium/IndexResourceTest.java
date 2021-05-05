@@ -69,7 +69,7 @@ public class IndexResourceTest {
                     Assertions.assertEquals(200, response.code(), "locale: " + locale + ", header: " + header);
 
                     // we need a constant string (no {variable} input)
-                    Assertions.assertTrue(body.string().contains(bundle.main_text()), "locale: " + locale + ", header: " + header + ", main_text: " + bundle.main_text());
+                    Assertions.assertTrue(body.string().contains(bundle.welcomeMainText()), "locale: " + locale + ", header: " + header + ", main_text: " + bundle.welcomeMainText());
                 } catch (IOException e) {
                     fail("locale: " + locale + ", header: " + header, e);
                 }
@@ -98,7 +98,7 @@ public class IndexResourceTest {
             AppMessages bundle = MessageBundles.get(AppMessages.class);
 
             Assertions.assertTrue(page.url().contains("/thank-you/"), "not redirected to /thank-you/");
-            Assertions.assertTrue(page.content().contains(bundle.download_starting()), "thank-you page does not display download_starting");
+            Assertions.assertTrue(page.content().contains(bundle.thankYouDownloadStarting()), "thank-you page does not display download_starting");
         } catch (PlaywrightException e) {
             fail("failed to launch browser " + browserType.name());
         }

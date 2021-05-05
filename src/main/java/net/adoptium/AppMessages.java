@@ -1,26 +1,54 @@
 package net.adoptium;
 
+import io.quarkus.arc.Arc;
 import io.quarkus.qute.i18n.Message;
 import io.quarkus.qute.i18n.MessageBundle;
 import io.quarkus.qute.i18n.MessageParam;
+import net.adoptopenjdk.api.v3.models.*;
 
 @MessageBundle
 public interface AppMessages {
 
-    @Message("adoptium")
+    @Message("Adoptium")
     String adoptium();
 
-    @Message("Download Java for free")
-    String main_text();
+    @Message("Temurin is a free to use runtime for the Java™ programming language. " +
+            "If you need Java™, this is the download you are looking for.")
+    String welcomeMainText();
 
-    @Message("download {download_name ?: 'Java'}")
-    String download_java(@MessageParam("download_name") String download_name);
+    @Message("No download for platform:")
+    String welcomeNoDownload();
 
-    @Message("Download starting...")
-    String download_starting();
+    @Message("Sorry, we do not have a version for your platform, yet.")
+    String welcomeNoDownloadButtonWindow();
+
+    @Message("Download {project ?: 'Java'}")
+    String welcomeDownloadButtonHeader(@MessageParam("project") Project project);
 
     @Message("{version}\n for {os} {arch}")
-    String download_version(@MessageParam("version") String version,
-                            @MessageParam("os") String os,
-                            @MessageParam("arch") String arch);
+    String welcomeDownloadButtonBody(@MessageParam("version") String version,
+                                       @MessageParam("os") OperatingSystem os,
+                                       @MessageParam("arch") Architecture arch);
+
+    @Message("Thank you for downloading")
+    String thankYouDownloadStarting();
+
+    @Message("If the download does not start within 10 seconds, ")
+    String thankYouDownloadTimeout();
+
+    @Message("try again to download manually")
+    String thankYouDownloadTimoutClickAgain();
+
+    @Message("Checksum")
+    String thankYouChecksum();
+
+    @Message("Copy")
+    String literalCopy();
+
+    @Message("{vendor} {imageType} {version} for {os} {arch}")
+    String thankYouDownloadStartingLink(@MessageParam("vendor") Vendor vendor,
+                                        @MessageParam("imageType") ImageType imageType,
+                                        @MessageParam("version") String version,
+                                        @MessageParam("os") OperatingSystem os,
+                                        @MessageParam("arch") Architecture arch);
 }
