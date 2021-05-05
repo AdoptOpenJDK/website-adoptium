@@ -7,6 +7,7 @@
     <artifactId>website-adoptium</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <properties>
+        <sonar.exclusions>**/.github/*.java,**/.mvn/**/*.java</sonar.exclusions>
         <sonar.projectKey>test-adoptium-sonar</sonar.projectKey>
         <sonar.organization>thomasbuechi</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
