@@ -1,4 +1,4 @@
-package net.adoptium;
+package net.adoptium.model;
 
 import net.adoptopenjdk.api.v3.models.Architecture;
 import net.adoptopenjdk.api.v3.models.OperatingSystem;

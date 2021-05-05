@@ -66,14 +66,15 @@ public class DownloadRepository {
     }
 
     /**
-     * builds the arg string used by /thank-you/{args}
+     * returns absolute path to thank-you URL with the specific args.
      *
      * @param download the Download to be executed
      * @return arg string
      */
-    public String buildRedirectArgs(Download download) {
+    public String buildThankYouPath(Download download) {
         Binary binary = download.getBinary();
-        return String.format("%s-%s-%s-%s-%s-%s-%s-%s-%s", binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(), binary.getImage_type(), binary.getHeap_size(), binary.getProject(), RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, download.getSemver());
+        // TODO use constant path in DownloadResource and here
+        return String.format("/download/thank-you/%s-%s-%s-%s-%s-%s-%s-%s-%s", binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(), binary.getImage_type(), binary.getHeap_size(), binary.getProject(), RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, download.getSemver());
     }
 
     public List<Release> requestDownloadVersion(Map<DownloadArgumentGroup, String> versionArguments) throws DownloadBinaryNotFoundException {

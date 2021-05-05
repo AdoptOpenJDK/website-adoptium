@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import net.adoptium.api.DownloadRepository;
-import net.adoptium.model.DownloadResourceHTMLData;
+import net.adoptium.model.ThankYouTemplate;
 import net.adoptium.utils.DownloadArgumentGroup;
 import net.adoptium.utils.DownloadStringArgumentExtractor;
 import org.jboss.logging.Logger;
@@ -31,10 +31,10 @@ public class DownloadResource {
         /**
          * The method name of a `static native TemplateInstance` refers to the name of a .html file in templates/DownloadResource.
          *
-         * @param htmlData all data accessible by the template
-         * @return a Template with values from htmlData filled in
+         * @param template all data accessible by the template
+         * @return a Template with values from template filled in
          */
-        public static native TemplateInstance download(DownloadResourceHTMLData htmlData);
+        public static native TemplateInstance download(ThankYouTemplate template);
     }
 
     @Inject
@@ -47,7 +47,7 @@ public class DownloadResource {
         LOG.info("download/thank-you page called with args: " + args);
         Map<DownloadArgumentGroup, String> versionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
         Binary binary = repository.getBinary(versionDetails);
-        DownloadResourceHTMLData htmlData = new DownloadResourceHTMLData(versionDetails, binary);
-        return Templates.download(htmlData);
+        ThankYouTemplate template = new ThankYouTemplate(versionDetails, binary);
+        return Templates.download(template);
     }
 }

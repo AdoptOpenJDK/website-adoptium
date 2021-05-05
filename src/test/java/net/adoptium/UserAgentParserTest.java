@@ -1,5 +1,7 @@
 package net.adoptium;
 
+import net.adoptium.model.UserSystem;
+import net.adoptium.utils.UserAgentParser;
 import net.adoptopenjdk.api.v3.models.Architecture;
 import net.adoptopenjdk.api.v3.models.OperatingSystem;
 import org.junit.jupiter.api.BeforeEach;

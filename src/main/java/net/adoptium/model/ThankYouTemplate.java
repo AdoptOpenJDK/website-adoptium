@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static net.adoptium.utils.DownloadArgumentGroup.*;
 
-public class DownloadResourceHTMLData {
+public class ThankYouTemplate {
     private final String downloadLink;
     private final String imageType;
     private final String checksum;
@@ -18,7 +18,7 @@ public class DownloadResourceHTMLData {
     private final String arch;
     private final String os;
 
-    public DownloadResourceHTMLData(Map<DownloadArgumentGroup, String> versionDetails, Binary binary) {
+    public ThankYouTemplate(Map<DownloadArgumentGroup, String> versionDetails, Binary binary) {
         imageType = versionDetails.get(IMAGE_TYPE);
         version = versionDetails.get(VERSION);
         vendor = versionDetails.get(VENDOR);

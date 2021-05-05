@@ -14,21 +14,21 @@
     <div class="left-column">
         <h2>{msg:download_starting}</h2>
         <p>Thank you for downloading</p>
-        <a href="{htmlData.getDownloadLink()}">
-            {htmlData.getVendor()} {htmlData.getImageType()} {htmlData.getVersion()}<br>
-            for {htmlData.getOs()} {htmlData.getArch()}
+        <a href="{template.getDownloadLink()}">
+            {template.getVendor()} {template.getImageType()} {template.getVersion()}<br>
+            for {template.getOs()} {template.getArch()}
         </a>
         <button id="btn-copy-dll">Copy</button>
         <p>
-            If the downlaod does not start within 10 seconds,<br>
-            <a href="{htmlData.getDownloadLink()}">try again to download manually</a>
+            If the download does not start within 10 seconds,<br>
+            <a href="{template.getDownloadLink()}">try again to download manually</a>
         </p>
-        <p>checksum (sha256): {htmlData.getChecksum()}</p>
+        <p>checksum (sha256): {template.getChecksum()}</p>
         <button id="btn-copy-chksm">Copy</button>
     </div>
 </div>
 <script type="text/javascript" scoped>
-    window.open('{htmlData.getDownloadLink()}', '_self');
+    window.open('{template.getDownloadLink()}', '_self');
     function fallbackCopyTextToClipboard(text) {
         var textArea = document.createElement("textarea");
         textArea.value = text;
@@ -66,10 +66,10 @@
     var btnCopyDll = document.querySelector('#btn-copy-dll'),
         btnCopyChksm = document.querySelector('#btn-copy-chksm');
     btnCopyDll.addEventListener('click', function(event) {
-        copyTextToClipboard('{htmlData.getDownloadLink()}');
+        copyTextToClipboard('{template.getDownloadLink()}');
     });
     btnCopyChksm.addEventListener('click', function(event) {
-        copyTextToClipboard('{htmlData.getChecksum()}');
+        copyTextToClipboard('{template.getChecksum()}');
     });
 </script>
 </body>

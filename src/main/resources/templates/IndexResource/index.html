@@ -11,22 +11,30 @@
 </div>
 
 <div class="container">
+    {#if template.errorText == null}
     {msg:main_text}
-    <br>
-    {msg:download_java(download_name)}
+    {#else}
+    {template.errorText}
+    {/if}
 </div>
 
 <div class="container" id="main">
-    <a href="/download/thank-you/{thank-you-version}" class="button" id="download_btn">
+    <a href="{template.getRedirectPath()}" class="button" id="download_btn">
         <div id="dl-version">
             <i id="dl-icon" class="fa fa-download" aria-hidden="true"></i>
+            {#if template.errorText == null}
             <span>Latest release</span>
+            {#else}
+            <span>{msg:download_button_fallback}</span>
+            {/if}
             <i id="dl-icon-2" class="fa fa-arrow-circle-o-right hide" aria-hidden="true"></i>
         </div>
+        {#if template.errorText == null}
         <div class="dl-description">
-            {version}<br>
-            for {os} {arch}
+            {template.getVersion()}<br>
+            for {template.getOs()} {template.getArch()}
         </div>
+        {/if}
     </a>
 </div>
 </body>

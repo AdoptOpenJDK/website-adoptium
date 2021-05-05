@@ -1,5 +1,6 @@
-package net.adoptium;
+package net.adoptium.utils;
 
+import net.adoptium.model.UserSystem;
 import net.adoptopenjdk.api.v3.models.Architecture;
 import net.adoptopenjdk.api.v3.models.OperatingSystem;
 
