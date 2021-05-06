@@ -1,11 +1,8 @@
 package net.adoptium.model;
 
-import io.quarkus.arc.Arc;
 import net.adoptopenjdk.api.v3.models.Architecture;
 import net.adoptopenjdk.api.v3.models.OperatingSystem;
 import net.adoptopenjdk.api.v3.models.Project;
-
-import java.util.Objects;
 
 public class IndexTemplate {
     private OperatingSystem os = null;
@@ -34,10 +31,10 @@ public class IndexTemplate {
     /**
      * Constructor for default case, where a download binary for os/arch has been found.
      *
-     * @param os client os
-     * @param arch client arch
-     * @param version user visible version name of binary (should include major version)
-     * @param project user visible name of the download
+     * @param os           client os
+     * @param arch         client arch
+     * @param version      user visible version name of binary (should include major version)
+     * @param project      user visible name of the download
      * @param redirectPath absolut path to thank you page
      */
     public IndexTemplate(OperatingSystem os, Architecture arch, String version, Project project, String redirectPath) {

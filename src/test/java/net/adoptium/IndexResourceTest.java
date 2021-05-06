@@ -49,11 +49,12 @@ public class IndexResourceTest {
             //Locale.setDefault(locale); // doesn't work?
             // , Localized.Literal.of(locale.getCountry())
             AppMessages bundle;
-            if (locale == Locale.ENGLISH) {
+            /*if (locale == Locale.ENGLISH) {
                 bundle = MessageBundles.get(AppMessages.class);
             } else {
                 bundle = MessageBundles.get(AppMessages.class, Localized.Literal.of(locale.getLanguage()));
-            }
+            }*/
+            bundle = MessageBundles.get(AppMessages.class, Localized.Literal.of(locale.getLanguage()));
 
             for (String header : headers) {
                 try {

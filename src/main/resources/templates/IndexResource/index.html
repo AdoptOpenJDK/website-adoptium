@@ -36,5 +36,13 @@
         {/if}
     </a>
 </div>
+
+<div class="container" id="locales">
+    {#for loc in locales}
+    <a href="/?locale={loc}">
+        <img src="/icons/locale/{loc}.svg" width="32px" height="32px" alt="{loc}" class="locale">
+    </a>
+    {/for}
+</div>
 </body>
 </html>

@@ -17,9 +17,11 @@ import net.adoptopenjdk.api.v3.models.Binary;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
 import java.util.List;
 
 import static io.quarkus.qute.i18n.MessageBundles.ATTRIBUTE_LOCALE;
@@ -98,14 +100,14 @@ public class IndexResource {
         if (clientSystem.getOs() == null) {
             LOG.warnf("no OS detected for ua: %s", ua);
             IndexTemplate data = new IndexTemplate(bundle.welcomeClientOsUndetected());
-            return Templates.index(data);
+            return Templates.index(data).data("locales", appConfig.getLocales());
         }
 
         Download recommended = repository.getUserDownload(clientSystem.getOs(), clientSystem.getArch());
         if (recommended == null) {
             LOG.warnf("no binary found for clientSystem: %s", clientSystem);
             IndexTemplate data = new IndexTemplate(bundle.welcomeClientOsUnsupported());
-            return Templates.index(data);
+            return Templates.index(data).data("locales", appConfig.getLocales());
         }
 
         String thankYouPath = repository.buildThankYouPath(recommended);
@@ -113,6 +115,6 @@ public class IndexResource {
 
         Binary binary = recommended.getBinary();
         IndexTemplate data = new IndexTemplate(binary.getOs(), binary.getArchitecture(), recommended.getSemver(), binary.getProject(), thankYouPath);
-        return Templates.index(data);
+        return Templates.index(data).data("locales", appConfig.getLocales());
     }
 }
