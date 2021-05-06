@@ -1,15 +1,13 @@
 package net.adoptium;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Member {
-    public String memberName;
-    public String memberLink;
-    public String memberLogo;
-    public String memberAltText;
-    public String organizationType;
+    private String memberName;
+    private String memberLink;
+    private String memberLogo;
+    private String memberAltText;
+    private String organizationType;
 
+    // Empty constructor is needed for ObjectMapper
     public Member(){
     }
 
