@@ -22,6 +22,10 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+/**
+ * Testing the localization middleware requires a full HTTP client.
+ * q: relative preference, no q means q=1
+ */
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IndexResourceTest {
@@ -33,51 +37,59 @@ public class IndexResourceTest {
     URL indexUrl;
 
     @Test
-    public void testIndexLocale() {
-        // q: relative preference
-        final Map<Locale, String[]> languages = new HashMap<>() {{
-            put(Locale.ENGLISH, new String[]{"en", "en-US", "en-US,en", "en-GB,en;q=0.5,de;q=0.3"});
-            // no q means q=1
-            put(Locale.GERMAN, new String[]{"de", "de-CH", "de-CH,de", "de-DE,de;q=0.9,en;q=0.4"/*, "de,en-GB;q=0.9"*/});
-        }};
+    public void testIndexLocaleEn() throws IOException {
+        Request request = new Request.Builder()
+                .header("Accept-Language", "en-GB,en;q=0.5,de;q=0.3")
+                .header("User-Agent", "linux x64")
+                .url(indexUrl)
+                .build();
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
 
-        languages.forEach((locale, headers) -> {
-            // MessageBundle > ResourceBundle as it also supports the values defined using @Message
-            // MessageBundle gets Locale from default locale
-            // ResourceBundle bundle = ResourceBundle.getBundle("messages/msg", locale);
-            System.out.println("testing locale: " + locale);
-            //Locale.setDefault(locale); // doesn't work?
-            // , Localized.Literal.of(locale.getCountry())
-            AppMessages bundle;
-            /*if (locale == Locale.ENGLISH) {
-                bundle = MessageBundles.get(AppMessages.class);
-            } else {
-                bundle = MessageBundles.get(AppMessages.class, Localized.Literal.of(locale.getLanguage()));
-            }*/
-            bundle = MessageBundles.get(AppMessages.class, Localized.Literal.of(locale.getLanguage()));
+        assert body != null;
+        Assertions.assertEquals(200, response.code());
 
-            for (String header : headers) {
-                try {
-                    Request request = new Request.Builder()
-                            .header("Accept-Language", header)
-                            .header("User-Agent", "Windows")
-                            .url(indexUrl)
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    ResponseBody body = response.body();
-
-                    assert body != null;
-                    Assertions.assertEquals(200, response.code(), "locale: " + locale + ", header: " + header);
-
-                    // we need a constant string (no {variable} input)
-                    Assertions.assertTrue(body.string().contains(bundle.welcomeMainText()), "locale: " + locale + ", header: " + header + ", main_text: " + bundle.welcomeMainText());
-                } catch (IOException e) {
-                    fail("locale: " + locale + ", header: " + header, e);
-                }
-            }
-        });
+        // we need a constant string (no {variable} input)
+        // as suggested during code review: nothing dynamic :)
+        Assertions.assertTrue(body.string().contains("Temurin is a free to use runtime"));
     }
 
+    @Test
+    public void testIndexLocaleDe() throws IOException {
+        Request request = new Request.Builder()
+                .header("Accept-Language", "de-DE,de;q=0.9,en;q=0.4")
+                .header("User-Agent", "linux x64")
+                .url(indexUrl)
+                .build();
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
+
+        assert body != null;
+        Assertions.assertEquals(200, response.code());
+
+        Assertions.assertTrue(body.string().contains("Temurin ist eine gratis zu benutzende Laufzeitumgebung"));
+    }
+
+    @Test
+    public void testIndexLocaleDefault() throws IOException {
+        Request request = new Request.Builder()
+                .header("Accept-Language", "")
+                .header("User-Agent", "linux x64")
+                .url(indexUrl)
+                .build();
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
+
+        assert body != null;
+        Assertions.assertEquals(200, response.code());
+
+        // application.properties defines english as default
+        Assertions.assertTrue(body.string().contains("Temurin is a free to use runtime"));
+    }
+
+    /**
+     * ensures /download/thank-you path is correctly used in buildThankYouPath.
+     */
     @Test
     public void testDownloadRedirect() {
         Playwright playwright = Playwright.create();

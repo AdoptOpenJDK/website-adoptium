@@ -1,6 +1,5 @@
 package net.adoptium.api;
 
-import net.adoptium.DownloadResource;
 import net.adoptium.exceptions.DownloadBinaryNotFoundException;
 import net.adoptium.model.Download;
 import net.adoptium.utils.DownloadArgumentGroup;
@@ -9,6 +8,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.client.exception.ResteasyWebApplicationException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 import static net.adoptium.utils.DownloadArgumentGroup.*;
 
-@Dependent
+@ApplicationScoped
 public class DownloadRepository {
     private static final Logger LOG = Logger.getLogger(DownloadRepository.class);
     // TODO where to define these? custom struct?

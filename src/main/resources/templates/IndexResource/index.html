@@ -11,10 +11,10 @@
 </div>
 
 <div class="container">
-    {#if template.errorText == null}
-    {msg:welcomeMainText}
+    {#if template.isError()}
+    {msg:welcomeClientOsUnsupported}
     {#else}
-    {template.errorText}
+    {msg:welcomeMainText}
     {/if}
 </div>
 
@@ -22,16 +22,16 @@
     <a href="{template.getRedirectPath()}" class="button" id="download_btn">
         <div id="dl-version">
             <i id="dl-icon" class="fa fa-download" aria-hidden="true"></i>
-            {#if template.errorText == null}
-            <span>{msg:welcomeDownloadButtonHeader}</span>
-            {#else}
+            {#if template.isError()}
             <span>{msg:welcomeDownloadButtonFallback}</span>
+            {#else}
+            <span>{msg:welcomeDownloadButtonHeader}</span>
             {/if}
             <i id="dl-icon-2" class="fa fa-arrow-circle-o-right hide" aria-hidden="true"></i>
         </div>
-        {#if template.errorText == null}
+        {#if !template.isError()}
         <div class="dl-description">
-            {msg:welcomeDownloadButtonBody(template.getVersion(),template.getOs(),template.getArch())}
+            {msg:welcomeDownloadButtonBody(template.getDownload().getSemver(), template.getDownload().getBinary().getOs(), template.getDownload().getBinary().getArchitecture())}
         </div>
         {/if}
     </a>
@@ -40,7 +40,7 @@
 <div class="container" id="locales">
     {#for loc in locales}
     <a href="/?locale={loc}">
-        <img src="/icons/locale/{loc}.svg" width="32px" height="32px" alt="{loc}" class="locale">
+        <img src="/icons/locale/{loc}.svg" width="32px" height="32px" alt="{loc}" class="locale" id="locale_{loc}">
     </a>
     {/for}
 </div>

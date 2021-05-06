@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="banner lead">
-    Adoptium
+    {msg:adoptium}
 </div>
 
 <div class="container">
@@ -16,7 +16,7 @@
         <h2>{msg:thankYouDownloadStarting}</h2>
 
         <a href="{template.getDownloadLink()}">
-            {msg:thankYouDownloadStartingLink(template.getVendor(),template.getImageType(),template.getVersion(),template.getOs(),template.getArch())}
+            {msg:thankYouDownloadStartingLink(template.getVendor(), template.getImageType(), template.getVersion(), template.getOs(), template.getArch())}
         </a>
         &nbsp;<button id="btn-copy-dll">{msg:literalCopy}</button>
         <p>

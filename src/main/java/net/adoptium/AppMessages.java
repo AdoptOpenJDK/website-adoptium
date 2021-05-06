@@ -23,10 +23,6 @@ public interface AppMessages {
                                      @MessageParam("os") OperatingSystem os,
                                      @MessageParam("arch") Architecture arch);
 
-
-    @Message("We could not detect your OS automatically")
-    String welcomeClientOsUndetected();
-
     @Message("We don't support  your platform right now")
     String welcomeClientOsUnsupported();
 

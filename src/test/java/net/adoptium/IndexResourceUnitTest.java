@@ -3,10 +3,13 @@ package net.adoptium;
 import io.quarkus.qute.HtmlEscaper;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.qute.i18n.MessageBundles;
+import io.quarkus.test.Mock;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import net.adoptium.api.ApiMockServer;
 import net.adoptium.api.ApiService;
 import net.adoptium.api.DownloadRepository;
+import net.adoptium.model.Download;
 import net.adoptium.model.IndexTemplate;
 import net.adoptopenjdk.api.v3.models.Architecture;
 import net.adoptopenjdk.api.v3.models.OperatingSystem;
@@ -19,6 +22,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 
 import javax.swing.text.html.HTML;
 import java.io.IOException;
@@ -32,30 +37,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IndexResourceUnitTest {
 
-    /**
-     * mockWebServer mocks the api by returning responses from json files in test/resources/api-stating
-     */
-    private MockWebServer mockWebServer;
-    private ApiService remoteApi;
-
-    @BeforeAll
-    public void setupMockServer() throws IOException {
-        mockWebServer = new MockWebServer();
-        mockWebServer.setDispatcher(new ApiMockServer());
-        mockWebServer.start();
-
-        // all paths are registered as absolute paths
-        HttpUrl baseUrl = mockWebServer.url("/");
-
-        remoteApi = RestClientBuilder.newBuilder()
-                .baseUri(baseUrl.uri())
-                .build(ApiService.class);
-    }
+    //@InjectMock
+    //DownloadRepository mockRepository;
 
     @Test
     public void testNoDownloadAvailable() {
-        DownloadRepository repository = new DownloadRepository(remoteApi);
-        IndexResource index = new IndexResource(repository);
+        DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
+
+        // TODO return Download
+        Mockito.when(mockRepository.getUserDownload(OperatingSystem.linux, Architecture.x64)).thenReturn(null);
+
+        IndexResource index = new IndexResource(mockRepository);
+        System.out.println("index: " + index);
 
         AppMessages bundle = MessageBundles.get(AppMessages.class);
 
@@ -73,11 +66,6 @@ public class IndexResourceUnitTest {
 
         // empty user agent: OS unknown
         got = index.get("");
-        assertThat(got.render(), CoreMatchers.containsString(htmlEscaper.map(bundle.welcomeClientOsUndetected(), null)));
-    }
-
-    @AfterAll
-    public void shutdownMockServer() throws IOException {
-        mockWebServer.shutdown();
+        assertThat(got.render(), CoreMatchers.containsString(htmlEscaper.map(bundle.welcomeClientOsUnsupported(), null)));
     }
 }

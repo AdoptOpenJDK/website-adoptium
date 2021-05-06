@@ -2,7 +2,6 @@ package net.adoptium;
 
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
-import io.quarkus.qute.i18n.MessageBundles;
 import io.quarkus.runtime.configuration.LocaleConverter;
 import io.quarkus.vertx.web.RouteFilter;
 import io.vertx.core.http.Cookie;
@@ -13,7 +12,6 @@ import net.adoptium.model.Download;
 import net.adoptium.model.IndexTemplate;
 import net.adoptium.model.UserSystem;
 import net.adoptium.utils.UserAgentParser;
-import net.adoptopenjdk.api.v3.models.Binary;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
@@ -23,6 +21,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Locale;
 
 import static io.quarkus.qute.i18n.MessageBundles.ATTRIBUTE_LOCALE;
 
@@ -77,14 +76,24 @@ public class IndexResource {
                 localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, defaultLocale);
             } else {
                 LOG.info("locale - using Accept-Language: " + acceptLanguage);
-                acceptLanguage = new LocaleConverter().convert(acceptLanguage).getLanguage();
-                localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, acceptLanguage);
+                Locale parsedHeaderLocale = new LocaleConverter().convert(acceptLanguage);
+                if (parsedHeaderLocale == null) {
+                    LOG.info("locale - bad Accept-Language, using default");
+                    localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, defaultLocale);
+                } else {
+                    acceptLanguage = parsedHeaderLocale.getLanguage();
+                    localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, acceptLanguage);
+                }
             }
         }
 
         // qute did the Accept-Language parsing for us, but to set the correct cookie we need to parse it outselves
         // how does quarks/qute do it'
         localeCookie.setPath("/");
+        localeCookie.setHttpOnly(true);
+        // if not set it's deleted when the session sends
+        // set it to 1 year?
+        localeCookie.setMaxAge(60 * 60 * 24 * 360);
         LOG.info("locale - using: " + localeCookie.getValue());
         rc.response().addCookie(localeCookie);
         rc.request().headers().set("Accept-Language", localeCookie.getValue());
@@ -94,27 +103,22 @@ public class IndexResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get(@HeaderParam("user-agent") String ua) {
-        AppMessages bundle = MessageBundles.get(AppMessages.class);
-
         UserSystem clientSystem = UserAgentParser.getOsAndArch(ua);
         if (clientSystem.getOs() == null) {
             LOG.warnf("no OS detected for ua: %s", ua);
-            IndexTemplate data = new IndexTemplate(bundle.welcomeClientOsUndetected());
-            return Templates.index(data).data("locales", appConfig.getLocales());
+            return Templates.index(new IndexTemplate()).data("locales", appConfig.getLocales());
         }
 
         Download recommended = repository.getUserDownload(clientSystem.getOs(), clientSystem.getArch());
         if (recommended == null) {
             LOG.warnf("no binary found for clientSystem: %s", clientSystem);
-            IndexTemplate data = new IndexTemplate(bundle.welcomeClientOsUnsupported());
-            return Templates.index(data).data("locales", appConfig.getLocales());
+            return Templates.index(new IndexTemplate()).data("locales", appConfig.getLocales());
         }
 
         String thankYouPath = repository.buildThankYouPath(recommended);
         LOG.infof("user: %s -> [%s] binary: %s", clientSystem, thankYouPath, recommended);
 
-        Binary binary = recommended.getBinary();
-        IndexTemplate data = new IndexTemplate(binary.getOs(), binary.getArchitecture(), recommended.getSemver(), binary.getProject(), thankYouPath);
+        IndexTemplate data = new IndexTemplate(recommended, thankYouPath);
         return Templates.index(data).data("locales", appConfig.getLocales());
     }
 }
