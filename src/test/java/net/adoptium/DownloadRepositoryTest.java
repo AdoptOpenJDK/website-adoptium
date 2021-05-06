@@ -20,7 +20,7 @@ import org.junit.jupiter.api.TestInstance;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * \@QuarkusTest annotation required so JacksonKotlinModule gets initialized.
@@ -76,9 +76,9 @@ public class DownloadRepositoryTest {
 
             Binary recommendedBinary = recommended.getBinary();
             if (recommendedBinary.getInstaller() != null) {
-                assertEquals(checksum, recommendedBinary.getInstaller().getChecksum(), "client: " + userSystem);
+                assertThat(checksum).overridingErrorMessage("client: " + userSystem).isEqualTo(recommendedBinary.getInstaller().getChecksum());
             } else {
-                assertEquals(checksum, recommendedBinary.getPackage().getChecksum(), "client: " + userSystem);
+                assertThat(checksum).overridingErrorMessage("client: " + userSystem).isEqualTo(recommendedBinary.getPackage().getChecksum());
             }
         });
     }

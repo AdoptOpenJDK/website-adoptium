@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import net.adoptium.api.DownloadRepository;
+import net.adoptium.model.Download;
 import net.adoptium.model.ThankYouTemplate;
 import net.adoptium.utils.DownloadArgumentGroup;
 import net.adoptium.utils.DownloadStringArgumentExtractor;
@@ -22,6 +23,8 @@ import net.adoptopenjdk.api.v3.models.Binary;
 @Path("/download")
 public class DownloadResource {
     private static final Logger LOG = Logger.getLogger(DownloadResource.class);
+
+    private final DownloadRepository repository;
 
     /**
      * Checked Templates ensure type-safety in html templating.
@@ -38,16 +41,22 @@ public class DownloadResource {
     }
 
     @Inject
-    public DownloadRepository repository;
+    public DownloadResource(DownloadRepository repository) {
+        this.repository = repository;
+    }
 
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("thank-you/{args}")
     public TemplateInstance get(@PathParam("args") String args) {
-        LOG.info("download/thank-you page called with args: " + args);
+        ThankYouTemplate template = getImpl(args);
+        return Templates.download(template);
+    }
+
+    ThankYouTemplate getImpl(String args) {
+        LOG.info("/download/thank-you page called with args: " + args);
         Map<DownloadArgumentGroup, String> versionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
         Binary binary = repository.getBinary(versionDetails);
-        ThankYouTemplate template = new ThankYouTemplate(versionDetails, binary);
-        return Templates.download(template);
+        return new ThankYouTemplate(versionDetails, binary);
     }
 }

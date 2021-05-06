@@ -29,6 +29,15 @@ class DownloadStringArgumentExtractorTest {
     }
 
     @Test
+    public void testVersionWithManyDots() {
+        String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.0.0.0.0.0";
+        Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionDetails(testString);
+
+        assertEquals(DownloadArgumentGroup.values().length, arguments.size());
+        assertEquals("11.0.0.0.0.0.0", arguments.get(VERSION));
+    }
+
+    @Test
     public void testStringWithMinusSymbol() {
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10-9";
         Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionDetails(testString);

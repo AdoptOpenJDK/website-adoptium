@@ -30,7 +30,6 @@ import static io.quarkus.qute.i18n.MessageBundles.ATTRIBUTE_LOCALE;
 // index.html in META-INF.resources is used as static resource (not template)
 @Path("/")
 public class IndexResource {
-
     private static final Logger LOG = Logger.getLogger(IndexResource.class);
 
     private final ApplicationConfig appConfig;
@@ -67,7 +66,7 @@ public class IndexResource {
         Cookie localeCookie = rc.getCookie(ATTRIBUTE_LOCALE);
 
         List<String> localeQuery = rc.queryParam(ATTRIBUTE_LOCALE);
-        if (localeQuery.size() > 0)
+        if (!localeQuery.isEmpty())
             localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, localeQuery.get(0));
 
         // if cookie & query-param aren't set, use header
@@ -96,7 +95,6 @@ public class IndexResource {
         // if not set it's deleted when the session sends
         // set it to 1 year?
         localeCookie.setMaxAge(60 * 60 * 24 * 360);
-        LOG.info("locale - using: " + localeCookie.getValue());
         rc.response().addCookie(localeCookie);
         rc.request().headers().set("Accept-Language", localeCookie.getValue());
         rc.next();

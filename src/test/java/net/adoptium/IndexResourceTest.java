@@ -1,7 +1,6 @@
 package net.adoptium;
 
 import com.microsoft.playwright.*;
-import io.quarkus.qute.i18n.Localized;
 import io.quarkus.qute.i18n.MessageBundles;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.common.http.TestHTTPResource;
@@ -16,10 +15,8 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -46,12 +43,12 @@ public class IndexResourceTest {
         Response response = client.newCall(request).execute();
         ResponseBody body = response.body();
 
-        assert body != null;
-        Assertions.assertEquals(200, response.code());
+        assertThat(body).isNotNull();
+        assertThat(response.code()).isEqualTo(200);
 
         // we need a constant string (no {variable} input)
         // as suggested during code review: nothing dynamic :)
-        Assertions.assertTrue(body.string().contains("Temurin is a free to use runtime"));
+        assertThat(body.string()).contains("Temurin is a free to use runtime");
     }
 
     @Test
@@ -64,10 +61,10 @@ public class IndexResourceTest {
         Response response = client.newCall(request).execute();
         ResponseBody body = response.body();
 
-        assert body != null;
-        Assertions.assertEquals(200, response.code());
+        assertThat(body).isNotNull();
+        assertThat(response.code()).isEqualTo(200);
 
-        Assertions.assertTrue(body.string().contains("Temurin ist eine gratis zu benutzende Laufzeitumgebung"));
+        assertThat(body.string()).contains("Temurin ist eine gratis zu benutzende Laufzeitumgebung");
     }
 
     @Test
@@ -80,11 +77,11 @@ public class IndexResourceTest {
         Response response = client.newCall(request).execute();
         ResponseBody body = response.body();
 
-        assert body != null;
-        Assertions.assertEquals(200, response.code());
+        assertThat(body).isNotNull();
+        assertThat(response.code()).isEqualTo(200);
 
         // application.properties defines english as default
-        Assertions.assertTrue(body.string().contains("Temurin is a free to use runtime"));
+        assertThat(body.string()).contains("Temurin is a free to use runtime");
     }
 
     /**
@@ -110,8 +107,8 @@ public class IndexResourceTest {
 
             AppMessages bundle = MessageBundles.get(AppMessages.class);
 
-            Assertions.assertTrue(page.url().contains("/thank-you/"), "not redirected to /thank-you/");
-            Assertions.assertTrue(page.content().contains(bundle.thankYouDownloadStarting()), "thank-you page does not display download_starting");
+            assertThat(page.url()).overridingErrorMessage("not redirected to /thank-you/").contains("/thank-you/");
+            assertThat(page.content()).overridingErrorMessage("thank-you page does not display download_starting").contains(bundle.thankYouDownloadStarting());
         } catch (PlaywrightException e) {
             fail("failed to launch browser " + browserType.name());
         }

@@ -9,7 +9,6 @@ import org.jboss.logging.Logger;
 import org.jboss.resteasy.client.exception.ResteasyWebApplicationException;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
@@ -73,10 +72,10 @@ public class DownloadRepository {
      */
     public String buildThankYouPath(Download download) {
         Binary binary = download.getBinary();
-        // TODO use constant path in DownloadResource and here
         return String.format("/download/thank-you/%s-%s-%s-%s-%s-%s-%s-%s-%s", binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(), binary.getImage_type(), binary.getHeap_size(), binary.getProject(), RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, download.getSemver());
     }
 
+    // TODO i18n: only set app-messages key in error
     public List<Release> requestDownloadVersion(Map<DownloadArgumentGroup, String> versionArguments) throws DownloadBinaryNotFoundException {
         try {
             return api.getRelease(versionArguments.get(VERSION),
@@ -93,10 +92,11 @@ public class DownloadRepository {
         }
     }
 
+    // TODO i18n: only set app-messages key in error
     public Binary getBinary(Map<DownloadArgumentGroup, String> versionDetails) throws DownloadBinaryNotFoundException {
         List<Release> releaseList = requestDownloadVersion(versionDetails);
         List<Binary> binaryList = Arrays.asList(releaseList.get(0).getBinaries());
-        if (binaryList.size() == 0) {
+        if (binaryList.isEmpty()) {
             throw new DownloadBinaryNotFoundException("Binary not found!", "Try to access this page from the root route.");
         } else if (binaryList.size() > 1) {
             LOG.error("There are " + binaryList.size() + " binaries available! Expected just 1.");
