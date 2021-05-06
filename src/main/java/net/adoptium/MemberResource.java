@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Path("/members")
@@ -33,7 +34,13 @@ public class MemberResource {
         URL json_url = loadJSONURL(JSON_PATH);
         List<Member> memberList = getMemberList(json_url);
 
+        sortMemberListAlphabetically(memberList);
+
         filterMembersByOrganisationType(memberList);
+    }
+
+    private void sortMemberListAlphabetically(List<Member> memberList) {
+        Collections.sort(memberList);
     }
 
     private void filterMembersByOrganisationType(List<Member> memberList){
@@ -78,6 +85,8 @@ public class MemberResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get() throws Exception {
-        return members.data("strategicMembers", strategicMembers);
+        return members.data("strategicMembers", strategicMembers)
+                .data("enterpriseMembers", enterpriseMembers)
+                .data("participantMembers", participantMembers);
     }
 }

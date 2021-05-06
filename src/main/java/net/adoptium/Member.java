@@ -1,6 +1,8 @@
 package net.adoptium;
 
-public class Member {
+import org.jetbrains.annotations.NotNull;
+
+public class Member implements Comparable<Member> {
     private String memberName;
     private String memberLink;
     private String memberLogo;
@@ -37,5 +39,10 @@ public class Member {
 
     public String getOrganizationType() {
         return organizationType;
+    }
+
+    @Override
+    public int compareTo(@NotNull Member o) {
+        return this.memberName.toLowerCase().compareTo(o.memberName.toLowerCase());
     }
 }
