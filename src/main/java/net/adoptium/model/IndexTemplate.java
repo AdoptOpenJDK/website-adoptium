@@ -44,6 +44,10 @@ public class IndexTemplate {
         return redirectPath;
     }
 
+    public List<Locale> getLocales() {
+        return locales;
+    }
+
     public boolean isError() {
         return error;
     }

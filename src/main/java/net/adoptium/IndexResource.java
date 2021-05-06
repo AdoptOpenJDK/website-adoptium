@@ -37,8 +37,6 @@ public class IndexResource {
 
     private final DownloadRepository repository;
 
-    TemplateProvider<IndexTemplate> provider = new TemplateProvider<>(Templates::index);
-
     /**
      * Checked Templates ensure type-safety in html templating.
      */
@@ -106,25 +104,26 @@ public class IndexResource {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get(@HeaderParam("user-agent") String ua) {
-        UserSystem clientSystem = UserAgentParser.getOsAndArch(ua);
+    public TemplateInstance get(@HeaderParam("user-agent") String userAgent) {
+        IndexTemplate data = getImpl(userAgent);
+        return Templates.index(data);
+    }
+
+    IndexTemplate getImpl(String userAgent) {
+        UserSystem clientSystem = UserAgentParser.getOsAndArch(userAgent);
         if (clientSystem.getOs() == null) {
-            LOG.warnf("no OS detected for ua: %s", ua);
-            return provider.get(new IndexTemplate(appConfig.getLocales()));
+            LOG.warnf("no OS detected for userAgent: %s", userAgent);
+            return new IndexTemplate(appConfig.getLocales());
         }
 
         Download recommended = repository.getUserDownload(clientSystem.getOs(), clientSystem.getArch());
         if (recommended == null) {
             LOG.warnf("no binary found for clientSystem: %s", clientSystem);
-            return provider.get(new IndexTemplate(appConfig.getLocales()));
+            return new IndexTemplate(appConfig.getLocales());
         }
 
         String thankYouPath = repository.buildThankYouPath(recommended);
         LOG.infof("user: %s -> [%s] binary: %s", clientSystem, thankYouPath, recommended);
-
-        IndexTemplate data = new IndexTemplate(recommended, thankYouPath, appConfig.getLocales());
-        return provider.get(data);
+        return new IndexTemplate(recommended, thankYouPath, appConfig.getLocales());
     }
-
-
 }

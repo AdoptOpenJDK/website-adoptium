@@ -37,7 +37,6 @@ public class IndexResourceUnitTest {
     @Test
     public void testNoDownloadAvailable() {
         DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
-        TestTemplateInstance testTemplate = new TestTemplateInstance();
 
         Download mockDownload = new Download(
                 new Binary(new Package(
@@ -54,19 +53,18 @@ public class IndexResourceUnitTest {
 
         ApplicationConfig testConfig = new ApplicationConfig(List.of(Locale.ENGLISH), Locale.ENGLISH);
         IndexResource index = new IndexResource(mockRepository, testConfig);
-        index.provider = new TemplateProvider<>(testTemplate::data);
 
         // Linux x64: download exists
         // welcomeMainText and errorText are mutually exclusive, if welcomeMainText is shown there was no error
-        TemplateInstance got = index.get("linux x64");
-        assertFalse(((IndexTemplate) ((TestTemplateInstance) got).getData()).isError());
+        IndexTemplate got = index.getImpl("linux x64");
+        assertFalse(got.isError());
 
         // Linux x32: OS detected, no download
-        got = index.get("linux x32");
-        assertTrue(((IndexTemplate) ((TestTemplateInstance) got).getData()).isError());
+        got = index.getImpl("linux x32");
+        assertTrue(got.isError());
 
         // empty user agent: OS unknown
-        got = index.get("");
-        assertTrue(((IndexTemplate) ((TestTemplateInstance) got).getData()).isError());
+        got = index.getImpl("");
+        assertTrue(got.isError());
     }
 }
