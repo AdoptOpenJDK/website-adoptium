@@ -1,0 +1,25 @@
+[
+  {
+    "memberName": "Microsoft",
+    "memberLink": "https://microsoft.com/",
+    "memberLogo": "assets/memberLogos/microsoft.svg",
+    "memberAltText": "Microsoft Logo",
+    "organizationType": "strategic"
+  },
+  {
+    "memberName": "Karakun",
+    "memberLink": "https://karakun.com/",
+    "memberLogo": "assets/memberLogos/karakun.svg",
+    "memberAltText": "Karakun Logo",
+    "organizationType": "strategic"
+  },
+  {
+    "memberName": "Red Hat",
+    "memberLink": "https://www.redhat.com/",
+    "memberLogo": "assets/memberLogos/redhat.svg",
+    "memberAltText": "Red Hat Logo",
+    "organizationType": "strategic"
+  }
+]
+
+
