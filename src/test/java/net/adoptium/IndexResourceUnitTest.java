@@ -2,70 +2,71 @@ package net.adoptium;
 
 import io.quarkus.qute.HtmlEscaper;
 import io.quarkus.qute.TemplateInstance;
+import io.quarkus.qute.TemplateInstanceBase;
 import io.quarkus.qute.i18n.MessageBundles;
-import io.quarkus.test.Mock;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
-import net.adoptium.api.ApiMockServer;
-import net.adoptium.api.ApiService;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import net.adoptium.api.DownloadRepository;
+import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.Download;
 import net.adoptium.model.IndexTemplate;
-import net.adoptopenjdk.api.v3.models.Architecture;
-import net.adoptopenjdk.api.v3.models.OperatingSystem;
-import net.adoptopenjdk.api.v3.models.Project;
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockWebServer;
-import org.eclipse.microprofile.rest.client.RestClientBuilder;
+import net.adoptopenjdk.api.v3.models.Package;
+import net.adoptopenjdk.api.v3.models.*;
 import org.hamcrest.CoreMatchers;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import javax.swing.text.html.HTML;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Consumer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * QuarkusTest annotation is required for RestClientBuilder to work
+ * Can't use AppMessages without @QuarkusTest -> use the english strings manually
  */
-@QuarkusTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IndexResourceUnitTest {
-
-    //@InjectMock
-    //DownloadRepository mockRepository;
 
     @Test
     public void testNoDownloadAvailable() {
         DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
+        TestTemplateInstance testTemplate = new TestTemplateInstance();
 
-        // TODO return Download
-        Mockito.when(mockRepository.getUserDownload(OperatingSystem.linux, Architecture.x64)).thenReturn(null);
+        Download mockDownload = new Download(
+                new Binary(new Package(
+                        "name", "link", 1, "", "", 1, "", ""
+                ), 1, new DateTime(new Date()), null, new Installer(
+                        "name", "link", 1, "", "", 1, "", ""
+                ), HeapSize.normal, OperatingSystem.linux, Architecture.x64, ImageType.jdk, JvmImpl.hotspot, Project.jdk),
+                "1.0.0"
+        );
+        String mockThankYouPath = "/mock-thank-you-path";
 
-        IndexResource index = new IndexResource(mockRepository);
-        System.out.println("index: " + index);
+        Mockito.when(mockRepository.getUserDownload(OperatingSystem.linux, Architecture.x64)).thenReturn(mockDownload);
+        Mockito.when(mockRepository.buildThankYouPath(mockDownload)).thenReturn(mockThankYouPath);
 
-        AppMessages bundle = MessageBundles.get(AppMessages.class);
-
-        // NOTE: to match the response, we need to escape our strings like qute does
-        HtmlEscaper htmlEscaper = new HtmlEscaper();
+        ApplicationConfig testConfig = new ApplicationConfig(List.of(Locale.ENGLISH), Locale.ENGLISH);
+        IndexResource index = new IndexResource(mockRepository, testConfig);
+        index.provider = new TemplateProvider<>(testTemplate::data);
 
         // Linux x64: download exists
         // welcomeMainText and errorText are mutually exclusive, if welcomeMainText is shown there was no error
         TemplateInstance got = index.get("linux x64");
-        assertThat(got.render(), CoreMatchers.containsString(htmlEscaper.map(bundle.welcomeMainText(), null)));
+        assertFalse(((IndexTemplate) ((TestTemplateInstance) got).getData()).isError());
 
         // Linux x32: OS detected, no download
         got = index.get("linux x32");
-        assertThat(got.render(), CoreMatchers.containsString(htmlEscaper.map(bundle.welcomeClientOsUnsupported(), null)));
+        assertTrue(((IndexTemplate) ((TestTemplateInstance) got).getData()).isError());
 
         // empty user agent: OS unknown
         got = index.get("");
-        assertThat(got.render(), CoreMatchers.containsString(htmlEscaper.map(bundle.welcomeClientOsUnsupported(), null)));
+        assertTrue(((IndexTemplate) ((TestTemplateInstance) got).getData()).isError());
     }
 }

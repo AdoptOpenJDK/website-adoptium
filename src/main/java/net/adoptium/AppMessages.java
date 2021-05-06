@@ -23,7 +23,7 @@ public interface AppMessages {
                                      @MessageParam("os") OperatingSystem os,
                                      @MessageParam("arch") Architecture arch);
 
-    @Message("We don't support  your platform right now")
+    @Message("We don't support your platform right now")
     String welcomeClientOsUnsupported();
 
     @Message("View all releases")

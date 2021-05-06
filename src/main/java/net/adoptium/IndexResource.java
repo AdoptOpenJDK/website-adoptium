@@ -22,6 +22,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static io.quarkus.qute.i18n.MessageBundles.ATTRIBUTE_LOCALE;
 
@@ -31,10 +33,11 @@ public class IndexResource {
 
     private static final Logger LOG = Logger.getLogger(IndexResource.class);
 
-    @Inject
-    ApplicationConfig appConfig;
+    private final ApplicationConfig appConfig;
 
     private final DownloadRepository repository;
+
+    TemplateProvider<IndexTemplate> provider = new TemplateProvider<>(Templates::index);
 
     /**
      * Checked Templates ensure type-safety in html templating.
@@ -51,8 +54,9 @@ public class IndexResource {
     }
 
     @Inject
-    public IndexResource(DownloadRepository repository) {
+    public IndexResource(DownloadRepository repository, ApplicationConfig appConfig) {
         this.repository = repository;
+        this.appConfig = appConfig;
     }
 
     @RouteFilter
@@ -106,19 +110,21 @@ public class IndexResource {
         UserSystem clientSystem = UserAgentParser.getOsAndArch(ua);
         if (clientSystem.getOs() == null) {
             LOG.warnf("no OS detected for ua: %s", ua);
-            return Templates.index(new IndexTemplate()).data("locales", appConfig.getLocales());
+            return provider.get(new IndexTemplate(appConfig.getLocales()));
         }
 
         Download recommended = repository.getUserDownload(clientSystem.getOs(), clientSystem.getArch());
         if (recommended == null) {
             LOG.warnf("no binary found for clientSystem: %s", clientSystem);
-            return Templates.index(new IndexTemplate()).data("locales", appConfig.getLocales());
+            return provider.get(new IndexTemplate(appConfig.getLocales()));
         }
 
         String thankYouPath = repository.buildThankYouPath(recommended);
         LOG.infof("user: %s -> [%s] binary: %s", clientSystem, thankYouPath, recommended);
 
-        IndexTemplate data = new IndexTemplate(recommended, thankYouPath);
-        return Templates.index(data).data("locales", appConfig.getLocales());
+        IndexTemplate data = new IndexTemplate(recommended, thankYouPath, appConfig.getLocales());
+        return provider.get(data);
     }
+
+
 }
