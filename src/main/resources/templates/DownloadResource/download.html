@@ -20,8 +20,7 @@
         </a>
         &nbsp;<button id="btn-copy-dll">{msg:literalCopy}</button>
         <p>
-            {msg:thankYouDownloadTimeout}<br>
-            <a href="{template.getDownloadLink()}">{msg:thankYouDownloadTimeoutClickAgain}</a>
+            {msg:thankYouDownloadHint(template.getDownloadLink()).raw}
         </p>
         <p>{msg:literalChecksum} (SHA-256): {template.getChecksum()}</p>
         <button id="btn-copy-chksm">{msg:literalCopy}</button>

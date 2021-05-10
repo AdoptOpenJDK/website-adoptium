@@ -32,11 +32,8 @@ public interface AppMessages {
     @Message("Thank you for downloading")
     String thankYouDownloadStarting();
 
-    @Message("If the download does not start within 10 seconds, ")
-    String thankYouDownloadTimeout();
-
-    @Message("try again to download manually")
-    String thankYouDownloadTimeoutClickAgain();
+    @Message("If your download does not start within 10 seconds, <a href='{downloadLink}'>click here</a>")
+    String thankYouDownloadHint(@MessageParam("downloadLink") String downloadLink);
 
     @Message("{vendor} {imageType} {version} for {os} {arch}")
     String thankYouDownloadStartingLink(@MessageParam("vendor") Vendor vendor,
