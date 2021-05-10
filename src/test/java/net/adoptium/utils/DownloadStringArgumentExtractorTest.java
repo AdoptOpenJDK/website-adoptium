@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DownloadStringArgumentExtractorTest {
 
     @Test
-    public void testArgumentGroups() {
+    void testArgumentGroups() {
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9";
         Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionDetails(testString);
 
@@ -29,7 +29,7 @@ class DownloadStringArgumentExtractorTest {
     }
 
     @Test
-    public void testVersionWithManyDots() {
+    void testVersionWithManyDots() {
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.0.0.0.0.0";
         Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionDetails(testString);
 
@@ -38,7 +38,7 @@ class DownloadStringArgumentExtractorTest {
     }
 
     @Test
-    public void testStringWithMinusSymbol() {
+    void testStringWithMinusSymbol() {
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10-9";
         Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionDetails(testString);
 
@@ -47,7 +47,7 @@ class DownloadStringArgumentExtractorTest {
     }
 
     @Test
-    public void testFindsGroupsWithEnoughArgumentsAlthoughNotValidArguments() {
+    void testFindsGroupsWithEnoughArgumentsAlthoughNotValidArguments() {
         //The DownloadStringArgumentExtractor should not check if the arguments are valid
         String testString = "windows-x-64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10-9";
         Map<DownloadArgumentGroup, String> arguments = DownloadStringArgumentExtractor.getVersionDetails(testString);
@@ -58,7 +58,7 @@ class DownloadStringArgumentExtractorTest {
     }
 
     @Test
-    public void testInvalidStringPattern() {
+    void testInvalidStringPattern() {
         //There are not enough - symbols to generate the needed arguments
         String testString = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk";
 

@@ -24,7 +24,7 @@ public class DownloadResourceTest {
     private final DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
 
     @Test
-    public void testDownloadLink() {
+    void testDownloadLink() {
         String args = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9";
 
         // mockBinary is effectively ignored, as long as ThankYouTemplate is populated with the correct link
@@ -44,7 +44,7 @@ public class DownloadResourceTest {
     }
 
     @Test
-    public void testArgParsingMissingArg() {
+    void testArgParsingMissingArg() {
         String args = "windows-x64-hotspot-jdk-jdk-ga-adoptopenjdk-11.0.10+9";
 
         DownloadResource download = new DownloadResource(mockRepository);

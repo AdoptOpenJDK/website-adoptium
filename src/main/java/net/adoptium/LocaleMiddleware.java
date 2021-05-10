@@ -57,7 +57,7 @@ public class LocaleMiddleware {
         localeCookie.setHttpOnly(true);
         // if not set it's deleted when the session sends
         // set it to 1 year?
-        localeCookie.setMaxAge(60 * 60 * 24 * 360);
+        localeCookie.setMaxAge(60 * 60 * 24 * 360L);
         rc.response().addCookie(localeCookie);
         rc.request().headers().set("Accept-Language", localeCookie.getValue());
         rc.next();

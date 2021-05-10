@@ -36,7 +36,7 @@ public class DownloadRepositoryTest {
     private ApiService remoteApi;
 
     @BeforeAll
-    public void setupMockServer() throws IOException {
+    void setupMockServer() throws IOException {
         mockWebServer = new MockWebServer();
         mockWebServer.setDispatcher(new ApiMockServer());
         mockWebServer.start();
@@ -50,7 +50,7 @@ public class DownloadRepositoryTest {
     }
 
     @Test
-    public void testUserDownload() {
+    void testUserDownload() {
         // current procedure for determining the correct binary: manually searching for it based on the criteria used in getUserDownload (CTRL-F "linux")
         // NOTE: for OS.windows (which usually includes installers) the first match will be used,
         //       while OS.linux generally accepts the last one (since it's trying to find an installer)
@@ -84,7 +84,7 @@ public class DownloadRepositoryTest {
     }
 
     @AfterAll
-    public void shutdownMockServer() throws IOException {
+    void shutdownMockServer() throws IOException {
         mockWebServer.shutdown();
     }
 }

@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class IndexResourceUnitTest {
 
     @Test
-    public void testNoDownloadAvailable() {
+    void testNoDownloadAvailable() {
         DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
 
         // OperatingSystem, Architecture, etc. don't matter

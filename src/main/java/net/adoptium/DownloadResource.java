@@ -1,24 +1,21 @@
 package net.adoptium;
 
+import io.quarkus.qute.CheckedTemplate;
+import io.quarkus.qute.TemplateInstance;
+import net.adoptium.api.DownloadRepository;
+import net.adoptium.model.ThankYouTemplate;
+import net.adoptium.utils.DownloadArgumentGroup;
+import net.adoptium.utils.DownloadStringArgumentExtractor;
+import net.adoptopenjdk.api.v3.models.Binary;
+import org.jboss.logging.Logger;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
+
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import io.quarkus.qute.CheckedTemplate;
-import io.quarkus.qute.TemplateInstance;
-import net.adoptium.api.DownloadRepository;
-import net.adoptium.model.Download;
-import net.adoptium.model.ThankYouTemplate;
-import net.adoptium.utils.DownloadArgumentGroup;
-import net.adoptium.utils.DownloadStringArgumentExtractor;
-import org.jboss.logging.Logger;
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
-
 import java.util.Map;
-
-import net.adoptopenjdk.api.v3.models.Binary;
 
 @Path("/download")
 public class DownloadResource {

@@ -34,7 +34,7 @@ public class IndexResourceTest {
     URL indexUrl;
 
     @Test
-    public void testIndexLocaleEn() throws IOException {
+    void testIndexLocaleEn() throws IOException {
         Request request = new Request.Builder()
                 .header("Accept-Language", "en-GB,en;q=0.5,de;q=0.3")
                 .header("User-Agent", "linux x64")
@@ -52,7 +52,7 @@ public class IndexResourceTest {
     }
 
     @Test
-    public void testIndexLocaleDe() throws IOException {
+    void testIndexLocaleDe() throws IOException {
         Request request = new Request.Builder()
                 .header("Accept-Language", "de-DE,de;q=0.9,en;q=0.4")
                 .header("User-Agent", "linux x64")
@@ -68,7 +68,7 @@ public class IndexResourceTest {
     }
 
     @Test
-    public void testIndexLocaleDefault() throws IOException {
+    void testIndexLocaleDefault() throws IOException {
         Request request = new Request.Builder()
                 .header("Accept-Language", "")
                 .header("User-Agent", "linux x64")
@@ -88,7 +88,7 @@ public class IndexResourceTest {
      * ensures /download/thank-you path is correctly used in buildThankYouPath.
      */
     @Test
-    public void testDownloadRedirect() {
+    void testDownloadRedirect() {
         Playwright playwright = Playwright.create();
 
         // TODO use global config
