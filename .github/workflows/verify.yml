@@ -14,11 +14,12 @@ jobs:
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v2
+
+      - name: rebase
+        uses: linhbn123/rebase-pull-requests@v1.0.1
         
       - name: Build app
         run: ./mvnw verify sonar:sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      
-
