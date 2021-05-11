@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Website-Adoptium</title>
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
-<div class="banner lead">
-    {msg:adoptium}
-</div>
+
+{#include HeaderFooterTemplates/header /}
 
 <div class="container">
     {#if template.isError()}
@@ -44,5 +43,14 @@
     </a>
     {/for}
 </div>
+
+<div>
+    <p>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>Test to see if scrolling works (This text isnt translated)
+    </p>
+</div>
+
+{#include HeaderFooterTemplates/footer /}
+
 </body>
 </html>
