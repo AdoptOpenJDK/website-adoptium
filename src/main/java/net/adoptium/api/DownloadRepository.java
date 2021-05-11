@@ -1,6 +1,5 @@
 package net.adoptium.api;
 
-import net.adoptium.DownloadResource;
 import net.adoptium.exceptions.DownloadBinaryNotFoundException;
 import net.adoptium.model.Download;
 import net.adoptium.utils.DownloadArgumentGroup;
@@ -9,7 +8,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.client.exception.ResteasyWebApplicationException;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.Map;
 
 import static net.adoptium.utils.DownloadArgumentGroup.*;
 
-@Dependent
+@ApplicationScoped
 public class DownloadRepository {
     private static final Logger LOG = Logger.getLogger(DownloadRepository.class);
     // TODO where to define these? custom struct?
@@ -66,16 +65,17 @@ public class DownloadRepository {
     }
 
     /**
-     * builds the arg string used by /thank-you/{args}
+     * returns absolute path to thank-you URL with the specific args.
      *
      * @param download the Download to be executed
      * @return arg string
      */
-    public String buildRedirectArgs(Download download) {
+    public String buildThankYouPath(Download download) {
         Binary binary = download.getBinary();
-        return String.format("%s-%s-%s-%s-%s-%s-%s-%s-%s", binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(), binary.getImage_type(), binary.getHeap_size(), binary.getProject(), RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, download.getSemver());
+        return String.format("/download/thank-you/%s-%s-%s-%s-%s-%s-%s-%s-%s", binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(), binary.getImage_type(), binary.getHeap_size(), binary.getProject(), RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, download.getSemver());
     }
 
+    // TODO i18n: only set app-messages key in error
     public List<Release> requestDownloadVersion(Map<DownloadArgumentGroup, String> versionArguments) throws DownloadBinaryNotFoundException {
         try {
             return api.getRelease(versionArguments.get(VERSION),
@@ -92,10 +92,11 @@ public class DownloadRepository {
         }
     }
 
+    // TODO i18n: only set app-messages key in error
     public Binary getBinary(Map<DownloadArgumentGroup, String> versionDetails) throws DownloadBinaryNotFoundException {
         List<Release> releaseList = requestDownloadVersion(versionDetails);
         List<Binary> binaryList = Arrays.asList(releaseList.get(0).getBinaries());
-        if (binaryList.size() == 0) {
+        if (binaryList.isEmpty()) {
             throw new DownloadBinaryNotFoundException("Binary not found!", "Try to access this page from the root route.");
         } else if (binaryList.size() > 1) {
             LOG.error("There are " + binaryList.size() + " binaries available! Expected just 1.");

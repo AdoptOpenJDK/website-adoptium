@@ -1,29 +1,28 @@
 package net.adoptium.model;
 
 import net.adoptium.utils.DownloadArgumentGroup;
-import net.adoptopenjdk.api.v3.models.Binary;
-import net.adoptopenjdk.api.v3.models.Installer;
 import net.adoptopenjdk.api.v3.models.Package;
+import net.adoptopenjdk.api.v3.models.*;
 
 import java.util.Map;
 
 import static net.adoptium.utils.DownloadArgumentGroup.*;
 
-public class DownloadResourceHTMLData {
+public class ThankYouTemplate {
     private final String downloadLink;
-    private final String imageType;
+    private final ImageType imageType;
     private final String checksum;
     private final String version;
-    private final String vendor;
-    private final String arch;
-    private final String os;
+    private final Vendor vendor;
+    private final Architecture arch;
+    private final OperatingSystem os;
 
-    public DownloadResourceHTMLData(Map<DownloadArgumentGroup, String> versionDetails, Binary binary) {
-        imageType = versionDetails.get(IMAGE_TYPE);
+    public ThankYouTemplate(Map<DownloadArgumentGroup, String> versionDetails, Binary binary) {
+        imageType = ImageType.valueOf(versionDetails.get(IMAGE_TYPE));
         version = versionDetails.get(VERSION);
-        vendor = versionDetails.get(VENDOR);
-        arch = versionDetails.get(ARCH);
-        os = versionDetails.get(OS);
+        vendor = Vendor.valueOf(versionDetails.get(VENDOR));
+        arch = Architecture.forValue(versionDetails.get(ARCH));
+        os = OperatingSystem.valueOf(versionDetails.get(OS));
         if (binary.getInstaller() != null) {
             Installer installer = binary.getInstaller();
             downloadLink = installer.getLink();
@@ -39,7 +38,7 @@ public class DownloadResourceHTMLData {
         return downloadLink;
     }
 
-    public String getImageType() {
+    public ImageType getImageType() {
         return imageType;
     }
 
@@ -51,15 +50,15 @@ public class DownloadResourceHTMLData {
         return version;
     }
 
-    public String getVendor() {
+    public Vendor getVendor() {
         return vendor;
     }
 
-    public String getArch() {
+    public Architecture getArch() {
         return arch;
     }
 
-    public String getOs() {
+    public OperatingSystem getOs() {
         return os;
     }
 }
