@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Website-Adoptium</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+<div class="banner lead">
+    {msg:adoptium}
+</div>
+
+<div class="container">
+    {#if template.isError()}
+    {msg:welcomeClientOsUnsupported}
+    {#else}
+    {msg:welcomeMainText}
+    {/if}
+</div>
+
+<div class="container" id="main">
+    <a href="{template.getRedirectPath()}" class="button" id="download_btn">
+        <div id="dl-version">
+            <i id="dl-icon" class="fa fa-download" aria-hidden="true"></i>
+            {#if template.isError()}
+            <span>{msg:welcomeDownloadButtonFallback}</span>
+            {#else}
+            <span>{msg:welcomeDownloadButtonHeader}</span>
+            {/if}
+            <i id="dl-icon-2" class="fa fa-arrow-circle-o-right hide" aria-hidden="true"></i>
+        </div>
+        {#if !template.isError()}
+        <div class="dl-description">
+            {msg:welcomeDownloadButtonBody(template.getDownload().getSemver(), template.getDownload().getBinary().getOs(), template.getDownload().getBinary().getArchitecture())}
+        </div>
+        {/if}
+    </a>
+</div>
+
+<div class="container" id="locales">
+    {#for loc in template.getLocales()}
+    <a href="/?locale={loc}">
+        <img src="/icons/locale/{loc}.svg" width="32px" height="32px" alt="{loc}" class="locale" id="locale_{loc}">
+    </a>
+    {/for}
+</div>
+</body>
+</html>

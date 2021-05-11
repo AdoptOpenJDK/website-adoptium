@@ -5,6 +5,7 @@ import net.adoptium.api.ApiMockServer;
 import net.adoptium.api.ApiService;
 import net.adoptium.api.DownloadRepository;
 import net.adoptium.model.Download;
+import net.adoptium.model.UserSystem;
 import net.adoptopenjdk.api.v3.models.Architecture;
 import net.adoptopenjdk.api.v3.models.Binary;
 import net.adoptopenjdk.api.v3.models.OperatingSystem;
@@ -19,7 +20,7 @@ import org.junit.jupiter.api.TestInstance;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * \@QuarkusTest annotation required so JacksonKotlinModule gets initialized.
@@ -28,11 +29,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DownloadRepositoryTest {
 
+    /**
+     * mockWebServer mocks the api by returning responses from json files in test/resources/api-stating
+     */
     private MockWebServer mockWebServer;
     private ApiService remoteApi;
 
     @BeforeAll
-    public void setupMockServer() throws IOException {
+    void setupMockServer() throws IOException {
         mockWebServer = new MockWebServer();
         mockWebServer.setDispatcher(new ApiMockServer());
         mockWebServer.start();
@@ -46,7 +50,7 @@ public class DownloadRepositoryTest {
     }
 
     @Test
-    public void testUserDownload() {
+    void testUserDownload() {
         // current procedure for determining the correct binary: manually searching for it based on the criteria used in getUserDownload (CTRL-F "linux")
         // NOTE: for OS.windows (which usually includes installers) the first match will be used,
         //       while OS.linux generally accepts the last one (since it's trying to find an installer)
@@ -72,15 +76,15 @@ public class DownloadRepositoryTest {
 
             Binary recommendedBinary = recommended.getBinary();
             if (recommendedBinary.getInstaller() != null) {
-                assertEquals(checksum, recommendedBinary.getInstaller().getChecksum(), "client: " + userSystem);
+                assertThat(checksum).overridingErrorMessage("client: " + userSystem).isEqualTo(recommendedBinary.getInstaller().getChecksum());
             } else {
-                assertEquals(checksum, recommendedBinary.getPackage().getChecksum(), "client: " + userSystem);
+                assertThat(checksum).overridingErrorMessage("client: " + userSystem).isEqualTo(recommendedBinary.getPackage().getChecksum());
             }
         });
     }
 
     @AfterAll
-    public void shutdownMockServer() throws IOException {
+    void shutdownMockServer() throws IOException {
         mockWebServer.shutdown();
     }
 }

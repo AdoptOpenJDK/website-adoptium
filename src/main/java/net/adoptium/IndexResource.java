@@ -1,52 +1,73 @@
 package net.adoptium;
 
-import io.quarkus.qute.Template;
+import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import net.adoptium.api.DownloadRepository;
 import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.Download;
+import net.adoptium.model.IndexTemplate;
+import net.adoptium.model.UserSystem;
+import net.adoptium.utils.UserAgentParser;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 // index.html in META-INF.resources is used as static resource (not template)
 @Path("/")
 public class IndexResource {
-
     private static final Logger LOG = Logger.getLogger(IndexResource.class);
+
+    private final ApplicationConfig appConfig;
 
     private final DownloadRepository repository;
 
-    @Inject
-    public Template index;
+    /**
+     * Checked Templates ensure type-safety in html templating.
+     */
+    @CheckedTemplate
+    public static class Templates {
+        /**
+         * The method name of a `static native TemplateInstance` refers to the name of a .html file in templates/DownloadResource.
+         *
+         * @param template all data accessible by the template
+         * @return a Template with values from template filled in
+         */
+        public static native TemplateInstance index(IndexTemplate template);
+    }
 
     @Inject
-    public IndexResource(DownloadRepository repository) {
+    public IndexResource(DownloadRepository repository, ApplicationConfig appConfig) {
         this.repository = repository;
+        this.appConfig = appConfig;
     }
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get(@QueryParam("name") String name, @HeaderParam("user-agent") String ua) {
-        UserSystem user = UserAgentParser.getOsAndArch(ua);
-        if (user.getOs() == null) {
-            LOG.warnf("no OS detected for ua: %s, redirecting...", ua);
-            // TODO redirect
+    public TemplateInstance get(@HeaderParam("user-agent") String userAgent) {
+        IndexTemplate data = getImpl(userAgent);
+        return Templates.index(data);
+    }
+
+    IndexTemplate getImpl(String userAgent) {
+        UserSystem clientSystem = UserAgentParser.getOsAndArch(userAgent);
+        if (clientSystem.getOs() == null) {
+            LOG.warnf("no OS detected for userAgent: %s", userAgent);
+            return new IndexTemplate(appConfig.getLocales());
         }
-        Download recommended = repository.getUserDownload(user.getOs(), user.getArch());
+
+        Download recommended = repository.getUserDownload(clientSystem.getOs(), clientSystem.getArch());
         if (recommended == null) {
-            LOG.warnf("no binary found for user: %s, redirecting...", user);
-            // TODO redirect
+            LOG.warnf("no binary found for clientSystem: %s", clientSystem);
+            return new IndexTemplate(appConfig.getLocales());
         }
-        String thankYouURL = repository.buildRedirectArgs(recommended);
-        LOG.infof("user: %s -> [%s] binary: %s", user, thankYouURL, recommended);
-        return index
-                .data("download_name", recommended.getBinary().getProject().toString())
-                .data("version", recommended.getSemver())
-                .data("thank-you-version", thankYouURL)
-                .data("os", recommended.getBinary().getOs())
-                .data("arch", recommended.getBinary().getArchitecture());
+
+        String thankYouPath = repository.buildThankYouPath(recommended);
+        LOG.infof("user: %s -> [%s] binary: %s", clientSystem, thankYouPath, recommended);
+        return new IndexTemplate(recommended, thankYouPath, appConfig.getLocales());
     }
 }

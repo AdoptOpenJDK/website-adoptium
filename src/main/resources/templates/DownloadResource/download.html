@@ -7,28 +7,28 @@
 </head>
 <body>
 <div class="banner lead">
-    Adoptium
+    {msg:adoptium}
 </div>
 
 <div class="container">
-    <div class="left-column">
-        <h2>{msg:download_starting}</h2>
-        <p>Thank you for downloading</p>
-        <a href="{htmlData.getDownloadLink()}">
-            {htmlData.getVendor()} {htmlData.getImageType()} {htmlData.getVersion()}<br>
-            for {htmlData.getOs()} {htmlData.getArch()}
+    <div>
+        <a href="/">Starting Page</a>
+        <h2>{msg:thankYouDownloadStarting}</h2>
+
+        <a href="{template.getDownloadLink()}">
+            {msg:thankYouDownloadStartingLink(template.getVendor(), template.getImageType(), template.getVersion(), template.getOs(), template.getArch())}
         </a>
-        <button id="btn-copy-dll">Copy</button>
+        &nbsp;<button id="btn-copy-dll">{msg:literalCopy}</button>
         <p>
-            If the downlaod does not start within 10 seconds,<br>
-            <a href="{htmlData.getDownloadLink()}">try again to download manually</a>
+            {msg:thankYouDownloadHint(template.getDownloadLink()).raw}
         </p>
-        <p>checksum (sha256): {htmlData.getChecksum()}</p>
-        <button id="btn-copy-chksm">Copy</button>
+        <p>{msg:literalChecksum} (SHA-256): {template.getChecksum()}</p>
+        <button id="btn-copy-chksm">{msg:literalCopy}</button>
     </div>
 </div>
 <script type="text/javascript" scoped>
-    window.open('{htmlData.getDownloadLink()}', '_self');
+    window.open('{template.getDownloadLink()}', '_self');
+
     function fallbackCopyTextToClipboard(text) {
         var textArea = document.createElement("textarea");
         textArea.value = text;
@@ -52,24 +52,26 @@
 
         document.body.removeChild(textArea);
     }
+
     function copyTextToClipboard(text) {
         if (!navigator.clipboard) {
             fallbackCopyTextToClipboard(text);
             return;
         }
-        navigator.clipboard.writeText(text).then(function() {
+        navigator.clipboard.writeText(text).then(function () {
             console.log('Async: Copying to clipboard was successful!');
-        }, function(err) {
+        }, function (err) {
             console.error('Async: Could not copy text: ', err);
         });
     }
+
     var btnCopyDll = document.querySelector('#btn-copy-dll'),
         btnCopyChksm = document.querySelector('#btn-copy-chksm');
-    btnCopyDll.addEventListener('click', function(event) {
-        copyTextToClipboard('{htmlData.getDownloadLink()}');
+    btnCopyDll.addEventListener('click', function (event) {
+        copyTextToClipboard('{template.getDownloadLink()}');
     });
-    btnCopyChksm.addEventListener('click', function(event) {
-        copyTextToClipboard('{htmlData.getChecksum()}');
+    btnCopyChksm.addEventListener('click', function (event) {
+        copyTextToClipboard('{template.getChecksum()}');
     });
 </script>
 </body>
