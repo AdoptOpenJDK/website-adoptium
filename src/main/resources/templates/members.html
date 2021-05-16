@@ -18,7 +18,10 @@
         <ul>
             {#for strategicMember in strategicMembers}
                 {#if strategicMember.isValid}
-                    <li><a href={strategicMember.memberLink} target="_blank" rel="noopener noreferrer">{strategicMember.memberName}</a></li>
+                    <li><a href={strategicMember.memberLink} target="_blank" rel="noopener noreferrer">
+                        <img alt={strategicMember.memberName} src={strategicMember.memberLogo}
+                             width=20%" height="20%">
+                    </a></li>
                 {#else}
                     <li><a>{strategicMember.memberName}</a></li>
                 {/if}
@@ -29,7 +32,10 @@
         <ul>
             {#for enterpriseMember in enterpriseMembers}
                 {#if enterpriseMember.isValid}
-                <li><a href={enterpriseMember.memberLink} target="_blank" rel="noopener noreferrer">{enterpriseMember.memberName}</a></li>
+                <li><a href={enterpriseMember.memberLink} target="_blank" rel="noopener noreferrer">
+                    <img alt={enterpriseMember.memberName} src={enterpriseMember.memberLogo}
+                         width=20%" height="20%">
+                </a></li>
                 {#else}
                 <li><a>{enterpriseMember.memberName}</a></li>
                 {/if}
@@ -40,7 +46,10 @@
         <ul>
             {#for participantMember in participantMembers}
                 {#if participantMember.isValid}
-                <li><a href={participantMember.memberLink} target="_blank" rel="noopener noreferrer">{participantMember.memberName}</a></li>
+                <li><a href={participantMember.memberLink} target="_blank" rel="noopener noreferrer">
+                    <img alt={participantMember.memberName} src={participantMember.memberLogo}
+                         width=20%" height="20%">
+                </a></li>
                 {#else}
                 <li><a>{participantMember.memberName}</a></li>
                 {/if}
