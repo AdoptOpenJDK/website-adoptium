@@ -52,8 +52,6 @@ public class MemberResource {
         } catch (NullPointerException e){
             LOG.errorf("Error: MemberList is empty!");
         }
-
-
     }
 
     protected void sortMemberListAlphabetically(List<Member> memberList) throws NullPointerException {
