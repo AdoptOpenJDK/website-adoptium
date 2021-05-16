@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Download - Error</title>
-    <link rel="stylesheet" href="/css/index.css">
-</head>
-<body>
-<div class="banner lead">
-    {msg:adoptium}
-</div>
+    <head>
+        <meta charset="UTF-8">
+        <title>Download - Error</title>
+        <link rel="stylesheet" href="/css/index.css">
+    </head>
 
-<div class="container">
-    <div class="left-column">
-        <p id="error">{msg}</p>
-        <p>{suggestion}</p>
-    </div>
-</div>
-</body>
+    <body>
+
+        {#include HeaderFooterTemplates/header /}
+
+        <div class="site-content">
+            <div class="container">
+                <div class="left-column">
+                    <p id="error">{msg}</p>
+                    <p>{suggestion}</p>
+                </div>
+            </div>
+        </div>
+        {#include HeaderFooterTemplates/footer /}
+
+    </body>
 </html>

@@ -1,78 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Download</title>
-    <link rel="stylesheet" href="/css/index.css">
-</head>
-<body>
-<div class="banner lead">
-    {msg:adoptium}
-</div>
+    <head>
+        <meta charset="UTF-8">
+        <title>Download</title>
+        <link rel="stylesheet" href="/css/index.css">
+    </head>
 
-<div class="container">
-    <div>
-        <a href="/">Starting Page</a>
-        <h2>{msg:thankYouDownloadStarting}</h2>
+    <body>
 
-        <a href="{template.getDownloadLink()}">
-            {msg:thankYouDownloadStartingLink(template.getVendor(), template.getImageType(), template.getVersion(), template.getOs(), template.getArch())}
-        </a>
-        &nbsp;<button id="btn-copy-dll">{msg:literalCopy}</button>
-        <p>
-            {msg:thankYouDownloadHint(template.getDownloadLink()).raw}
-        </p>
-        <p>{msg:literalChecksum} (SHA-256): {template.getChecksum()}</p>
-        <button id="btn-copy-chksm">{msg:literalCopy}</button>
-    </div>
-</div>
-<script type="text/javascript" scoped>
-    window.open('{template.getDownloadLink()}', '_self');
+        {#include HeaderFooterTemplates/header /}
 
-    function fallbackCopyTextToClipboard(text) {
-        var textArea = document.createElement("textarea");
-        textArea.value = text;
+        <div class="site-content">
+            <div>
+                <a href="/">Starting Page</a>
+                <h2>{msg:thankYouDownloadStarting}</h2>
 
-        // Avoid scrolling to bottom
-        textArea.style.top = "0";
-        textArea.style.left = "0";
-        textArea.style.position = "fixed";
+                <a href="{template.getDownloadLink()}">
+                    {msg:thankYouDownloadStartingLink(template.getVendor(), template.getImageType(), template.getVersion(), template.getOs(), template.getArch())}
+                </a>
+                &nbsp;<button id="btn-copy-dll">{msg:literalCopy}</button>
+                <p>
+                    {msg:thankYouDownloadHint(template.getDownloadLink()).raw}
+                </p>
+                <p>{msg:literalChecksum} (SHA-256): {template.getChecksum()}</p>
+                <button id="btn-copy-chksm">{msg:literalCopy}</button>
+            </div>
+        </div>
 
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
+        {#include HeaderFooterTemplates/footer /}
 
-        try {
-            var successful = document.execCommand('copy');
-            var msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Fallback: Copying text command was ' + msg);
-        } catch (err) {
-            console.error('Fallback: Oops, unable to copy', err);
-        }
+        <script type="text/javascript" scoped>
+            window.open('{template.getDownloadLink()}', '_self');
 
-        document.body.removeChild(textArea);
-    }
+            function fallbackCopyTextToClipboard(text) {
+                var textArea = document.createElement("textarea");
+                textArea.value = text;
 
-    function copyTextToClipboard(text) {
-        if (!navigator.clipboard) {
-            fallbackCopyTextToClipboard(text);
-            return;
-        }
-        navigator.clipboard.writeText(text).then(function () {
-            console.log('Async: Copying to clipboard was successful!');
-        }, function (err) {
-            console.error('Async: Could not copy text: ', err);
-        });
-    }
+                // Avoid scrolling to bottom
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                textArea.style.position = "fixed";
 
-    var btnCopyDll = document.querySelector('#btn-copy-dll'),
-        btnCopyChksm = document.querySelector('#btn-copy-chksm');
-    btnCopyDll.addEventListener('click', function (event) {
-        copyTextToClipboard('{template.getDownloadLink()}');
-    });
-    btnCopyChksm.addEventListener('click', function (event) {
-        copyTextToClipboard('{template.getChecksum()}');
-    });
-</script>
-</body>
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                try {
+                    var successful = document.execCommand('copy');
+                    var msg = successful ? 'successful' : 'unsuccessful';
+                    console.log('Fallback: Copying text command was ' + msg);
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+
+                document.body.removeChild(textArea);
+            }
+
+            function copyTextToClipboard(text) {
+                if (!navigator.clipboard) {
+                    fallbackCopyTextToClipboard(text);
+                    return;
+                }
+                navigator.clipboard.writeText(text).then(function () {
+                    console.log('Async: Copying to clipboard was successful!');
+                }, function (err) {
+                    console.error('Async: Could not copy text: ', err);
+                });
+            }
+
+            var btnCopyDll = document.querySelector('#btn-copy-dll'),
+                btnCopyChksm = document.querySelector('#btn-copy-chksm');
+            btnCopyDll.addEventListener('click', function (event) {
+                copyTextToClipboard('{template.getDownloadLink()}');
+            });
+            btnCopyChksm.addEventListener('click', function (event) {
+                copyTextToClipboard('{template.getChecksum()}');
+            });
+        </script>
+    </body>
+
 </html>
