@@ -47,7 +47,7 @@ public class MemberResource {
             LOG.errorf("Invalid JSON Path, couldn't find resource. JSON Path: %s", JSON_PATH);
             // TODO: If JSON Path invalid, loads members page only with headers. Maybe show error text?
         } catch (IOException e) {
-            LOG.errorf("Error: Could not deserialize JSON URL to Member Objects. e: %s", e.getMessage());
+            LOG.errorf("Error: Could not deserialize JSON URL to Member Objects. Error: %s", e.getMessage());
         }
 
 
