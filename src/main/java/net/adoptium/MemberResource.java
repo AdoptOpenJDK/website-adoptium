@@ -31,12 +31,19 @@ public class MemberResource {
     Template members;
 
     public MemberResource() {
-        URL json_url = loadJSONURL(JSON_PATH);
-        List<Member> memberList = getMemberList(json_url);
+        URL json_url = null;
+        try {
+            json_url = loadJSONURL(JSON_PATH);
 
-        sortMemberListAlphabetically(memberList);
+            List<Member> memberList = getListOfMembers(json_url);
 
-        filterMembersByOrganisationType(memberList);
+            sortMemberListAlphabetically(memberList);
+
+            filterMembersByOrganisationType(memberList);
+        } catch (FileNotFoundException e) {
+            LOG.errorf("Invalid JSON Path, couldn't find resource.", JSON_PATH);
+        }
+
     }
 
     private void sortMemberListAlphabetically(List<Member> memberList) {
@@ -67,7 +74,7 @@ public class MemberResource {
         }
     }
 
-    public static List<Member> getMemberList(URL url) {
+    public static List<Member> getListOfMembers(URL url) {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Member> listOfMembers = new ArrayList<>();
         try {
@@ -78,8 +85,12 @@ public class MemberResource {
         return listOfMembers;
     }
 
-    protected URL loadJSONURL(String is){
-        return getClass().getClassLoader().getResource(is);
+    protected URL loadJSONURL(String is) throws FileNotFoundException {
+        URL jsonURL = getClass().getClassLoader().getResource(is);
+        if(jsonURL == null){
+            throw new FileNotFoundException("Invalid JSON path.");
+        }
+        return jsonURL;
     }
 
     @GET

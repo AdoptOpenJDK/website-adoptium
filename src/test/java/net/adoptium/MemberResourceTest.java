@@ -48,7 +48,7 @@ public class MemberResourceTest {
         String organizationType = "strategic";
 
         // Deserialize JSON file by URL
-        List<Member> memberList = memberResource.getMemberList(validJsonURL);
+        List<Member> memberList = memberResource.getListOfMembers(validJsonURL);
         // Get the first Member
         Member testMember = memberList.get(0);
 
