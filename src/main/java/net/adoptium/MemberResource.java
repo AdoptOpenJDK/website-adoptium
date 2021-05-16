@@ -42,6 +42,7 @@ public class MemberResource {
             filterMembersByOrganisationType(memberList);
         } catch (FileNotFoundException e) {
             LOG.errorf("Invalid JSON Path, couldn't find resource.", JSON_PATH);
+            // TODO: If JSON Path invalid, loads members page only with headers. Maybe show error text?
         }
 
     }
