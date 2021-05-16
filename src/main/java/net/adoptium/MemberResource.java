@@ -40,10 +40,7 @@ public class MemberResource {
             sortMemberListAlphabetically(memberList);
 
             for(Member member : memberList){
-                member.validateURL();
-                if(!member.getIsValid()){
-                    LOG.warnf("Invalid URL of Member: %s", member.getMemberName());
-                }
+                checkValidationOfMemberLink(member);
                 filterMembersByOrganisationType(member);
             }
         } catch (FileNotFoundException e) {
@@ -60,6 +57,13 @@ public class MemberResource {
         Collections.sort(memberList);
     }
 
+    private void checkValidationOfMemberLink(Member member) {
+        member.validateURL();
+        if(!member.getIsValid()){
+            LOG.warnf("Invalid URL of Member: %s", member.getMemberName());
+        }
+    }
+
     private void filterMembersByOrganisationType(Member member){
         try {
             addMemberToCorrespondingMemberList(member);
@@ -70,6 +74,7 @@ public class MemberResource {
     }
 
     private void addMemberToCorrespondingMemberList(Member member) throws IllegalArgumentException {
+        // valueOf() throws IllegalArgumentException whenever Organization Type doesnt match with any Enum.
         OrganizationType orgType = OrganizationType.valueOf(member.getOrganizationType().toUpperCase());
         switch (orgType) {
             case STRATEGIC:
