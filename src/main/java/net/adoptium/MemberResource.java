@@ -41,9 +41,12 @@ public class MemberResource {
 
             filterMembersByOrganisationType(memberList);
         } catch (FileNotFoundException e) {
-            LOG.errorf("Invalid JSON Path, couldn't find resource.", JSON_PATH);
+            LOG.errorf("Invalid JSON Path, couldn't find resource. JSON Path: %s", JSON_PATH);
             // TODO: If JSON Path invalid, loads members page only with headers. Maybe show error text?
+        } catch (IOException e) {
+            LOG.errorf("Error: Could not deserialize JSON URL to Member Objects. e: %s", e.getMessage());
         }
+
 
     }
 
@@ -53,11 +56,16 @@ public class MemberResource {
 
     private void filterMembersByOrganisationType(List<Member> memberList){
         for(Member member : memberList){
-            addMemberToCorrespondingMemberList(member);
+            try {
+                addMemberToCorrespondingMemberList(member);
+            } catch (IllegalArgumentException e) {
+                LOG.warnf("While filtering members, missing Organization type." +
+                        "\nMember Name: %s, Member OrgType: %s", member.getMemberName(), member.getOrganizationType());
+            }
         }
     }
 
-    private void addMemberToCorrespondingMemberList(Member member){
+    private void addMemberToCorrespondingMemberList(Member member) throws IllegalArgumentException {
         OrganizationType orgType = OrganizationType.valueOf(member.getOrganizationType().toUpperCase());
         switch (orgType) {
             case STRATEGIC:
@@ -69,20 +77,13 @@ public class MemberResource {
             case PARTICIPANT:
                 participantMembers.add(member);
                 break;
-            default:
-                LOG.warnf("While filtering members, missing Organization type.");
-                break;
         }
     }
 
-    public static List<Member> getListOfMembers(URL url) {
+    public static List<Member> getListOfMembers(URL url) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Member> listOfMembers = new ArrayList<>();
-        try {
-            listOfMembers =  objectMapper.readValue(url, new TypeReference<List<Member>>(){});
-        } catch (IOException e) {
-            LOG.errorf("Error: Could not deserialize JSON String to Object", url);
-        }
+        listOfMembers =  objectMapper.readValue(url, new TypeReference<List<Member>>(){});
         return listOfMembers;
     }
 
