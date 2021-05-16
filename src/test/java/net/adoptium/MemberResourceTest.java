@@ -9,34 +9,129 @@ import org.junit.jupiter.api.TestInstance;
 
 import org.junit.Assert;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class MemberResourceTest {
+public class MemberResourceTest extends MemberResource{
     private MemberResource memberResource;
     private URL validJsonURL, invalidJsonURL;
     // Path of the testing json files
-    private final String VALIDJSON =  "json/members.json";
-    private final String INVALIDJSON = "src/test/java/net/adoptium/json/members_invalid.json";
+    private final String VALIDJSON =  "/json/members_valid.json";
+    private final String INVALIDFIELDJSON = "/json/members_invalidField.json";
+    private final String INVALIDFORMATJSON = "/json/members_invalidFormat.json";
+    private final String INVALIDPATHJSON = "/josn/members_valid.json";
+    private final String INVALIDLINKJSON = "/json/members_invalidLink.json";
 
     @BeforeAll
     public void init(){
-        memberResource = new MemberResource();
-        validJsonURL = memberResource.loadJSONURL(VALIDJSON);
+        //memberResource = new MemberResource();
+
+    }
+
+    @Test
+    void loadValidJSONURL() {
+        try {
+            Assert.assertNotNull(this.loadJSONURL(VALIDJSON));
+        }catch(FileNotFoundException e){
+            Assert.fail("Couldn't load valid JSON URL!");
+        }
+    }
+
+    @Test
+    void loadInvalidJSONURL() {
+        Assert.assertThrows(FileNotFoundException.class, () -> this.loadJSONURL(INVALIDPATHJSON));
+    }
+
+    @Test
+    void getListOfValidMembers(){
+        try {
+            URL url = this.loadJSONURL(VALIDJSON);
+            List<Member> memberList = this.getListOfMembers(url);
+            Assert.assertEquals(3, memberList.size());
+        } catch(IOException e){
+            Assert.fail();
+        }
+    }
+
+    @Test
+    void getListOfInvalidMembers(){
+        try {
+            URL fieldurl = this.loadJSONURL(INVALIDFIELDJSON);
+            URL formaturl = this.loadJSONURL(INVALIDFORMATJSON);
+            Assert.assertThrows(IOException.class, () -> this.getListOfMembers(fieldurl));
+            Assert.assertThrows(IOException.class, () -> this.getListOfMembers(formaturl));
+        }catch(FileNotFoundException e){
+            Assert.fail();
+        }
+    }
+
+    @Test
+    void sortMemberListAlphabetically(){
+        try {
+            URL url = this.loadJSONURL(VALIDJSON);
+            List<Member> memberList = getListOfMembers(url);
+            sortMemberListAlphabetically(memberList);
+            Assert.assertEquals("IBM", memberList.get(0).getMemberName());
+            Assert.assertEquals("Microsoft", memberList.get(1).getMemberName());
+            Assert.assertEquals("New Relic", memberList.get(2).getMemberName());
+        } catch(IOException | NullPointerException e){
+            Assert.fail();
+        }
+    }
+
+    @Test
+    void sortEmptyMemberListAlphabetically(){
+        List<Member> emptyList = null;
+        Assert.assertThrows(NullPointerException.class, () -> sortMemberListAlphabetically(emptyList));
+    }
+
+    @Test
+    void checkValidationOfMemberLink(){
+        try {
+            URL url = this.loadJSONURL(VALIDJSON);
+            List<Member> memberList = getListOfMembers(url);
+            sortMemberListAlphabetically(memberList);
+
+            for(Member member : memberList){
+                checkValidationOfMemberLink(member);
+                Assert.assertTrue(member.getIsValid());
+            }
+        }catch(IOException e){
+            Assert.fail();
+        }
+    }
+
+    @Test
+    void checkValidationOfInvalidMemberLink(){
+        try {
+            URL url = this.loadJSONURL(INVALIDLINKJSON);
+            List<Member> memberList = getListOfMembers(url);
+            sortMemberListAlphabetically(memberList);
+
+            for(Member member : memberList){
+                checkValidationOfMemberLink(member);
+                Assert.assertFalse(member.getIsValid());
+            }
+        }catch(IOException e){
+            Assert.fail();
+        }
     }
 
     @DisplayName("Test parsing a JSON file")
     @Test
-    void parseJSONTest(){
+    void parseJSONTest() throws IOException {
         /**
          * This test method will only test the deserialization of
-         * the first entry of the members.json file.
+         * the first entry of the members_valid.json file.
          *
          * To test a new entry, simply inject a new entry at
-         * the beginning of the members.json file and make sure
+         * the beginning of the members_valid.json file and make sure
          * that the injected info matches with the five Strings below.
          * These five Strings must be initialized according to the new
          * injected entry you want to test.
@@ -46,6 +141,8 @@ public class MemberResourceTest {
         String memberLogo = "assets/memberLogos/microsoft.svg";
         String memberAltText = "Microsoft Logo";
         String organizationType = "strategic";
+
+        validJsonURL = memberResource.loadJSONURL(VALIDJSON);
 
         // Deserialize JSON file by URL
         List<Member> memberList = memberResource.getListOfMembers(validJsonURL);

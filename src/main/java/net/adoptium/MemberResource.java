@@ -8,6 +8,7 @@ import net.adoptium.model.OrganizationType;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Null;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -47,17 +48,19 @@ public class MemberResource {
             LOG.errorf("Invalid JSON Path, couldn't find resource. JSON Path: %s", JSON_PATH);
             // TODO: If JSON Path invalid, loads members page only with headers. Maybe show error text?
         } catch (IOException e) {
-            LOG.errorf("Error: Could not deserialize JSON URL to Member Objects. Error: %s", e.getMessage());
+            LOG.errorf("Could not deserialize JSON URL to Member Objects. Error: %s", e.getMessage());
+        } catch (NullPointerException e){
+            LOG.errorf("Error: MemberList is empty!");
         }
 
 
     }
 
-    private void sortMemberListAlphabetically(List<Member> memberList) {
+    protected void sortMemberListAlphabetically(List<Member> memberList) throws NullPointerException {
         Collections.sort(memberList);
     }
 
-    private void checkValidationOfMemberLink(Member member) {
+    protected void checkValidationOfMemberLink(Member member) {
         member.validateURL();
         if(!member.getIsValid()){
             LOG.warnf("Invalid URL of Member: %s", member.getMemberName());
@@ -89,7 +92,7 @@ public class MemberResource {
         }
     }
 
-    public static List<Member> getListOfMembers(URL url) throws IOException {
+    protected List<Member> getListOfMembers(URL url) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Member> listOfMembers = new ArrayList<>();
         // objectMapper.readValue() throws IOException when JSON couldn't be deserialized

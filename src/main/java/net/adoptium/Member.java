@@ -17,6 +17,14 @@ public class Member implements Comparable<Member> {
     public Member(){
     }
 
+    public Member(String memberName, String memberLink, String memberLogo, String memberAltText, String organizationType){
+        this.memberName = memberName;
+        this.memberLink = memberLink;
+        this.memberLogo = memberLogo;
+        this.memberAltText = memberAltText;
+        this.organizationType = organizationType;
+    }
+
     public String getMemberName() {
         return memberName;
     }
@@ -42,7 +50,7 @@ public class Member implements Comparable<Member> {
     }
 
     public void validateURL() {
-        String regex = "((http?|https|ftp|file)://)?((W|w){3}.)?[a-zA-Z0-9]+.[a-zA-Z]+(/)?";
+        String regex = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$";
 
         Pattern p = Pattern.compile(regex);
 
