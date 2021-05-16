@@ -39,7 +39,13 @@ public class MemberResource {
 
             sortMemberListAlphabetically(memberList);
 
-            filterMembersByOrganisationType(memberList);
+            for(Member member : memberList){
+                member.validateURL();
+                if(!member.getIsValid()){
+                    LOG.warnf("Invalid URL of Member: %s", member.getMemberName());
+                }
+                filterMembersByOrganisationType(member);
+            }
         } catch (FileNotFoundException e) {
             LOG.errorf("Invalid JSON Path, couldn't find resource. JSON Path: %s", JSON_PATH);
             // TODO: If JSON Path invalid, loads members page only with headers. Maybe show error text?
@@ -54,14 +60,12 @@ public class MemberResource {
         Collections.sort(memberList);
     }
 
-    private void filterMembersByOrganisationType(List<Member> memberList){
-        for(Member member : memberList){
-            try {
-                addMemberToCorrespondingMemberList(member);
-            } catch (IllegalArgumentException e) {
-                LOG.warnf("While filtering members, missing Organization type." +
-                        "\nMember Name: %s, Member OrgType: %s", member.getMemberName(), member.getOrganizationType());
-            }
+    private void filterMembersByOrganisationType(Member member){
+        try {
+            addMemberToCorrespondingMemberList(member);
+        } catch (IllegalArgumentException e) {
+            LOG.warnf("While filtering members, missing Organization type." +
+                    "\nMember Name: %s, Member OrgType: %s", member.getMemberName(), member.getOrganizationType());
         }
     }
 

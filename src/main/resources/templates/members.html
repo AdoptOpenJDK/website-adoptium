@@ -17,21 +17,33 @@
     <h3>Strategic Members</h3>
         <ul>
             {#for strategicMember in strategicMembers}
-            <li><a href={strategicMember.memberLink} target="_blank" rel="noopener noreferrer">{strategicMember.memberName}</a></li>
+                {#if strategicMember.isValid}
+                    <li><a href={strategicMember.memberLink} target="_blank" rel="noopener noreferrer">{strategicMember.memberName}</a></li>
+                {#else}
+                    <li><a>{strategicMember.memberName}</a></li>
+                {/if}
             {/for}
         </ul>
 
     <h3>Enterprise Members</h3>
         <ul>
             {#for enterpriseMember in enterpriseMembers}
-            <li><a href={enterpriseMember.memberLink} target="_blank" rel="noopener noreferrer">{enterpriseMember.memberName}</a></li>
+                {#if enterpriseMember.isValid}
+                <li><a href={enterpriseMember.memberLink} target="_blank" rel="noopener noreferrer">{enterpriseMember.memberName}</a></li>
+                {#else}
+                <li><a>{enterpriseMember.memberName}</a></li>
+                {/if}
             {/for}
         </ul>
 
     <h3>Participant Members</h3>
         <ul>
             {#for participantMember in participantMembers}
-            <li><a href={participantMember.memberLink} target="_blank" rel="noopener noreferrer">{participantMember.memberName}</a></li>
+                {#if participantMember.isValid}
+                <li><a href={participantMember.memberLink} target="_blank" rel="noopener noreferrer">{participantMember.memberName}</a></li>
+                {#else}
+                <li><a>{participantMember.memberName}</a></li>
+                {/if}
             {/for}
         </ul>
 </div>
