@@ -13,14 +13,6 @@ public class Member implements Comparable<Member> {
     public Member(){
     }
 
-    public Member(String memberName, String memberLink, String memberLogo, String memberAltText, String organizationType){
-        this.memberName = memberName;
-        this.memberLink = memberLink;
-        this.memberLogo = memberLogo;
-        this.memberAltText = memberAltText;
-        this.organizationType = organizationType;
-    }
-
     public String getMemberName() {
         return memberName;
     }
