@@ -83,6 +83,7 @@ public class MemberResource {
     public static List<Member> getListOfMembers(URL url) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Member> listOfMembers = new ArrayList<>();
+        // objectMapper.readValue() throws IOException when JSON couldn't be deserialized
         listOfMembers =  objectMapper.readValue(url, new TypeReference<List<Member>>(){});
         return listOfMembers;
     }
