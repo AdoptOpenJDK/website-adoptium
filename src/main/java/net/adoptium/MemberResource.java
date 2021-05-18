@@ -8,7 +8,6 @@ import net.adoptium.model.OrganizationType;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
-import javax.validation.constraints.Null;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
