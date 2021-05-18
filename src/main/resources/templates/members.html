@@ -17,7 +17,7 @@
     <h3>Strategic Members</h3>
         <ul>
             {#for strategicMember in strategicMembers}
-                {#if strategicMember.isValid}
+                {#if strategicMember.isURLValid}
                     <li><a href={strategicMember.memberLink} target="_blank" rel="noopener noreferrer">
                         <img alt={strategicMember.memberName} src={strategicMember.memberLogo}
                              width=20%" height="20%">
@@ -31,7 +31,7 @@
     <h3>Enterprise Members</h3>
         <ul>
             {#for enterpriseMember in enterpriseMembers}
-                {#if enterpriseMember.isValid}
+                {#if enterpriseMember.isURLValid}
                 <li><a href={enterpriseMember.memberLink} target="_blank" rel="noopener noreferrer">
                     <img alt={enterpriseMember.memberName} src={enterpriseMember.memberLogo}
                          width=20%" height="20%">
@@ -45,7 +45,7 @@
     <h3>Participant Members</h3>
         <ul>
             {#for participantMember in participantMembers}
-                {#if participantMember.isValid}
+                {#if participantMember.isURLValid}
                 <li><a href={participantMember.memberLink} target="_blank" rel="noopener noreferrer">
                     <img alt={participantMember.memberName} src={participantMember.memberLogo}
                          width=20%" height="20%">

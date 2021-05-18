@@ -12,8 +12,6 @@ import org.junit.Assert;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @QuarkusTest
@@ -100,7 +98,7 @@ public class MemberResourceTest extends MemberResource{
 
             for(Member member : memberList){
                 checkValidationOfMemberLink(member);
-                Assert.assertTrue(member.getIsValid());
+                Assert.assertTrue(member.getIsURLValid());
             }
         }catch(IOException e){
             Assert.fail();
@@ -116,7 +114,7 @@ public class MemberResourceTest extends MemberResource{
 
             for(Member member : memberList){
                 checkValidationOfMemberLink(member);
-                Assert.assertFalse(member.getIsValid());
+                Assert.assertFalse(member.getIsURLValid());
             }
         }catch(IOException e){
             Assert.fail();

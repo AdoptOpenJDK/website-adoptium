@@ -59,7 +59,7 @@ public class MemberResource {
 
     protected void checkValidationOfMemberLink(Member member) {
         member.validateURL();
-        if(!member.getIsValid()){
+        if(!member.getIsURLValid()){
             LOG.warnf("Invalid URL of Member: %s", member.getMemberName());
         }
     }

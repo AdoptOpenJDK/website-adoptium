@@ -11,7 +11,7 @@ public class Member implements Comparable<Member> {
     private String memberLogo;
     private String memberAltText;
     private String organizationType;
-    private boolean isValid = false;
+    private boolean isURLValid = false;
 
     // Empty constructor is needed for ObjectMapper
     public Member(){
@@ -45,8 +45,8 @@ public class Member implements Comparable<Member> {
         return organizationType;
     }
 
-    public boolean getIsValid(){
-        return isValid;
+    public boolean getIsURLValid(){
+        return isURLValid;
     }
 
     public void validateURL() {
@@ -57,11 +57,11 @@ public class Member implements Comparable<Member> {
         String url = memberLink;
 
         if (url == null) {
-            isValid = false;
+            isURLValid = false;
         }
 
         Matcher m = p.matcher(url);
-        isValid = m.matches();
+        isURLValid = m.matches();
     }
 
     @Override
