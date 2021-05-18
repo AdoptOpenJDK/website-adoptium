@@ -5,6 +5,7 @@ import io.quarkus.qute.TemplateInstance;
 import net.adoptium.api.DownloadRepository;
 import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.Download;
+import net.adoptium.model.HeaderTemplate;
 import net.adoptium.model.IndexTemplate;
 import net.adoptium.model.UserSystem;
 import net.adoptium.utils.UserAgentParser;
@@ -16,6 +17,7 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.Locale;
 
 // index.html in META-INF.resources is used as static resource (not template)
 @Path("/")
@@ -48,26 +50,27 @@ public class IndexResource {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get(@HeaderParam("user-agent") String userAgent) {
+    public TemplateInstance get(@HeaderParam("user-agent") String userAgent, @HeaderParam("accept-language") String acceptLanguage){
         IndexTemplate data = getImpl(userAgent);
-        return Templates.index(data);
+        HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), acceptLanguage);
+        return Templates.index(data).data("header", header);
     }
 
     IndexTemplate getImpl(String userAgent) {
         UserSystem clientSystem = UserAgentParser.getOsAndArch(userAgent);
         if (clientSystem.getOs() == null) {
             LOG.warnf("no OS detected for userAgent: %s", userAgent);
-            return new IndexTemplate(appConfig.getLocales());
+            return new IndexTemplate();
         }
 
         Download recommended = repository.getUserDownload(clientSystem.getOs(), clientSystem.getArch());
         if (recommended == null) {
             LOG.warnf("no binary found for clientSystem: %s", clientSystem);
-            return new IndexTemplate(appConfig.getLocales());
+            return new IndexTemplate();
         }
 
         String thankYouPath = repository.buildThankYouPath(recommended);
         LOG.infof("user: %s -> [%s] binary: %s", clientSystem, thankYouPath, recommended);
-        return new IndexTemplate(recommended, thankYouPath, appConfig.getLocales());
+        return new IndexTemplate(recommended, thankYouPath);
     }
 }

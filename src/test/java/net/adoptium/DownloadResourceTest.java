@@ -1,6 +1,7 @@
 package net.adoptium;
 
 import net.adoptium.api.DownloadRepository;
+import net.adoptium.config.ApplicationConfig;
 import net.adoptium.exceptions.DownloadInvalidArgumentException;
 import net.adoptium.model.ThankYouTemplate;
 import net.adoptium.utils.DownloadArgumentGroup;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,7 +40,8 @@ public class DownloadResourceTest {
         Map<DownloadArgumentGroup, String> expectedVersionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
         Mockito.when(mockRepository.getBinary(expectedVersionDetails)).thenReturn(mockBinary);
 
-        DownloadResource download = new DownloadResource(mockRepository);
+        ApplicationConfig testConfig = new ApplicationConfig(List.of(Locale.ENGLISH), Locale.ENGLISH);
+        DownloadResource download = new DownloadResource(mockRepository, testConfig);
 
         ThankYouTemplate got = download.getImpl(args);
         assertThat(got.getDownloadLink()).isEqualTo(args);
@@ -46,8 +50,8 @@ public class DownloadResourceTest {
     @Test
     void testArgParsingMissingArg() {
         String args = "windows-x64-hotspot-jdk-jdk-ga-adoptopenjdk-11.0.10+9";
-
-        DownloadResource download = new DownloadResource(mockRepository);
+        ApplicationConfig testConfig = new ApplicationConfig(List.of(Locale.ENGLISH), Locale.ENGLISH);
+        DownloadResource download = new DownloadResource(mockRepository, testConfig);
 
         assertThatThrownBy(() -> download.getImpl(args)).isExactlyInstanceOf(DownloadInvalidArgumentException.class);
     }

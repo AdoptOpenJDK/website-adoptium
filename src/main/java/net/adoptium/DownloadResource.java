@@ -3,6 +3,8 @@ package net.adoptium;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import net.adoptium.api.DownloadRepository;
+import net.adoptium.config.ApplicationConfig;
+import net.adoptium.model.HeaderTemplate;
 import net.adoptium.model.ThankYouTemplate;
 import net.adoptium.utils.DownloadArgumentGroup;
 import net.adoptium.utils.DownloadStringArgumentExtractor;
@@ -12,6 +14,7 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -20,7 +23,7 @@ import java.util.Map;
 @Path("/download")
 public class DownloadResource {
     private static final Logger LOG = Logger.getLogger(DownloadResource.class);
-
+    private final ApplicationConfig appConfig;
     private final DownloadRepository repository;
 
     /**
@@ -38,16 +41,18 @@ public class DownloadResource {
     }
 
     @Inject
-    public DownloadResource(DownloadRepository repository) {
+    public DownloadResource(DownloadRepository repository, ApplicationConfig appConfig) {
         this.repository = repository;
+        this.appConfig = appConfig;
     }
 
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("thank-you/{args}")
-    public TemplateInstance get(@PathParam("args") String args) {
+    public TemplateInstance get(@PathParam("args") String args, @HeaderParam("accept-language") String acceptLanguage) {
         ThankYouTemplate template = getImpl(args);
-        return Templates.download(template);
+        HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), acceptLanguage);
+        return Templates.download(template).data("header", header);
     }
 
     ThankYouTemplate getImpl(String args) {
