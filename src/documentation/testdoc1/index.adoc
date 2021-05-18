@@ -1,5 +1,3 @@
-
-
 = ENGLISH testdoc1
 Firstname Lastname <author@asciidoctor.org>
 3.0, July 29, 2022: AsciiDoc article template
@@ -91,4 +89,3 @@ The text at the end of this sentence is cross referenced to <<_third_level_headi
 
 This is a link to the https://docs.asciidoctor.org/home/[Asciidoctor documentation].
 This is an attribute reference {url-quickref}[that links this text to the AsciiDoc Syntax Quick Reference].
-
