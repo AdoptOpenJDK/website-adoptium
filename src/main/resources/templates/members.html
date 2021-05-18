@@ -23,7 +23,7 @@
                             <img alt={strategicMember.memberName} src={strategicMember.memberLogo}
                                  width=20%" height="20%">
                         {#else}
-                            {strategicMember.memberName}
+                            {strategicMember.memberAltText}
                         {/if}
                     </a></li>
                 {#else}
@@ -41,7 +41,7 @@
                         <img alt={enterpriseMember.memberName} src={enterpriseMember.memberLogo}
                              width=20%" height="20%">
                     {#else}
-                        {enterpriseMember.memberName}
+                        {enterpriseMember.memberAltText}
                     {/if}
                 </a></li>
                 {#else}
@@ -59,7 +59,7 @@
                         <img alt={participantMember.memberName} src={participantMember.memberLogo}
                              width=20%" height="20%">
                     {#else}
-                        {participantMember.memberName}
+                        {participantMember.memberAltText}
                     {/if}
                 </a></li>
                 {#else}
