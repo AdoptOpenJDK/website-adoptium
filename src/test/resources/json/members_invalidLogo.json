@@ -1,0 +1,23 @@
+[
+  {
+    "memberName": "Microsoft",
+    "memberLink": "https://microsoft.com/",
+    "memberLogo": "assets/memberLogos/microsoft.png",
+    "memberAltText": "Microsoft Logo",
+    "organizationType": "strategic"
+  },
+  {
+    "memberName": "New Relic",
+    "memberLink": "https://newrelic.com/",
+    "memberLogo": "assets/memberLogos/ne?wrelic.svg",
+    "memberAltText": "New Relic Logo",
+    "organizationType": "participant"
+  },
+  {
+    "memberName": "IBM",
+    "memberLink": "https://ibm.com/",
+    "memberLogo": "assets//ibm.svg",
+    "memberAltText": "IBM Logo",
+    "organizationType": "enterprise"
+  }
+]

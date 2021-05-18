@@ -18,14 +18,6 @@ public class Member implements Comparable<Member> {
     public Member(){
     }
 
-    public Member(String memberName, String memberLink, String memberLogo, String memberAltText, String organizationType){
-        this.memberName = memberName;
-        this.memberLink = memberLink;
-        this.memberLogo = memberLogo;
-        this.memberAltText = memberAltText;
-        this.organizationType = organizationType;
-    }
-
     public String getMemberName() {
         return memberName;
     }
@@ -61,10 +53,6 @@ public class Member implements Comparable<Member> {
 
         String url = memberLink;
 
-        if (url == null) {
-            isURLValid = false;
-        }
-
         Matcher m = p.matcher(url);
         isURLValid = m.matches();
     }
@@ -75,10 +63,6 @@ public class Member implements Comparable<Member> {
         Pattern p = Pattern.compile(regex);
 
         String imageFileName = memberLogo;
-
-        if (imageFileName == null) {
-            isImageFormatValid = false;
-        }
 
         Matcher m = p.matcher(imageFileName);
         isImageFormatValid = m.matches();

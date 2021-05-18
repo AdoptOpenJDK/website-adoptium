@@ -2,10 +2,9 @@ package net.adoptium;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Assert;
 
@@ -25,6 +24,8 @@ public class MemberResourceTest extends MemberResource{
     private final String INVALIDFORMATJSON = "/json/members_invalidFormat.json";
     private final String INVALIDPATHJSON = "/josn/members_valid.json";
     private final String INVALIDLINKJSON = "/json/members_invalidLink.json";
+    private final String INVALID_LOGO_JSON = "/json/members_invalidLogo.json";
+    private final String INVALID_ORGTYPE_JSON = "/json/members_invalidOrgType.json";
 
     @BeforeAll
     public void init(){
@@ -35,15 +36,15 @@ public class MemberResourceTest extends MemberResource{
     @Test
     void loadValidJSONURL() {
         try {
-            Assert.assertNotNull(this.loadJSONURL(VALIDJSON));
+            assertNotNull(this.loadJSONURL(VALIDJSON));
         }catch(FileNotFoundException e){
-            Assert.fail("Couldn't load valid JSON URL!");
+            fail("Couldn't load valid JSON URL!");
         }
     }
 
     @Test
     void loadInvalidJSONURL() {
-        Assert.assertThrows(FileNotFoundException.class, () -> this.loadJSONURL(INVALIDPATHJSON));
+        assertThrows(FileNotFoundException.class, () -> this.loadJSONURL(INVALIDPATHJSON));
     }
 
     @Test
@@ -51,9 +52,9 @@ public class MemberResourceTest extends MemberResource{
         try {
             URL url = this.loadJSONURL(VALIDJSON);
             List<Member> memberList = this.getListOfMembers(url);
-            Assert.assertEquals(3, memberList.size());
+            assertEquals(3, memberList.size());
         } catch(IOException e){
-            Assert.fail();
+            fail();
         }
     }
 
@@ -62,10 +63,10 @@ public class MemberResourceTest extends MemberResource{
         try {
             URL fieldurl = this.loadJSONURL(INVALIDFIELDJSON);
             URL formaturl = this.loadJSONURL(INVALIDFORMATJSON);
-            Assert.assertThrows(IOException.class, () -> this.getListOfMembers(fieldurl));
-            Assert.assertThrows(IOException.class, () -> this.getListOfMembers(formaturl));
+            assertThrows(IOException.class, () -> this.getListOfMembers(fieldurl));
+            assertThrows(IOException.class, () -> this.getListOfMembers(formaturl));
         }catch(FileNotFoundException e){
-            Assert.fail();
+            fail();
         }
     }
 
@@ -75,18 +76,18 @@ public class MemberResourceTest extends MemberResource{
             URL url = this.loadJSONURL(VALIDJSON);
             List<Member> memberList = getListOfMembers(url);
             sortMemberListAlphabetically(memberList);
-            Assert.assertEquals("IBM", memberList.get(0).getMemberName());
-            Assert.assertEquals("Microsoft", memberList.get(1).getMemberName());
-            Assert.assertEquals("New Relic", memberList.get(2).getMemberName());
+            assertEquals("IBM", memberList.get(0).getMemberName());
+            assertEquals("Microsoft", memberList.get(1).getMemberName());
+            assertEquals("New Relic", memberList.get(2).getMemberName());
         } catch(IOException | NullPointerException e){
-            Assert.fail();
+            fail();
         }
     }
 
     @Test
     void sortEmptyMemberListAlphabetically(){
         List<Member> emptyList = null;
-        Assert.assertThrows(NullPointerException.class, () -> sortMemberListAlphabetically(emptyList));
+        assertThrows(NullPointerException.class, () -> sortMemberListAlphabetically(emptyList));
     }
 
     @Test
@@ -98,10 +99,10 @@ public class MemberResourceTest extends MemberResource{
 
             for(Member member : memberList){
                 checkValidationOfMemberLink(member);
-                Assert.assertTrue(member.getIsURLValid());
+                assertTrue(member.getIsURLValid());
             }
         }catch(IOException e){
-            Assert.fail();
+            fail();
         }
     }
 
@@ -114,15 +115,74 @@ public class MemberResourceTest extends MemberResource{
 
             for(Member member : memberList){
                 checkValidationOfMemberLink(member);
-                Assert.assertFalse(member.getIsURLValid());
+                assertFalse(member.getIsURLValid());
             }
         }catch(IOException e){
-            Assert.fail();
+            fail();
+        }
+    }
+
+    @Test
+    void checkValidationOfMemberLogo(){
+        try {
+            URL url = this.loadJSONURL(VALIDJSON);
+            List<Member> memberList = getListOfMembers(url);
+
+            for(Member member : memberList){
+                checkValidationOfMemberLogo(member);
+                assertTrue(member.getIsImageFormatValid());
+            }
+        }catch(IOException e){
+            fail();
+        }
+    }
+
+    @Test
+    void checkValidationOfInvalidMemberLogo(){
+        try {
+            URL url = this.loadJSONURL(INVALID_LOGO_JSON);
+            List<Member> memberList = getListOfMembers(url);
+
+            for(Member member : memberList){
+                checkValidationOfMemberLogo(member);
+                assertFalse(member.getIsImageFormatValid());
+            }
+        }catch(IOException e){
+            fail();
+        }
+    }
+
+    @Test
+    void addMemberToCorrespondingMemberList(){
+        try {
+            URL url = this.loadJSONURL(VALIDJSON);
+            List<Member> memberList = getListOfMembers(url);
+
+            for(Member member : memberList){
+                assertDoesNotThrow(() -> addMemberToCorrespondingMemberList(member));
+            }
+        }catch(IOException e){
+            fail();
+        }
+    }
+
+    @Test
+    void addMemberWithInvalidOrgTypeToCorrespondingMemberList(){
+        try {
+            URL url = this.loadJSONURL(INVALID_ORGTYPE_JSON);
+            List<Member> memberList = getListOfMembers(url);
+
+            for(Member member : memberList){
+                assertThrows(IllegalArgumentException.class, () -> addMemberToCorrespondingMemberList(member));
+            }
+        }catch(IOException e){
+            fail();
         }
     }
 
     @DisplayName("Test parsing a JSON file")
     @Test
+    @Disabled
     void parseJSONTest() throws IOException {
         /**
          * This test method will only test the deserialization of
@@ -156,6 +216,7 @@ public class MemberResourceTest extends MemberResource{
 
     @DisplayName("Test reading a valid JSON file")
     @Test
+    @Disabled
     void readValidJSON(){
         Assert.assertTrue(isJSONValid(validJsonURL));
     }

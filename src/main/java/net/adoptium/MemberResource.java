@@ -81,7 +81,7 @@ public class MemberResource {
         }
     }
 
-    private void addMemberToCorrespondingMemberList(Member member) throws IllegalArgumentException {
+    protected void addMemberToCorrespondingMemberList(Member member) throws IllegalArgumentException {
         // valueOf() throws IllegalArgumentException whenever Organization Type doesnt match with any Enum.
         OrganizationType orgType = OrganizationType.valueOf(member.getOrganizationType().toUpperCase());
         switch (orgType) {
