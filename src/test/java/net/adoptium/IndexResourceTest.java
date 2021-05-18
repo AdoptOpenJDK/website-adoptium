@@ -9,12 +9,15 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -25,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class IndexResourceTest {
+class IndexResourceTest {
 
     OkHttpClient client = new OkHttpClient();
 
@@ -33,10 +36,11 @@ public class IndexResourceTest {
     @TestHTTPResource
     URL indexUrl;
 
-    @Test
-    void testIndexLocaleEn() throws IOException {
+    @ParameterizedTest
+    @MethodSource
+    void testIndexLocalization(String localisationValue, String testString) throws IOException {
         Request request = new Request.Builder()
-                .header("Accept-Language", "en-GB,en;q=0.5,de;q=0.3")
+                .header("Accept-Language", localisationValue)
                 .header("User-Agent", "linux x64")
                 .url(indexUrl)
                 .build();
@@ -46,42 +50,18 @@ public class IndexResourceTest {
         assertThat(body).isNotNull();
         assertThat(response.code()).isEqualTo(200);
 
-        // we need a constant string (no {variable} input)
-        // as suggested during code review: nothing dynamic :)
-        assertThat(body.string()).contains("Temurin is a free to use runtime");
+        assertThat(body.string()).contains(testString);
     }
 
-    @Test
-    void testIndexLocaleDe() throws IOException {
-        Request request = new Request.Builder()
-                .header("Accept-Language", "de-DE,de;q=0.9,en;q=0.4")
-                .header("User-Agent", "linux x64")
-                .url(indexUrl)
-                .build();
-        Response response = client.newCall(request).execute();
-        ResponseBody body = response.body();
-
-        assertThat(body).isNotNull();
-        assertThat(response.code()).isEqualTo(200);
-
-        assertThat(body.string()).contains("Temurin ist eine gratis zu benutzende Laufzeitumgebung");
-    }
-
-    @Test
-    void testIndexLocaleDefault() throws IOException {
-        Request request = new Request.Builder()
-                .header("Accept-Language", "")
-                .header("User-Agent", "linux x64")
-                .url(indexUrl)
-                .build();
-        Response response = client.newCall(request).execute();
-        ResponseBody body = response.body();
-
-        assertThat(body).isNotNull();
-        assertThat(response.code()).isEqualTo(200);
-
-        // application.properties defines english as default
-        assertThat(body.string()).contains("Temurin is a free to use runtime");
+    /**
+     * @return the arguments needed to test the method: testIndexLocalization
+     */
+    private static Stream<Arguments> testIndexLocalization() {
+        return Stream.of(
+                Arguments.of("en-GB,en;q=0.5,de;q=0.3", "Temurin is a free to use runtime"),
+                Arguments.of("de-DE,de;q=0.9,en;q=0.4", "Temurin ist eine gratis zu benutzende Laufzeitumgebung"),
+                Arguments.of("", "Temurin is a free to use runtime")
+        );
     }
 
     /**

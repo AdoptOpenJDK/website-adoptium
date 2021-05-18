@@ -12,6 +12,7 @@ public class DownloadInvalidArgumentException extends WebApplicationException {
         this.suggestion = suggestion;
     }
 
+    @Override
     public String getMessage() {
         return this.msg;
     }

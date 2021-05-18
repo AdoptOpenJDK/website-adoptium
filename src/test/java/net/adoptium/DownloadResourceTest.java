@@ -16,10 +16,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * TODO test 404 status code?
- */
-public class DownloadResourceTest {
+class DownloadResourceTest {
 
     private final DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
 
