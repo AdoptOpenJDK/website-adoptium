@@ -1,12 +1,9 @@
 package net.adoptium;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.Assert;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,18 +14,18 @@ import java.util.List;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MemberResourceTest extends MemberResource{
     // Path of the testing json files
-    private final String VALIDJSON =  "/json/members_valid.json";
-    private final String INVALIDFIELDJSON = "/json/members_invalidField.json";
-    private final String INVALIDFORMATJSON = "/json/members_invalidFormat.json";
-    private final String INVALIDPATHJSON = "/josn/members_valid.json";
-    private final String INVALIDLINKJSON = "/json/members_invalidLink.json";
+    private final String VALID_JSON =  "/json/members_valid.json";
+    private final String INVALID_FIELD_JSON = "/json/members_invalidField.json";
+    private final String INVALID_FORMAT_JSON = "/json/members_invalidFormat.json";
+    private final String INVALID_PATH_JSON = "/josn/members_valid.json";
+    private final String INVALID_LINK_JSON = "/json/members_invalidLink.json";
     private final String INVALID_LOGO_JSON = "/json/members_invalidLogo.json";
     private final String INVALID_ORGTYPE_JSON = "/json/members_invalidOrgType.json";
 
     @Test
     void loadValidJSONURL() {
         try {
-            assertNotNull(this.loadJSONURL(VALIDJSON));
+            assertNotNull(this.loadJSONURL(VALID_JSON));
         }catch(FileNotFoundException e){
             fail("Couldn't load valid JSON URL!");
         }
@@ -36,13 +33,13 @@ public class MemberResourceTest extends MemberResource{
 
     @Test
     void loadInvalidJSONURL() {
-        assertThrows(FileNotFoundException.class, () -> this.loadJSONURL(INVALIDPATHJSON));
+        assertThrows(FileNotFoundException.class, () -> this.loadJSONURL(INVALID_PATH_JSON));
     }
 
     @Test
     void getListOfValidMembers(){
         try {
-            URL url = this.loadJSONURL(VALIDJSON);
+            URL url = this.loadJSONURL(VALID_JSON);
             List<Member> memberList = this.getListOfMembers(url);
             assertEquals(3, memberList.size());
         } catch(IOException e){
@@ -53,8 +50,8 @@ public class MemberResourceTest extends MemberResource{
     @Test
     void getListOfInvalidMembers(){
         try {
-            URL fieldurl = this.loadJSONURL(INVALIDFIELDJSON);
-            URL formaturl = this.loadJSONURL(INVALIDFORMATJSON);
+            URL fieldurl = this.loadJSONURL(INVALID_FIELD_JSON);
+            URL formaturl = this.loadJSONURL(INVALID_FORMAT_JSON);
             assertThrows(IOException.class, () -> this.getListOfMembers(fieldurl));
             assertThrows(IOException.class, () -> this.getListOfMembers(formaturl));
         }catch(FileNotFoundException e){
@@ -65,7 +62,7 @@ public class MemberResourceTest extends MemberResource{
     @Test
     void sortMemberListAlphabetically(){
         try {
-            URL url = this.loadJSONURL(VALIDJSON);
+            URL url = this.loadJSONURL(VALID_JSON);
             List<Member> memberList = getListOfMembers(url);
             sortMemberListAlphabetically(memberList);
             assertEquals("IBM", memberList.get(0).getMemberName());
@@ -85,7 +82,7 @@ public class MemberResourceTest extends MemberResource{
     @Test
     void checkValidationOfMemberLink(){
         try {
-            URL url = this.loadJSONURL(VALIDJSON);
+            URL url = this.loadJSONURL(VALID_JSON);
             List<Member> memberList = getListOfMembers(url);
 
             for(Member member : memberList){
@@ -100,7 +97,7 @@ public class MemberResourceTest extends MemberResource{
     @Test
     void checkValidationOfInvalidMemberLink(){
         try {
-            URL url = this.loadJSONURL(INVALIDLINKJSON);
+            URL url = this.loadJSONURL(INVALID_LINK_JSON);
             List<Member> memberList = getListOfMembers(url);
 
             for(Member member : memberList){
@@ -115,7 +112,7 @@ public class MemberResourceTest extends MemberResource{
     @Test
     void checkValidationOfMemberLogo(){
         try {
-            URL url = this.loadJSONURL(VALIDJSON);
+            URL url = this.loadJSONURL(VALID_JSON);
             List<Member> memberList = getListOfMembers(url);
 
             for(Member member : memberList){
@@ -145,7 +142,7 @@ public class MemberResourceTest extends MemberResource{
     @Test
     void addMemberToCorrespondingMemberList(){
         try {
-            URL url = this.loadJSONURL(VALIDJSON);
+            URL url = this.loadJSONURL(VALID_JSON);
             List<Member> memberList = getListOfMembers(url);
 
             for(Member member : memberList){
@@ -190,7 +187,7 @@ public class MemberResourceTest extends MemberResource{
         String memberAltText3 = "IBM Logo";
         String organizationType3 = "enterprise";
 
-        MemberResource memberResource = new MemberResource(VALIDJSON);
+        MemberResource memberResource = new MemberResource(VALID_JSON);
 
         // Get the first Member
         Member strategicMember = memberResource.getStrategicMembers().get(0);
