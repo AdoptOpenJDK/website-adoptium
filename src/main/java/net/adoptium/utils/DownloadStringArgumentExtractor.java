@@ -2,10 +2,10 @@ package net.adoptium.utils;
 
 import net.adoptium.exceptions.DownloadInvalidArgumentException;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.EnumMap;
+import java.util.Map;
 
 import static net.adoptium.utils.DownloadArgumentGroup.*;
 
@@ -47,12 +47,11 @@ public class DownloadStringArgumentExtractor {
         if(!matcher.find()) {
             throw new DownloadInvalidArgumentException("Version not found!", "Try to access this page from the root route.");
         }
-        Map<DownloadArgumentGroup, String> versionDetails = extractArgumentsToMap(matcher);
-        return versionDetails;
+        return extractArgumentsToMap(matcher);
     }
 
     private static Map<DownloadArgumentGroup, String> extractArgumentsToMap(Matcher matcher) {
-        Map<DownloadArgumentGroup, String> versionDetails = new HashMap<>();
+        Map<DownloadArgumentGroup, String> versionDetails = new EnumMap<>(DownloadArgumentGroup.class);
         for(DownloadArgumentGroup downloadArgGroup : DownloadArgumentGroup.values()) {
             String argument = matcher.group(downloadArgGroup.toString());
             versionDetails.put(downloadArgGroup, argument);
