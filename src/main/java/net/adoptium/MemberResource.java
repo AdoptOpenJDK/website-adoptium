@@ -41,6 +41,7 @@ public class MemberResource {
 
             for(Member member : memberList){
                 checkValidationOfMemberLink(member);
+                checkValidationOfMemberLogo(member);
                 filterMembersByOrganisationType(member);
             }
         } catch (FileNotFoundException e) {
@@ -61,6 +62,13 @@ public class MemberResource {
         member.validateURL();
         if(!member.getIsURLValid()){
             LOG.warnf("Invalid URL of Member: %s", member.getMemberName());
+        }
+    }
+
+    protected void checkValidationOfMemberLogo(Member member) {
+        member.validateImageFormat();
+        if(!member.getIsImageFormatValid()){
+            LOG.warnf("Invalid Logo Format/Path of Member: %s. Format: ([a-zA-Z0-9-_]+/)*[a-zA-Z0-9-_]+\\.(svg)", member.getMemberName());
         }
     }
 

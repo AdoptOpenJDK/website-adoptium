@@ -12,6 +12,7 @@ public class Member implements Comparable<Member> {
     private String memberAltText;
     private String organizationType;
     private boolean isURLValid = false;
+    private boolean isImageFormatValid = false;
 
     // Empty constructor is needed for ObjectMapper
     public Member(){
@@ -49,6 +50,10 @@ public class Member implements Comparable<Member> {
         return isURLValid;
     }
 
+    public boolean getIsImageFormatValid() {
+        return isImageFormatValid;
+    }
+
     public void validateURL() {
         String regex = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-zA-Z0-9]+([\\-\\.]{1}[a-zA-Z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$";
 
@@ -65,7 +70,18 @@ public class Member implements Comparable<Member> {
     }
 
     public void validateImageFormat() {
+        String regex = "([a-zA-Z0-9-_]+/)*[a-zA-Z0-9-_]+\\.(svg)";
 
+        Pattern p = Pattern.compile(regex);
+
+        String imageFileName = memberLogo;
+
+        if (imageFileName == null) {
+            isImageFormatValid = false;
+        }
+
+        Matcher m = p.matcher(imageFileName);
+        isImageFormatValid = m.matches();
     }
 
     @Override

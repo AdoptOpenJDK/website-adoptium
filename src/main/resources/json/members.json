@@ -9,14 +9,14 @@
   {
     "memberName": "Alibaba Cloud",
     "memberLink": "https://alibabacloud.com/",
-    "memberLogo": "assets/memberLogos/alibaba.png",
+    "memberLogo": "assets/memberLogos/alibaba.svg",
     "memberAltText": "Alibaba Cloud Logo",
     "organizationType": "strategic"
   },
   {
     "memberName": "Huawei",
     "memberLink": "https://huawei.com/",
-    "memberLogo": "assets/memberLogos/huawei.png",
+    "memberLogo": "assets/memberLogos/huawei.svg",
     "memberAltText": "Huawei Logo",
     "organizationType": "strategic"
   },
@@ -44,7 +44,7 @@
   {
     "memberName": "iJUG",
     "memberLink": "https://www.ijug.eu/",
-    "memberLogo": "assets/memberLogos/ijug.png",
+    "memberLogo": "assets/memberLogos/ijug.svg",
     "memberAltText": "iJUG Logo",
     "organizationType": "participant"
   },

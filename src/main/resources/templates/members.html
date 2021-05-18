@@ -19,8 +19,12 @@
             {#for strategicMember in strategicMembers}
                 {#if strategicMember.isURLValid}
                     <li><a href={strategicMember.memberLink} target="_blank" rel="noopener noreferrer">
-                        <img alt={strategicMember.memberName} src={strategicMember.memberLogo}
-                             width=20%" height="20%">
+                        {#if strategicMember.isImageFormatValid}
+                            <img alt={strategicMember.memberName} src={strategicMember.memberLogo}
+                                 width=20%" height="20%">
+                        {#else}
+                            {strategicMember.memberName}
+                        {/if}
                     </a></li>
                 {#else}
                     <li><a>{strategicMember.memberName}</a></li>
@@ -33,8 +37,12 @@
             {#for enterpriseMember in enterpriseMembers}
                 {#if enterpriseMember.isURLValid}
                 <li><a href={enterpriseMember.memberLink} target="_blank" rel="noopener noreferrer">
-                    <img alt={enterpriseMember.memberName} src={enterpriseMember.memberLogo}
-                         width=20%" height="20%">
+                    {#if enterpriseMember.isImageFormatValid}
+                        <img alt={enterpriseMember.memberName} src={enterpriseMember.memberLogo}
+                             width=20%" height="20%">
+                    {#else}
+                        {enterpriseMember.memberName}
+                    {/if}
                 </a></li>
                 {#else}
                 <li><a>{enterpriseMember.memberName}</a></li>
@@ -47,11 +55,15 @@
             {#for participantMember in participantMembers}
                 {#if participantMember.isURLValid}
                 <li><a href={participantMember.memberLink} target="_blank" rel="noopener noreferrer">
-                    <img alt={participantMember.memberName} src={participantMember.memberLogo}
-                         width=20%" height="20%">
+                    {#if participantMember.isImageFormatValid}
+                        <img alt={participantMember.memberName} src={participantMember.memberLogo}
+                             width=20%" height="20%">
+                    {#else}
+                        {participantMember.memberName}
+                    {/if}
                 </a></li>
                 {#else}
-                <li><a>{participantMember.memberName}</a></li>
+                    <li><a>{participantMember.memberName}</a></li>
                 {/if}
             {/for}
         </ul>
