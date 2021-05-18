@@ -207,17 +207,28 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <sourceDirectory>src/docs/</sourceDirectory>
+                    <sourceDirectory>src/documentation/</sourceDirectory>
+                    <outputDirectory>target/classes/templates/DocumentationResource/documentation</outputDirectory>
                     <preserveDirectories>true</preserveDirectories>
                     <!-- If you set baseDir to ${project.basedir}, top-level includes are resolved relative to the project root -->
                     <!--
                     <baseDir>${project.basedir}</baseDir>
                     -->
                     <!-- Attributes common to all output formats -->
+                    <resources>
+                        <resource>
+                            <!-- (Mandatory) Directory to copy from. Paths are relative to maven's ${baseDir} -->
+                            <directory>src/documentation</directory>
+                            <!-- (Optional) Directory to copy to. By default uses the option `outputDirectory` -->
+                            <targetPath>../../../../generated-resources-from-docs</targetPath>
+                            <!-- (Optional) NOTE: SVN, GIT and other version control files are excluded by default, there's no need to add them -->
+                        </resource>
+                    </resources>
                     <attributes>
                         <endpoint-url>http://example.org</endpoint-url>
                         <sourcedir>${project.build.sourceDirectory}</sourcedir>
                         <project-version>${project.version}</project-version>
+                        <stylesheet>src/main/resources/META-INF/resources/css/index.css</stylesheet>
                     </attributes>
                 </configuration>
                 <executions>

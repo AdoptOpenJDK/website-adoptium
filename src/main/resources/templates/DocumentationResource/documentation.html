@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{template.getDocName()}</title>
+</head>
+<body>
+    {#include HeaderFooterTemplates/header /}
+
+    <div class="site-content">
+        {template.getDoc()}
+    </div>
+
+    {#include HeaderFooterTemplates/footer /}
+</body>
+</html>
