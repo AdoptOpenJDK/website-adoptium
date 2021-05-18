@@ -16,7 +16,7 @@ public class DownloadStringArgumentExtractor {
     The pattern is not used to check if the arguments are valid. It checks if the string to match holds enough arguments
     to build the download-api-request and puts the found arguments into their specified groups.
 
-    Groups:     Found in the enum {DownloadArgumentGroup}
+    Groups:     Found in the enum DownloadArgumentGroup
     Patterns:   [^-\/] accept anything except the -, \ and the / symbol
                 The - symbol outside of a group is used to distinguish between arguments and their groups.
     Group example: (?<os>[^-\/]*) -> accept anything except the specified symbols and put the found substring in the group os
@@ -37,6 +37,10 @@ public class DownloadStringArgumentExtractor {
                                                 "(?<" + VERSION + ">.*)$";
 
     private static final Pattern DOWNLOAD_PATTERN = Pattern.compile(REGEX_DOWNLOAD, Pattern.CASE_INSENSITIVE);
+
+    private DownloadStringArgumentExtractor() {
+        throw new IllegalStateException("This is an utility class and should not get instantiated");
+    }
 
     public static Map<DownloadArgumentGroup, String> getVersionDetails(String stringVersionArguments) throws DownloadInvalidArgumentException {
         Matcher matcher = DOWNLOAD_PATTERN.matcher(stringVersionArguments);
