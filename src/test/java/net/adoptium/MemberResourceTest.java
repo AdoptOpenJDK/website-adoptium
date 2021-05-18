@@ -16,8 +16,6 @@ import java.util.List;
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MemberResourceTest extends MemberResource{
-    private MemberResource memberResource;
-    private URL validJsonURL, invalidJsonURL;
     // Path of the testing json files
     private final String VALIDJSON =  "/json/members_valid.json";
     private final String INVALIDFIELDJSON = "/json/members_invalidField.json";
@@ -26,12 +24,6 @@ public class MemberResourceTest extends MemberResource{
     private final String INVALIDLINKJSON = "/json/members_invalidLink.json";
     private final String INVALID_LOGO_JSON = "/json/members_invalidLogo.json";
     private final String INVALID_ORGTYPE_JSON = "/json/members_invalidOrgType.json";
-
-    @BeforeAll
-    public void init(){
-        //memberResource = new MemberResource();
-
-    }
 
     @Test
     void loadValidJSONURL() {
@@ -95,7 +87,6 @@ public class MemberResourceTest extends MemberResource{
         try {
             URL url = this.loadJSONURL(VALIDJSON);
             List<Member> memberList = getListOfMembers(url);
-            sortMemberListAlphabetically(memberList);
 
             for(Member member : memberList){
                 checkValidationOfMemberLink(member);
@@ -111,7 +102,6 @@ public class MemberResourceTest extends MemberResource{
         try {
             URL url = this.loadJSONURL(INVALIDLINKJSON);
             List<Member> memberList = getListOfMembers(url);
-            sortMemberListAlphabetically(memberList);
 
             for(Member member : memberList){
                 checkValidationOfMemberLink(member);
@@ -180,54 +170,55 @@ public class MemberResourceTest extends MemberResource{
         }
     }
 
-    @DisplayName("Test parsing a JSON file")
     @Test
-    @Disabled
-    void parseJSONTest() throws IOException {
-        /**
-         * This test method will only test the deserialization of
-         * the first entry of the members_valid.json file.
-         *
-         * To test a new entry, simply inject a new entry at
-         * the beginning of the members_valid.json file and make sure
-         * that the injected info matches with the five Strings below.
-         * These five Strings must be initialized according to the new
-         * injected entry you want to test.
-         */
-        String memberName = "Microsoft";
-        String memberLink = "https://microsoft.com/";
-        String memberLogo = "assets/memberLogos/microsoft.svg";
-        String memberAltText = "Microsoft Logo";
-        String organizationType = "strategic";
+    void IntegrationTest(){
+        String memberName1 = "Microsoft";
+        String memberLink1 = "https://microsoft.com/";
+        String memberLogo1 = "assets/memberLogos/microsoft.svg";
+        String memberAltText1 = "Microsoft Logo";
+        String organizationType1 = "strategic";
 
-        validJsonURL = memberResource.loadJSONURL(VALIDJSON);
+        String memberName2 = "New Relic";
+        String memberLink2 = "https://newrelic.com/";
+        String memberLogo2 = "assets/memberLogos/newrelic.svg";
+        String memberAltText2 = "New Relic Logo";
+        String organizationType2 = "participant";
 
-        // Deserialize JSON file by URL
-        List<Member> memberList = memberResource.getListOfMembers(validJsonURL);
+        String memberName3 = "IBM";
+        String memberLink3 = "https://ibm.com/";
+        String memberLogo3 = "assets/memberLogos/ibm.svg";
+        String memberAltText3 = "IBM Logo";
+        String organizationType3 = "enterprise";
+
+        MemberResource memberResource = new MemberResource(VALIDJSON);
+
         // Get the first Member
-        Member testMember = memberList.get(0);
+        Member strategicMember = memberResource.getStrategicMembers().get(0);
+        Member participantMember = memberResource.getParticipantMembers().get(0);
+        Member enterpriseMember = memberResource.getEnterpriseMembers().get(0);
 
-        Assert.assertEquals(memberName, testMember.getMemberName());
-        Assert.assertEquals(memberLink, testMember.getMemberLink());
-        Assert.assertEquals(memberLogo, testMember.getMemberLogo());
-        Assert.assertEquals(memberAltText, testMember.getMemberAltText());
-        Assert.assertEquals(organizationType, testMember.getOrganizationType());
-    }
+        assertAll(
+                () -> assertEquals(memberName1, strategicMember.getMemberName()),
+                () -> assertEquals(memberLink1, strategicMember.getMemberLink()),
+                () -> assertEquals(memberLogo1, strategicMember.getMemberLogo()),
+                () -> assertEquals(memberAltText1, strategicMember.getMemberAltText()),
+                () -> assertEquals(organizationType1, strategicMember.getOrganizationType())
+        );
 
-    @DisplayName("Test reading a valid JSON file")
-    @Test
-    @Disabled
-    void readValidJSON(){
-        Assert.assertTrue(isJSONValid(validJsonURL));
-    }
+        assertAll(
+                () -> assertEquals(memberName2, participantMember.getMemberName()),
+                () -> assertEquals(memberLink2, participantMember.getMemberLink()),
+                () -> assertEquals(memberLogo2, participantMember.getMemberLogo()),
+                () -> assertEquals(memberAltText2, participantMember.getMemberAltText()),
+                () -> assertEquals(organizationType2, participantMember.getOrganizationType())
+        );
 
-    private boolean isJSONValid(URL jsonURL) {
-        try {
-            final ObjectMapper mapper = new ObjectMapper();
-            mapper.readTree(jsonURL);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
+        assertAll(
+                () -> assertEquals(memberName3, enterpriseMember.getMemberName()),
+                () -> assertEquals(memberLink3, enterpriseMember.getMemberLink()),
+                () -> assertEquals(memberLogo3, enterpriseMember.getMemberLogo()),
+                () -> assertEquals(memberAltText3, enterpriseMember.getMemberAltText()),
+                () -> assertEquals(organizationType3, enterpriseMember.getOrganizationType())
+        );
     }
 }

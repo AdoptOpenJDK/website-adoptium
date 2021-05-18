@@ -31,9 +31,17 @@ public class MemberResource {
     Template members;
 
     public MemberResource() {
+        setUpMembers(JSON_PATH);
+    }
+
+    public MemberResource(String jsonPath){
+        setUpMembers(jsonPath);
+    }
+
+    private void setUpMembers(String jsonPath){
         URL json_url = null;
         try {
-            json_url = loadJSONURL(JSON_PATH);
+            json_url = loadJSONURL(jsonPath);
 
             List<Member> memberList = getListOfMembers(json_url);
 
@@ -72,7 +80,7 @@ public class MemberResource {
         }
     }
 
-    private void filterMembersByOrganisationType(Member member){
+    protected void filterMembersByOrganisationType(Member member){
         try {
             addMemberToCorrespondingMemberList(member);
         } catch (IllegalArgumentException e) {
@@ -112,6 +120,19 @@ public class MemberResource {
         }
         return jsonURL;
     }
+
+    public List<Member> getStrategicMembers() {
+        return strategicMembers;
+    }
+
+    public List<Member> getEnterpriseMembers() {
+        return enterpriseMembers;
+    }
+
+    public List<Member> getParticipantMembers() {
+        return participantMembers;
+    }
+
 
     @GET
     @Produces(MediaType.TEXT_HTML)
