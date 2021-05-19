@@ -7,5 +7,17 @@
 </head>
 <div class="header">
     {msg:headerAdoptium}
+
+    <div class="container" id="locales">
+        <form action="#" method="GET">
+            <select name="locale" id="languageSelect" onchange="this.form.submit()">
+                {#for loc in header.getLocales()}
+                <option value="{loc}" {#if header.getLocale() is loc.toString()} selected{/if}>{loc.getDisplayLanguage(loc)}</option>
+                {/for}
+            </select>
+        </form>
+    </div>
+
 </div>
 </html>
+

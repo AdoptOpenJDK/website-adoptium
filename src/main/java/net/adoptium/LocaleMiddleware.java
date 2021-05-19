@@ -5,6 +5,7 @@ import io.quarkus.vertx.web.RouteFilter;
 import io.vertx.core.http.Cookie;
 import io.vertx.ext.web.RoutingContext;
 import net.adoptium.config.ApplicationConfig;
+import net.adoptium.model.HeaderTemplate;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
@@ -50,6 +51,10 @@ public class LocaleMiddleware {
                 }
             }
         }
+
+        //TODO HOW to access RoutingContext in Handler?
+        HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), localeCookie.getValue());
+        rc.put("header", header);
 
         // qute did the Accept-Language parsing for us, but to set the correct cookie we need to parse it outselves
         // how does quarks/qute do it'

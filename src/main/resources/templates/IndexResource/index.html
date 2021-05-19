@@ -7,9 +7,7 @@
 </head>
 
 <body>
-
     {#include HeaderFooterTemplates/header /}
-
     <div class="site-content">
         <div class="container">
             {#if template.isError()}
@@ -18,7 +16,6 @@
             {msg:welcomeMainText}
             {/if}
         </div>
-
         <div class="container" id="main">
             <a href="{template.getRedirectPath()}" class="button" id="download_btn">
                 <div id="dl-version">
@@ -36,14 +33,6 @@
                 </div>
                 {/if}
             </a>
-        </div>
-
-        <div class="container" id="locales">
-            {#for loc in template.getLocales()}
-            <a href="/?locale={loc}">
-                <img src="/icons/locale/{loc}.svg" width="32px" height="32px" alt="{loc}" class="locale" id="locale_{loc}">
-            </a>
-            {/for}
         </div>
 
         <div>
