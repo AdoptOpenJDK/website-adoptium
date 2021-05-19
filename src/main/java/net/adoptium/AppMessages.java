@@ -47,4 +47,10 @@ public interface AppMessages {
 
     @Message("Copy")
     String literalCopy();
+
+    @Message("Adoptium Header (eng)")
+    String headerAdoptium();
+
+    @Message("Adoptium Footer (eng)")
+    String footerAdoptium();
 }

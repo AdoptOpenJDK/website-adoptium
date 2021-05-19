@@ -1,0 +1,58 @@
+[
+  {
+    "memberName": "Microsoft",
+    "memberLink": "https://microsoft.com/",
+    "memberLogo": "assets/memberLogos/microsoft.svg",
+    "memberAltText": "Microsoft-Logo",
+    "organizationType": "strategic"
+  },
+  {
+    "memberName": "Alibaba Cloud",
+    "memberLink": "https://alibabacloud.com/",
+    "memberLogo": "assets/memberLogos/alibaba.svg",
+    "memberAltText": "Alibaba-Cloud-Logo",
+    "organizationType": "strategic"
+  },
+  {
+    "memberName": "Huawei",
+    "memberLink": "https://huawei.com/",
+    "memberLogo": "assets/memberLogos/huawei.svg",
+    "memberAltText": "Huawei-Logo",
+    "organizationType": "strategic"
+  },
+  {
+    "memberName": "New Relic",
+    "memberLink": "https://newrelic.com/",
+    "memberLogo": "assets/memberLogos/newrelic.svg",
+    "memberAltText": "New-Relic-Logo",
+    "organizationType": "participant"
+  },
+  {
+    "memberName": "IBM",
+    "memberLink": "https://ibm.com/",
+    "memberLogo": "assets/memberLogos/ibm.svg",
+    "memberAltText": "IBM-Logo",
+    "organizationType": "enterprise"
+  },
+  {
+    "memberName": "Karakun",
+    "memberLink": "https://karakun.com/",
+    "memberLogo": "assets/memberLogos/karakun.svg",
+    "memberAltText": "Karakun-Logo",
+    "organizationType": "strategic"
+  },
+  {
+    "memberName": "iJUG",
+    "memberLink": "https://www.ijug.eu/",
+    "memberLogo": "assets/memberLogos/ijug.svg",
+    "memberAltText": "iJUG-Logo",
+    "organizationType": "participant"
+  },
+  {
+    "memberName": "Red Hat",
+    "memberLink": "https://www.redhat.com/",
+    "memberLogo": "assets/memberLogos/redhat.svg",
+    "memberAltText": "Red-Hat-Logo",
+    "organizationType": "strategic"
+  }
+]
