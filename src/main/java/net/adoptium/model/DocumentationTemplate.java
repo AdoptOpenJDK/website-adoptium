@@ -1,18 +1,14 @@
 package net.adoptium.model;
 
-import io.quarkus.qute.Engine;
 import io.quarkus.qute.RawString;
-import io.quarkus.qute.Template;
 
-import java.io.*;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
 public class DocumentationTemplate {
-    String docName;
+    private final String docName;
 
     public DocumentationTemplate(String docName) {
         this.docName = docName;
@@ -22,17 +18,24 @@ public class DocumentationTemplate {
         return docName;
     }
 
+    /**
+     * @return returns the correct path to the docs html file in the correct language
+     * TODO: language not yet implemented
+     */
     public String getDocPath() {
         return "/templates/DocumentationResource/documentation/" + getDocName() + "/index.html";
     }
 
+    /**
+     * @return returns a RawString of the docs html file
+     */
     public RawString getDocRaw() {
         try (InputStream inputStream = DocumentationTemplate.class.getResourceAsStream(getDocPath());
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String contents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new RawString(contents);
         }catch (Exception e) {
-            throw new RuntimeException("Cannot find Document", e);
+            throw new RuntimeException("Cannot find the \"" + getDocName() + "\" document in " + getDocPath(), e);
         }
     }
 
