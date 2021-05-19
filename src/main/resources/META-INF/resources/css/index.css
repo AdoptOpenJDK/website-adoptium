@@ -28,23 +28,17 @@ h6 {
     font-size: 1rem
 }
 
-.lead {
-    font-weight: 300;
-    font-size: 2rem;
-}
-
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+html, body {
     height: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    margin-top: 8px;
 }
 
-.banner {
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.header {
     font-size: 2.7rem;
     margin: 0;
     padding: 2rem 1rem;
@@ -52,9 +46,18 @@ h6 {
     color: white;
 }
 
-body {
+.site-content {
+    flex: 1;
+    text-align: center;
+}
+
+.footer {
+    font-size: 1.0rem;
     margin: 0;
-    font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    padding: 2rem 1rem;
+    background-color: #0d1c2c;
+    color: white;
+    flex-shrink: 0;
 }
 
 .button {
