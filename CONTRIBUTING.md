@@ -4,8 +4,8 @@
 ## PR-Previews
 
 ### How is a PR-Preview created?
-Every Pull Request in to the Main Branch will automatically create a viewable deployment on Heroku.
-[Picture]
+Every Pull Request in to the Main Branch will automatically create a viewable deployment environment on Heroku.
+
 
 ### Where to find the Deployment link?
 After a pull request has been created, you will find a button "View Deployment" at the end of the commit chain, which will redirect you to the deployment environment from Heroku. 
