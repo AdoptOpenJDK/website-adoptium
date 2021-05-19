@@ -3,13 +3,16 @@ package net.adoptium;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.qute.api.ResourcePath;
+import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.DocumentationTemplate;
+import net.adoptium.model.HeaderTemplate;
 import net.adoptium.model.ThankYouTemplate;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -17,6 +20,9 @@ import javax.ws.rs.core.MediaType;
 @Path("/documentation")
 public class DocumentationResource {
     private static final Logger LOG = Logger.getLogger(DownloadResource.class);
+
+    @Inject
+    ApplicationConfig appConfig;
 
     /**
      * Checked Templates ensure type-safety in html templating.
@@ -35,9 +41,10 @@ public class DocumentationResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/{doc-name}")
-    public TemplateInstance get(@PathParam("doc-name") String docName) {
+    public TemplateInstance get(@PathParam("doc-name") String docName, @HeaderParam("accept-language") String acceptLanguage) {
         DocumentationTemplate template = getImpl(docName);
-        return DocumentationResource.Templates.documentation(template);
+        HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), acceptLanguage);
+        return DocumentationResource.Templates.documentation(template).data("header", header);
     }
 
     private DocumentationTemplate getImpl(String docName) {
