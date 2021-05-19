@@ -15,7 +15,6 @@ import java.util.List;
 public class MemberResourceTest{
     private MemberResource memberResource;
     private URL validURL, invalidFieldURL, invalidFormatURL, invalidLinkURL, invalidLogoURL, invalidOrgTypeURL;
-    List<Member> validMemberList;
     // Path of the testing json files
     private final String VALID_JSON =  "/json/members_valid.json";
     private final String INVALID_FIELD_JSON = "/json/members_invalidField.json";
@@ -35,7 +34,6 @@ public class MemberResourceTest{
             invalidLinkURL = memberResource.loadJSONURL(INVALID_LINK_JSON);
             invalidLogoURL = memberResource.loadJSONURL(INVALID_LOGO_JSON);
             invalidOrgTypeURL = memberResource.loadJSONURL(INVALID_ORGTYPE_JSON);
-            //validMemberList = memberResource.getListOfMembers(validURL);
         }catch(IOException e){
             fail();
         }
