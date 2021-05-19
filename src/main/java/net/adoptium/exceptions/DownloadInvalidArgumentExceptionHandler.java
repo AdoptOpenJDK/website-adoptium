@@ -13,7 +13,7 @@ import javax.ws.rs.ext.Provider;
 public class DownloadInvalidArgumentExceptionHandler implements ExceptionMapper<DownloadInvalidArgumentException> {
 
     @Inject
-    public Template downloadError;
+    Template downloadError;
 
     @Override
     @Produces(MediaType.TEXT_HTML)

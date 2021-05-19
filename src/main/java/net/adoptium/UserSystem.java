@@ -1,4 +1,4 @@
-package net.adoptium.model;
+package net.adoptium;
 
 import net.adoptopenjdk.api.v3.models.Architecture;
 import net.adoptopenjdk.api.v3.models.OperatingSystem;
@@ -6,6 +6,10 @@ import net.adoptopenjdk.api.v3.models.OperatingSystem;
 public class UserSystem {
     private OperatingSystem os;
     private Architecture arch;
+
+    public UserSystem() {
+
+    }
 
     public UserSystem(OperatingSystem os, Architecture arch) {
         this.os = os;
@@ -27,7 +31,6 @@ public class UserSystem {
     public Architecture getArch() {
         return arch;
     }
-
     @Override
     public String toString() {
         return "UserSystem{" +

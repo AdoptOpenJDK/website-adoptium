@@ -1,28 +1,29 @@
 package net.adoptium.model;
 
 import net.adoptium.utils.DownloadArgumentGroup;
+import net.adoptopenjdk.api.v3.models.Binary;
+import net.adoptopenjdk.api.v3.models.Installer;
 import net.adoptopenjdk.api.v3.models.Package;
-import net.adoptopenjdk.api.v3.models.*;
 
 import java.util.Map;
 
 import static net.adoptium.utils.DownloadArgumentGroup.*;
 
-public class ThankYouTemplate {
-    private final String downloadLink;
-    private final ImageType imageType;
-    private final String checksum;
-    private final String version;
-    private final Vendor vendor;
-    private final Architecture arch;
-    private final OperatingSystem os;
+public class DownloadResourceHTMLData {
+    private String downloadLink;
+    private String imageType;
+    private String checksum;
+    private String version;
+    private String vendor;
+    private String arch;
+    private String os;
 
-    public ThankYouTemplate(Map<DownloadArgumentGroup, String> versionDetails, Binary binary) {
-        imageType = ImageType.valueOf(versionDetails.get(IMAGE_TYPE));
+    public DownloadResourceHTMLData(Map<DownloadArgumentGroup, String> versionDetails, Binary binary) {
+        imageType = versionDetails.get(IMAGE_TYPE);
         version = versionDetails.get(VERSION);
-        vendor = Vendor.valueOf(versionDetails.get(VENDOR));
-        arch = Architecture.forValue(versionDetails.get(ARCH));
-        os = OperatingSystem.valueOf(versionDetails.get(OS));
+        vendor = versionDetails.get(VENDOR);
+        arch = versionDetails.get(ARCH);
+        os = versionDetails.get(OS);
         if (binary.getInstaller() != null) {
             Installer installer = binary.getInstaller();
             downloadLink = installer.getLink();
@@ -38,27 +39,27 @@ public class ThankYouTemplate {
         return downloadLink;
     }
 
-    public ImageType getImageType() {
-        return imageType;
-    }
-
     public String getChecksum() {
         return checksum;
+    }
+
+    public String getImageType() {
+        return imageType;
     }
 
     public String getVersion() {
         return version;
     }
 
-    public Vendor getVendor() {
+    public String getVendor() {
         return vendor;
     }
 
-    public Architecture getArch() {
+    public String getArch() {
         return arch;
     }
 
-    public OperatingSystem getOs() {
+    public String getOs() {
         return os;
     }
 }

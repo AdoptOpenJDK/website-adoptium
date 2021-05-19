@@ -1,9 +1,5 @@
 package net.adoptium.utils;
 
-/**
- * This enum ensures, that the right group patterns are build and used within the argument extraction from
- * /thank-you/{args} in the DownloadStringArgumentExtractor.class.
- */
 public enum DownloadArgumentGroup {
     RELEASE_TYPE("releaseType"),
     IMAGE_TYPE("imageType"),

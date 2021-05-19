@@ -1,58 +1,57 @@
 package net.adoptium;
 
-import net.adoptium.api.DownloadRepository;
-import net.adoptium.config.ApplicationConfig;
-import net.adoptium.exceptions.DownloadInvalidArgumentException;
-import net.adoptium.model.ThankYouTemplate;
-import net.adoptium.utils.DownloadArgumentGroup;
-import net.adoptium.utils.DownloadStringArgumentExtractor;
-import net.adoptopenjdk.api.v3.models.Package;
-import net.adoptopenjdk.api.v3.models.*;
+import io.quarkus.test.common.http.TestHTTPEndpoint;
+import io.quarkus.test.common.http.TestHTTPResource;
+import io.quarkus.test.junit.QuarkusTest;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.io.IOException;
+import java.net.URL;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-/**
- * TODO test 404 status code?
- */
+@QuarkusTest
 public class DownloadResourceTest {
 
-    private final DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
+    OkHttpClient client = new OkHttpClient();
+
+    @TestHTTPEndpoint(DownloadResource.class)
+    @TestHTTPResource
+    URL downloadUrl;
 
     @Test
-    void testDownloadLink() {
-        String args = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9";
+    public void testDownloadLink() throws IOException {
+        Request request = new Request.Builder().url(new URL(downloadUrl.toString() + "/thank-you/windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9")).build();
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
 
-        // mockBinary is effectively ignored, as long as ThankYouTemplate is populated with the correct link
-        // using args as downloadLink to ensure it's unique per test
-        Binary mockBinary = new Binary(new Package(
-                "", args, 1, "", "", 1, "", ""
-        ), 1, new DateTime(new Date()), null, null, HeapSize.normal, OperatingSystem.linux, Architecture.x64, ImageType.jdk, JvmImpl.hotspot, Project.jdk);
+        assert body != null;
+        Assertions.assertEquals(200, response.code());
 
-        // parse download arguments so we can mock getBinary with the correct parameters
-        Map<DownloadArgumentGroup, String> expectedVersionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
-        Mockito.when(mockRepository.getBinary(expectedVersionDetails)).thenReturn(mockBinary);
-
-        ApplicationConfig testConfig = new ApplicationConfig(List.of(Locale.ENGLISH), Locale.ENGLISH);
-        DownloadResource download = new DownloadResource(mockRepository, testConfig);
-
-        ThankYouTemplate got = download.getImpl(args);
-        assertThat(got.getDownloadLink()).isEqualTo(args);
+        Assertions.assertTrue(body.string().contains("https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/OpenJDK11U-jdk_x64_windows_hotspot_11.0.10_9.msi"));
     }
 
     @Test
-    void testArgParsingMissingArg() {
-        String args = "windows-x64-hotspot-jdk-jdk-ga-adoptopenjdk-11.0.10+9";
-        ApplicationConfig testConfig = new ApplicationConfig(List.of(Locale.ENGLISH), Locale.ENGLISH);
-        DownloadResource download = new DownloadResource(mockRepository, testConfig);
+    public void testArgParsingMissingArg() throws IOException {
+        Request request = new Request.Builder().url(new URL(downloadUrl.toString() + "/thank-you/windows-x64-hotspot-jdk-jdk-ga-adoptopenjdk-11.0.10+9")).build();
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
 
-        assertThatThrownBy(() -> download.getImpl(args)).isExactlyInstanceOf(DownloadInvalidArgumentException.class);
+        assert body != null;
+        Assertions.assertEquals(404, response.code());
     }
+
+    @Test
+    public void testArgParsingInvalidVersion() throws IOException {
+        Request request = new Request.Builder().url(new URL(downloadUrl.toString() + "/download/thank-you/windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.0.0.0.0.0")).build();
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
+
+        assert body != null;
+        Assertions.assertEquals(404, response.code());
+    }
+
 }

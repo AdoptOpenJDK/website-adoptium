@@ -13,7 +13,7 @@ import javax.ws.rs.ext.Provider;
 public class DownloadBinaryNotFoundExceptionHandler implements ExceptionMapper<DownloadBinaryNotFoundException> {
 
     @Inject
-    public Template downloadError;
+    Template downloadError;
 
     @Override
     @Produces(MediaType.TEXT_HTML)
@@ -24,4 +24,5 @@ public class DownloadBinaryNotFoundExceptionHandler implements ExceptionMapper<D
                 .render();
         return Response.status(Response.Status.NOT_FOUND).entity(template).type(MediaType.TEXT_HTML).build();
     }
+
 }

@@ -26,15 +26,15 @@ public class DownloadStringArgumentExtractor {
         os-arch-jvm_impl-image_type-heap_size-project-release_type-vendor-version
         windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9
     */
-    private static final String REGEX_DOWNLOAD = "^(?<" + OS + ">[^-]*)-" +
-                                                "(?<" + ARCH + ">[^-]*)-" +
-                                                "(?<" + JVM_IMPL + ">[^-]*)-" +
-                                                "(?<" + IMAGE_TYPE + ">[^-]*)-" +
-                                                "(?<" + HEAP_SIZE + ">[^-]*)-" +
-                                                "(?<" + PROJECT + ">[^-]*)-" +
-                                                "(?<" + RELEASE_TYPE + ">[^-]*)-" +
-                                                "(?<" + VENDOR + ">[^-]*)-" +
-                                                "(?<" + VERSION + ">.*)$";
+    private static final String REGEX_DOWNLOAD = "^(?<" + OS + ">[^-\\/]*)-" +
+                                                "(?<" + ARCH + ">[^-\\/]*)-" +
+                                                "(?<" + JVM_IMPL + ">[^-\\/]*)-" +
+                                                "(?<" + IMAGE_TYPE + ">[^-\\/]*)-" +
+                                                "(?<" + HEAP_SIZE + ">[^-\\/]*)-" +
+                                                "(?<" + PROJECT + ">[^-\\/]*)-" +
+                                                "(?<" + RELEASE_TYPE + ">[^-\\/]*)-" +
+                                                "(?<" + VENDOR + ">[^-\\/]*)-" +
+                                                "(?<" + VERSION + ">[^\\/]*)$";
 
     private static final Pattern DOWNLOAD_PATTERN = Pattern.compile(REGEX_DOWNLOAD, Pattern.CASE_INSENSITIVE);
 
