@@ -48,7 +48,7 @@ public class MemberPageTest {
     }
 
     @Test
-    void testIfMemberHeadersLoad(){
+    void testIfMembersLoad(){
         String strategicDiv = "strategic";
         String strategicInnerHTML = page.querySelector(String.format(".%s", strategicDiv)).innerHTML();
         for(Member member : memberResource.getStrategicMembers()){
