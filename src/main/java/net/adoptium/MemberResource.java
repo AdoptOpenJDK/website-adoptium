@@ -27,6 +27,8 @@ public class MemberResource {
     private final List<Member> enterpriseMembers = new ArrayList<>();
     private final List<Member> participantMembers = new ArrayList<>();
 
+    private boolean canLoadJSON = true;
+
     @Inject
     Template members;
 
@@ -53,6 +55,7 @@ public class MemberResource {
                 filterMembersByOrganisationType(member);
             }
         } catch (FileNotFoundException e) {
+            canLoadJSON = false;
             LOG.errorf("Invalid JSON Path, couldn't find resource. JSON Path: %s", JSON_PATH);
             // TODO: If JSON Path invalid, loads members page only with headers. Maybe show error text?
         } catch (IOException e) {
@@ -138,6 +141,7 @@ public class MemberResource {
     public TemplateInstance get() {
         return members.data("strategicMembers", strategicMembers)
                 .data("enterpriseMembers", enterpriseMembers)
-                .data("participantMembers", participantMembers);
+                .data("participantMembers", participantMembers)
+                .data("canLoadJSON", canLoadJSON);
     }
 }
