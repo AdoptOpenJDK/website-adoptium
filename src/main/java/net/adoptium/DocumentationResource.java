@@ -2,11 +2,9 @@ package net.adoptium;
 
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
-import io.quarkus.qute.api.ResourcePath;
 import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.DocumentationTemplate;
 import net.adoptium.model.HeaderTemplate;
-import net.adoptium.model.ThankYouTemplate;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
@@ -48,6 +46,7 @@ public class DocumentationResource {
     }
 
     private DocumentationTemplate getImpl(String docName) {
+        LOG.infof("/download/%s page called", docName);
         return new DocumentationTemplate(docName);
     }
 }
