@@ -6,9 +6,8 @@ Firstname Lastname <author@asciidoctor.org>
 :url-quickref: https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/
 ifndef::imagesdir[:imagesdir: ../images]
 
-Content entered directly below the header but before the first section heading is called the preamble.
 
-== First level heading (en)
+== TestDoc1 English (Default)
 
 This is a paragraph with a *bold* word and an _italicized_ word.
 
