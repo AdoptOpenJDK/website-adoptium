@@ -210,6 +210,7 @@
                     <sourceDirectory>src/documentation/</sourceDirectory>
                     <outputDirectory>target/classes/templates/DocumentationResource/documentation</outputDirectory>
                     <preserveDirectories>true</preserveDirectories>
+                    <headerFooter>false</headerFooter>
                     <!-- If you set baseDir to ${project.basedir}, top-level includes are resolved relative to the project root -->
                     <!--
                     <baseDir>${project.basedir}</baseDir>
@@ -220,7 +221,7 @@
                             <!-- (Mandatory) Directory to copy from. Paths are relative to maven's ${baseDir} -->
                             <directory>src/documentation</directory>
                             <!-- (Optional) Directory to copy to. By default uses the option `outputDirectory` -->
-                            <targetPath>../../../../generated-resources-from-docs</targetPath>
+                            <targetPath>${project.basedir}/target/classes/META-INF/resources/doc-images</targetPath>
                             <!-- (Optional) NOTE: SVN, GIT and other version control files are excluded by default, there's no need to add them -->
                         </resource>
                     </resources>
@@ -228,7 +229,6 @@
                         <endpoint-url>http://example.org</endpoint-url>
                         <sourcedir>${project.build.sourceDirectory}</sourcedir>
                         <project-version>${project.version}</project-version>
-                        <stylesheet>src/main/resources/META-INF/resources/css/index.css</stylesheet>
                     </attributes>
                 </configuration>
                 <executions>
@@ -278,7 +278,7 @@
                             -->
                             <attributes>
                                 <source-highlighter>coderay</source-highlighter>
-                                <imagesdir>./images</imagesdir>
+                                <imagesdir>/doc-images/images</imagesdir>
                                 <toc>left</toc>
                                 <icons>font</icons>
                                 <sectanchors>true</sectanchors>

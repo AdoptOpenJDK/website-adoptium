@@ -4,6 +4,7 @@ Firstname Lastname <author@asciidoctor.org>
 :toc:
 :icons: font
 :url-quickref: https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/
+ifndef::imagesdir[:imagesdir: ../images]
 
 Content entered directly below the header but before the first section heading is called the preamble.
 
@@ -12,7 +13,8 @@ Content entered directly below the header but before the first section heading i
 This is a paragraph with a *bold* word and an _italicized_ word.
 
 .Image caption
-image::/images/image.png[I am the image alt text.]
+
+image::testdoc1/image.png[I am the image alt text.]
 
 This is another paragraph.footnote:[I am footnote text and will be displayed at the bottom of the article.]
 
