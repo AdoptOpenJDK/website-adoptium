@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>{template.getDocName()}</title>
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
     {#include HeaderFooterTemplates/header /}
 
     <div class="site-content">
-        {#include DocumentationResource/documentation/testdoc1/index /}
+        {template.getDocRaw()}
     </div>
 
     {#include HeaderFooterTemplates/footer /}
