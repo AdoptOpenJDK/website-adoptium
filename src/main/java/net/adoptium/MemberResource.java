@@ -38,12 +38,12 @@ public class MemberResource {
         setUpMembers(jsonPath);
     }
 
-    private void setUpMembers(String jsonPath){
-        URL json_url = null;
+    protected void setUpMembers(String jsonPath){
+        URL jsonUrl = null;
         try {
-            json_url = loadJSONURL(jsonPath);
+            jsonUrl = loadJSONURL(jsonPath);
 
-            List<Member> memberList = getListOfMembers(json_url);
+            List<Member> memberList = getListOfMembers(jsonUrl);
 
             sortMemberListAlphabetically(memberList);
 
@@ -107,7 +107,7 @@ public class MemberResource {
 
     protected List<Member> getListOfMembers(URL url) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Member> listOfMembers = new ArrayList<>();
+        List<Member> listOfMembers;
         // objectMapper.readValue() throws IOException when JSON couldn't be deserialized
         listOfMembers =  objectMapper.readValue(url, new TypeReference<List<Member>>(){});
         return listOfMembers;
@@ -133,10 +133,9 @@ public class MemberResource {
         return participantMembers;
     }
 
-
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get() throws Exception {
+    public TemplateInstance get() {
         return members.data("strategicMembers", strategicMembers)
                 .data("enterpriseMembers", enterpriseMembers)
                 .data("participantMembers", participantMembers);

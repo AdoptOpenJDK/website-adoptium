@@ -14,8 +14,8 @@ public class Member implements Comparable<Member> {
     private boolean isURLValid = false;
     private boolean isImageFormatValid = false;
 
-    // Empty constructor is needed for ObjectMapper
     public Member(){
+        // Empty constructor is needed for ObjectMapper
     }
 
     public String getMemberName() {
@@ -47,7 +47,7 @@ public class Member implements Comparable<Member> {
     }
 
     public void validateURL() {
-        String regex = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-zA-Z0-9]+([\\-\\.]{1}[a-zA-Z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$";
+        String regex = "^(http://www\\.|https://www\\.|http://|https://)?[a-zA-Z0-9]+([\\-.]{1}[a-zA-Z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$";
 
         Pattern p = Pattern.compile(regex);
 
