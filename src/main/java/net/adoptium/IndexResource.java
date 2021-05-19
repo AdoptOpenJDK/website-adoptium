@@ -31,6 +31,11 @@ public class IndexResource {
      */
     @CheckedTemplate
     public static class Templates {
+
+        private Templates() {
+            throw new IllegalStateException("This is an utility class and should not get instantiated");
+        }
+
         /**
          * The method name of a `static native TemplateInstance` refers to the name of a .html file in templates/DownloadResource.
          *

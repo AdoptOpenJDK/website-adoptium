@@ -10,6 +10,10 @@ import java.util.Map;
 
 public class UserAgentParser {
 
+    private UserAgentParser() {
+        throw new IllegalStateException("This is an utility class and should not get instantiated");
+    }
+
     private static final Map<OperatingSystem, String[]> osMap;
 
     static {

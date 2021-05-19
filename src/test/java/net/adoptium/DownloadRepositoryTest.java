@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DownloadRepositoryTest {
+class DownloadRepositoryTest {
 
     /**
      * mockWebServer mocks the api by returning responses from json files in test/resources/api-stating
