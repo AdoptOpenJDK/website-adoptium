@@ -51,6 +51,10 @@ body {
     text-align: center;
 }
 
+.doc {
+    text-align: left;
+}
+
 .footer {
     font-size: 1.0rem;
     margin: 0;

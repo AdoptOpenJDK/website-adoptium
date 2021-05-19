@@ -8,7 +8,7 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 Content entered directly below the header but before the first section heading is called the preamble.
 
-== First level heading (de)
+== TestDoc1 Deutsch
 
 This is a paragraph with a *bold* word and an _italicized_ word.
 
