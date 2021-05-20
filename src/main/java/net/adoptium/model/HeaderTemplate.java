@@ -12,7 +12,6 @@ public class HeaderTemplate {
         this.locale = locale;
     }
 
-
     public String getLocale() {
         return locale;
     }
@@ -20,5 +19,4 @@ public class HeaderTemplate {
     public List<Locale> getLocales() {
         return locales;
     }
-
 }

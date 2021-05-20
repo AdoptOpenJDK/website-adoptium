@@ -1,7 +1,6 @@
 package net.adoptium;
 
-import io.quarkus.qute.CheckedTemplate;
-import io.quarkus.qute.TemplateInstance;
+import io.quarkus.qute.*;
 import net.adoptium.api.DownloadRepository;
 import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.Download;
@@ -19,7 +18,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.Locale;
 
-// index.html in META-INF.resources is used as static resource (not template)
 @Path("/")
 public class IndexResource {
     private static final Logger LOG = Logger.getLogger(IndexResource.class);

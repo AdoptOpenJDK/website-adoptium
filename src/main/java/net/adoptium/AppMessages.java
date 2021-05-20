@@ -42,6 +42,15 @@ public interface AppMessages {
                                         @MessageParam("os") OperatingSystem os,
                                         @MessageParam("arch") Architecture arch);
 
+    @Message("Download not found")
+    String exceptionDownloadNotFound();
+
+    @Message("Version not found")
+    String exceptionVersionNotFound();
+
+    @Message("Try visiting the <a href=\"/\">home page</a>")
+    String exceptionGenericHint();
+
     @Message("Checksum")
     String literalChecksum();
 
