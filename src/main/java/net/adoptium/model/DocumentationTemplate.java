@@ -1,6 +1,7 @@
 package net.adoptium.model;
 
 import io.quarkus.qute.RawString;
+import net.adoptium.exceptions.DocNotFoundException;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -35,7 +36,7 @@ public class DocumentationTemplate {
             String contents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new RawString(contents);
         }catch (Exception e) {
-            throw new RuntimeException("Cannot find the \"" + getDocName() + "\" document in " + getDocPath(), e);
+            throw new DocNotFoundException("Cannot find the \"" + getDocName() + "\" document in " + getDocPath());
         }
     }
 

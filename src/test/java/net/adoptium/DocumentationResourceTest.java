@@ -10,8 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DocumentationResourceTest {
 
     private static final String existingDocPageName = "testdoc1";
-    private static final String nonexistantDocPageName = "thisPageDoesntExist";
-
 
     @Test
     void testGetExistingDoc() {
