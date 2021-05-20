@@ -1,7 +1,6 @@
 html {
     font: 16px sans-serif;
     font-weight: 300;
-    display: block
 }
 
 button,
@@ -17,17 +16,23 @@ textarea {
     font-weight: 400
 }
 
-p {
-    line-height: 1.8rem
-}
-
-body {
-    display: block;
-    margin: 8px;
-}
 html {
     max-width: 100%;
     overflow-x: hidden
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0px;
+}
+.p {
+    line-height: 1.8rem
 }
 
 .button {
@@ -55,29 +60,32 @@ html {
 }
 
 .home-main {
-    padding: 3rem 2rem 5rem 2rem
+    flex: 1;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    padding-left: 2rem;
 }
 
-main .intro {
+.intro {
     max-width: 40rem;
     margin-bottom: 1rem;
     width: 80%;
     line-height: 1.8rem
 }
 
-main .intro i {
+.intro i {
     font-size: 1.8rem;
     margin-right: .5rem;
     -webkit-transform: translateY(.3rem);
     transform: translateY(.3rem)
 }
 
-main .intro a {
+.intro a {
     text-decoration: none;
     color: #3d70b2
 }
 
-main .intro a:hover {
+.intro a:hover {
     text-decoration: underline;
     color: #3d70b2
 }
@@ -93,13 +101,28 @@ main .intro a:hover {
 .invisible {
     visibility: hidden
 }
+.footer {
+    flex-shrink: 0;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    margin-left: 1rem;
+    background: #14003c;
+    font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #fff;
+    border-top: none
+}
+
+.header {
+    margin-left: 1rem;
+}
 
 #dl-text {
     margin-bottom: 1rem
 }
 
 #minor-links {
-    margin-top: 2rem
+    margin-top: 0.5rem;
+    color: #dadada;
 }
 
 #minor-links span {
@@ -124,7 +147,8 @@ main .intro a:hover {
 }
 
 .inline-block {
-    display: inline-block
+    display: inline-block;
+    color: white;
 }
 
 .blue-button {
@@ -149,37 +173,4 @@ main .intro a:hover {
 #logo img {
     height: 3.5em;
     padding-top: 1.5em
-}
-
-.footer-container {
-    margin-right: auto;
-    margin-left: auto
-}
-
-footer#solstice-footer {
-    background: #14003c;
-    font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
-    padding-top: 60px;
-    color: #fff;
-    padding-bottom: 26px;
-    font-size: 14px;
-    border-top: none
-}
-
-footer#solstice-footer li {
-    padding-bottom: 1em
-}
-
-footer#solstice-footer .nav {
-    margin-left: -40px;
-    margin-bottom: 25px
-}
-
-footer#solstice-footer p {
-    line-height: 1rem
-}
-
-footer#solstice-footer a {
-    text-decoration: none;
-    color: #fff
 }
