@@ -25,10 +25,13 @@ public class DocumentationResourceTest {
             Page page = context.newPage();
 
             try {
-                page.navigate("localhost:8181/documentation" + existingDocPageName);
-            } catch (PlaywrightException e) {
-                fail("failed to navigate to page /documentation/" + existingDocPageName);
+                page.navigate("localhost:8181/documentation/" + existingDocPageName);
+            } catch (Exception e) {
+                fail("failed to navigate to page localhost:8181/documentation/" + existingDocPageName);
             }
+
+            assertEquals(existingDocPageName, page.title());
+
         } catch (PlaywrightException e) {
             fail("failed to launch browser " + browserType.name());
         }
