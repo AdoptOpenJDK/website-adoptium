@@ -1,12 +1,8 @@
 package net.adoptium.model;
 
 import io.quarkus.qute.RawString;
-import net.adoptium.exceptions.DocNotFoundException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.stream.Collectors;
 
 public class DocumentationTemplate {
@@ -31,13 +27,13 @@ public class DocumentationTemplate {
     /**
      * @return returns a RawString of the docs html file
      */
-    public RawString getDocRaw() {
+    public RawString getDocRaw() throws FileNotFoundException {
         try (InputStream inputStream = DocumentationTemplate.class.getResourceAsStream(getDocPath());
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String contents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new RawString(contents);
         }catch (Exception e) {
-            throw new DocNotFoundException("Cannot find the \"" + getDocName() + "\" document in " + getDocPath());
+            throw new FileNotFoundException("Cannot find the \"" + getDocName() + "\" document in " + getDocPath());
         }
     }
 }
