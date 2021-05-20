@@ -88,7 +88,7 @@ public class DownloadRepository {
                     versionArguments.get(RELEASE_TYPE),
                     versionArguments.get(VENDOR));
         } catch (ResteasyWebApplicationException e) {
-            throw new DownloadBinaryNotFoundException("Binary not found!", "Try to access this page from the root route.");
+            throw new DownloadBinaryNotFoundException();
         }
     }
 
@@ -97,7 +97,7 @@ public class DownloadRepository {
         List<Release> releaseList = requestDownloadVersion(versionDetails);
         List<Binary> binaryList = Arrays.asList(releaseList.get(0).getBinaries());
         if (binaryList.isEmpty()) {
-            throw new DownloadBinaryNotFoundException("Binary not found!", "Try to access this page from the root route.");
+            throw new DownloadBinaryNotFoundException();
         } else if (binaryList.size() > 1) {
             LOG.error("There are " + binaryList.size() + " binaries available! Expected just 1.");
         }

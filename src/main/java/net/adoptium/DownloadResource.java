@@ -4,6 +4,7 @@ import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import net.adoptium.api.DownloadRepository;
 import net.adoptium.config.ApplicationConfig;
+import net.adoptium.model.DownloadErrorTemplate;
 import net.adoptium.model.HeaderTemplate;
 import net.adoptium.model.ThankYouTemplate;
 import net.adoptium.utils.DownloadArgumentGroup;
@@ -38,6 +39,8 @@ public class DownloadResource {
          * @return a Template with values from template filled in
          */
         public static native TemplateInstance download(ThankYouTemplate template);
+
+        public static native TemplateInstance error(DownloadErrorTemplate template);
     }
 
     @Inject
