@@ -3,49 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Website-Adoptium</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="dist/assets/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="dist/assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 </head>
 
-<body>
+<body class="blue-bg vsc-initialized">
     {#include HeaderFooterTemplates/header /}
-    <div class="site-content">
-        <div class="container">
-            {#if template.isError()}
-            {msg:welcomeClientOsUnsupported}
-            {#else}
-            {msg:welcomeMainText}
-            {/if}
-        </div>
-        <div class="container" id="main">
-            <a href="{template.getRedirectPath()}" class="button" id="download_btn">
-                <div id="dl-version">
-                    <i id="dl-icon" class="fa fa-download" aria-hidden="true"></i>
-                    {#if template.isError()}
-                    <span>{msg:welcomeDownloadButtonFallback}</span>
-                    {#else}
-                    <span>{msg:welcomeDownloadButtonHeader}</span>
-                    {/if}
-                    <i id="dl-icon-2" class="fa fa-arrow-circle-o-right hide" aria-hidden="true"></i>
-                </div>
-                {#if !template.isError()}
-                <div class="dl-description">
-                    {msg:welcomeDownloadButtonBody(template.getDownload().getSemver(), template.getDownload().getBinary().getOs(), template.getDownload().getBinary().getArchitecture())}
-                </div>
+
+    <main class="grey-bg home-main">
+        <h1>Prebuilt OpenJDK Binaries for Free!</h1>
+        <p class="intro">
+            Java™ is the world's leading programming language and platform.
+            The Adoptium Working Group promotes and supports high-quality runtimes and associated technology for use across the Java™ ecosystem.
+        </p>
+
+        <div class="dl-container">
+            <h2>Downloads</h2>
+
+            <div id="dl-text">
+                {#if template.isError()}
+                {msg:welcomeClientOsUnsupported}
+                {#else}
+                {msg:welcomeMainText}
                 {/if}
-            </a>
+            </div>
+
+            <div class="container" id="main">
+                <a href="{template.getRedirectPath()}" class="blue-button" id="download_btn">
+                    <div id="dl-version">
+                        <i id="dl-icon" class="fa fa-download" aria-hidden="true"></i>
+                        {#if template.isError()}
+                        <span>{msg:welcomeDownloadButtonFallback}</span>
+                        {#else}
+                        <span>{msg:welcomeDownloadButtonHeader}</span>
+                        {/if}
+                        <i id="dl-icon-2" class="fa fa-arrow-circle-o-right hide" aria-hidden="true"></i>
+                    </div>
+                    {#if !template.isError()}
+                    <div class="dl-description">
+                        {msg:welcomeDownloadButtonBody(template.getDownload().getSemver(), template.getDownload().getBinary().getOs(), template.getDownload().getBinary().getArchitecture())}
+                    </div>
+                    {/if}
+                </a>
+            </div>
+
         </div>
 
-        <div>
-            <p>
-                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-                Test to see if scrolling works (This text isnt translated)<br><br>more
-            </p>
+        <div style="margin-top: 3rem;">
+            <div id="minor-links" class="blue-link-section">
+                <a href=""><h3 class="inline-block zero-margin">About</h3></a>
+                <span> | </span>
+                <a href=""><h3 class="inline-block zero-margin">FAQ</h3></a>
+                <span> | </span>
+                <a href="/members"><h3 class="inline-block zero-margin">Members</h3></a>
+                <span> | </span>
+                <a target="_blank" href="https://blog.adoptium.net/"><h3 class="inline-block zero-margin">Blog</h3></a>
+            </div>
         </div>
-
-        <div>
-            <a href="/members">Members Page..</a>
-        </div>
-    </div>
+    </main>
 
     {#include HeaderFooterTemplates/footer /}
 

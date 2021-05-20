@@ -4,11 +4,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
+import net.adoptium.config.ApplicationConfig;
+import net.adoptium.model.HeaderTemplate;
 import net.adoptium.model.OrganizationType;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -31,6 +34,8 @@ public class MemberResource {
 
     @Inject
     Template members;
+    @Inject
+    ApplicationConfig appConfig;
 
     public MemberResource() {
         setUpMembers(JSON_PATH);
@@ -139,10 +144,12 @@ public class MemberResource {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get() {
+    public TemplateInstance get(@HeaderParam("accept-language") String acceptLanguage) {
+        HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), acceptLanguage);
         return members.data("strategicMembers", strategicMembers)
                 .data("enterpriseMembers", enterpriseMembers)
                 .data("participantMembers", participantMembers)
-                .data("canLoadJSON", canLoadJSON);
+                .data("canLoadJSON", canLoadJSON)
+                .data("header", header);
     }
 }
