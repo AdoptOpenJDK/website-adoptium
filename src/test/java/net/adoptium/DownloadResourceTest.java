@@ -40,8 +40,7 @@ public class DownloadResourceTest {
         Map<DownloadArgumentGroup, String> expectedVersionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
         Mockito.when(mockRepository.getBinary(expectedVersionDetails)).thenReturn(mockBinary);
 
-        ApplicationConfig testConfig = new ApplicationConfig(List.of(Locale.ENGLISH), Locale.ENGLISH);
-        DownloadResource download = new DownloadResource(mockRepository, testConfig);
+        DownloadResource download = new DownloadResource(mockRepository);
 
         ThankYouTemplate got = download.getImpl(args);
         assertThat(got.getDownloadLink()).isEqualTo(args);
@@ -50,8 +49,7 @@ public class DownloadResourceTest {
     @Test
     void testArgParsingMissingArg() {
         String args = "windows-x64-hotspot-jdk-jdk-ga-adoptopenjdk-11.0.10+9";
-        ApplicationConfig testConfig = new ApplicationConfig(List.of(Locale.ENGLISH), Locale.ENGLISH);
-        DownloadResource download = new DownloadResource(mockRepository, testConfig);
+        DownloadResource download = new DownloadResource(mockRepository);
 
         assertThatThrownBy(() -> download.getImpl(args)).isExactlyInstanceOf(DownloadInvalidArgumentException.class);
     }

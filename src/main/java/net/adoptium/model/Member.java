@@ -1,4 +1,4 @@
-package net.adoptium;
+package net.adoptium.model;
 
 import org.jetbrains.annotations.NotNull;
 

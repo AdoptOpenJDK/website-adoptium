@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
+import net.adoptium.model.Member;
 import net.adoptium.model.OrganizationType;
 import org.jboss.logging.Logger;
 
