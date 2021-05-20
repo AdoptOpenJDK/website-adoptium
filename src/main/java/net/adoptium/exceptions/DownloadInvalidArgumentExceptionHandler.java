@@ -1,6 +1,10 @@
 package net.adoptium.exceptions;
 
-import io.quarkus.qute.Template;
+import io.quarkus.qute.Engine;
+import net.adoptium.DownloadResource;
+import net.adoptium.config.ApplicationConfig;
+import net.adoptium.model.DownloadErrorTemplate;
+import net.adoptium.model.HeaderTemplate;
 
 import javax.inject.Inject;
 import javax.ws.rs.Produces;
@@ -13,15 +17,17 @@ import javax.ws.rs.ext.Provider;
 public class DownloadInvalidArgumentExceptionHandler implements ExceptionMapper<DownloadInvalidArgumentException> {
 
     @Inject
-    public Template downloadError;
+    ApplicationConfig appConfig;
+
+    @Inject
+    Engine engine;
 
     @Override
     @Produces(MediaType.TEXT_HTML)
     public Response toResponse(DownloadInvalidArgumentException exception) {
-        String template = downloadError
-                .data("msg", exception.getMessage())
-                .data("suggestion", exception.getSuggestion())
-                .render();
+        String template = DownloadResource.Templates.error(
+                new DownloadErrorTemplate(engine, "exceptionVersionNotFound", "exceptionGenericHint")
+        ).data("header", new HeaderTemplate(appConfig.getLocales(), appConfig.getDefaultLocale().toLanguageTag())).render();
         return Response.status(Response.Status.NOT_FOUND).entity(template).type(MediaType.TEXT_HTML).build();
     }
 
