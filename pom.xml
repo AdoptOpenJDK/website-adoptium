@@ -24,6 +24,9 @@
         <quarkus.platform.version>1.13.1.Final</quarkus.platform.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
         <okhttp.version>3.14.9</okhttp.version>
+        <asciidoctor.maven.plugin.version>2.1.0</asciidoctor.maven.plugin.version>
+        <asciidoctorj.version>2.4.3</asciidoctorj.version>
+        <jruby.version>9.2.13.0</jruby.version>
     </properties>
 
     <repositories>
@@ -92,35 +95,40 @@
             <artifactId>quarkus-vertx-web</artifactId>
         </dependency>
 
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>mockwebserver</artifactId>
-      <version>${okhttp.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.microsoft.playwright</groupId>
-      <artifactId>playwright</artifactId>
-      <version>1.10.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>3.19.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5-mockito</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>${okhttp.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>1.10.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.19.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5-mockito</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -180,6 +188,140 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin.version}</version>
             </plugin>
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>${asciidoctor.maven.plugin.version}</version>
+                <dependencies>
+                    <!-- Comment this section to use the default jruby artifact provided by the plugin -->
+                    <dependency>
+                        <groupId>org.jruby</groupId>
+                        <artifactId>jruby-complete</artifactId>
+                        <version>${jruby.version}</version>
+                    </dependency>
+                    <!-- Comment this section to use the default AsciidoctorJ artifact provided by the plugin -->
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj</artifactId>
+                        <version>${asciidoctorj.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <sourceDirectory>src/documentation/</sourceDirectory>
+                    <outputDirectory>target/classes/templates/DocumentationResource/documentation</outputDirectory>
+                    <preserveDirectories>true</preserveDirectories>
+                    <headerFooter>false</headerFooter>
+                    <!-- If you set baseDir to ${project.basedir}, top-level includes are resolved relative to the project root -->
+                    <!--
+                    <baseDir>${project.basedir}</baseDir>
+                    -->
+                    <!-- Attributes common to all output formats -->
+                    <resources>
+                        <resource>
+                            <!-- (Mandatory) Directory to copy from. Paths are relative to maven's ${baseDir} -->
+                            <directory>src/documentation</directory>
+                            <!-- (Optional) Directory to copy to. By default uses the option `outputDirectory` -->
+                            <targetPath>${project.basedir}/target/classes/META-INF/resources/doc-images</targetPath>
+                            <!-- (Optional) NOTE: SVN, GIT and other version control files are excluded by default, there's no need to add them -->
+                        </resource>
+                    </resources>
+                    <attributes>
+                        <endpoint-url>http://example.org</endpoint-url>
+                        <sourcedir>${project.build.sourceDirectory}</sourcedir>
+                        <project-version>${project.version}</project-version>
+                    </attributes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>asciidoc-to-html</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>html5</backend>
+                            <!--
+                            Scenarios for linking vs embedding assets:
+                            Link to both stylesheets and images::
+                              - don't set embedAssets option
+                              - set linkcss attribute to true
+                              - set imagesdir attribute to path relative to AsciiDoc source file
+                              <attributes>
+                                  <linkcss>true</linkcss>
+                                  <imagesdir>./images</imagesdir>
+                              </attributes>
+                            Embed stylesheets and images::
+                              - set embedAssets option to true
+                              - don't set linkcss attribute
+                              - set imagesdir attribute to path relative to project root
+                              <embedAssets>true</embedAssets>
+                              <attributes>
+                                  <imagesdir>src/docs/asciidoc/images</imagesdir>
+                              </attributes>
+                            Link to stylesheets but embed images::
+                              - set embedAssets option to true
+                              - set linkcss attribute to true
+                              - set imagesdir attribute to path relative to project root
+                              <embedAssets>true</embedAssets>
+                              <attributes>
+                                  <linkcss>true</linkcss>
+                                  <imagesdir>src/docs/asciidoc/images</imagesdir>
+                              </attributes>
+                            Embed stylesheets but link images (default)::
+                              - don't set embedAssets option
+                              - don't set linkcss attribute
+                              - set imagesdir attribute to path relative to AsciiDoc source file
+                              <attributes>
+                                  <imagesdir>./images</imagesdir>
+                              </attributes>
+                            IMPORTANT: When you enable image embedding, you must qualify the path the the imagesdir, as shown above.
+                            -->
+                            <attributes>
+                                <source-highlighter>coderay</source-highlighter>
+                                <imagesdir>/doc-images/images</imagesdir>
+                                <toc>left</toc>
+                                <icons>font</icons>
+                                <sectanchors>true</sectanchors>
+                                <!-- set the idprefix to blank -->
+                                <idprefix/>
+                                <idseparator>-</idseparator>
+                                <docinfo1>true</docinfo1>
+                            </attributes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+            NOTE: Use the maven-resources-plugin if there are assets outside the AsciiDoc source folder
+                  that need to be copied to the generated-docs. The Maven plugin automatically copies
+                  non-AsciiDoc files in the AsciiDoc source folder to generated-docs.
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-asciidoc-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>src/docs/resources</directory>
+                                    <includes>
+                                        <include>**/*.jpg</include>
+                                        <include>**/*.png</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                            <outputDirectory>target/generated-docs</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
         </plugins>
     </build>
 
