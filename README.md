@@ -6,6 +6,21 @@
 - [Creating issues](https://github.com/AdoptOpenJDK/website-adoptium/wiki/ZENHUB:-Creating-and-Working-with-Issues#creating-issues) (templates, labels and more...)
 - [How to create PR-Previews](https://github.com/AdoptOpenJDK/website-adoptium/blob/main/CONTRIBUTING.md)
 
+## Running the server
+Also available here: https://quarkus.io/guides/getting-started#packaging-and-run-the-application
+```shell
+git clone https://github.com/AdoptOpenJDK/website-adoptium/
+cd website-adoptium/
+
+# development
+./mvnw compile quarkus:dev
+
+# production
+./mvnw package
+# If you want to deploy your application somewhere (typically in a container), you need to deploy the whole quarkus-app directory.
+java -jar target/quarkus-app/quarkus-run.jar
+```
+
 ## Updating test api
 ```shell
 curl https://staging-api.adoptopenjdk.net/v3/assets/latest/11/hotspot -o src/test/resources/api-staging/v3_assets_latest_11_hotspot.json
