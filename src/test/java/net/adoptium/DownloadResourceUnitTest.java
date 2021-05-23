@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 /**
  * TODO test 404 status code?
  */
-public class DownloadResourceUnitTest {
+class DownloadResourceUnitTest {
 
     private final DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
 

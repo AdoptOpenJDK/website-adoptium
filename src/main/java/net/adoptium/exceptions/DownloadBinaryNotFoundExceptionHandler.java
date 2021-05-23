@@ -31,9 +31,7 @@ public class DownloadBinaryNotFoundExceptionHandler implements ExceptionMapper<D
                 new DownloadErrorTemplate(
                         getI18N(header.getLocale(), "exceptionDownloadNotFound"), getI18N(header.getLocale(), "exceptionGenericHint")
                 ))
-                .data("header", header)
-                .setAttribute("locale", header.getLocale())
-                .render();
+                .setAttribute("locale", header.getLocale()).data("header", header).render();
         return Response.status(Response.Status.NOT_FOUND).entity(template).type(MediaType.TEXT_HTML).build();
     }
 

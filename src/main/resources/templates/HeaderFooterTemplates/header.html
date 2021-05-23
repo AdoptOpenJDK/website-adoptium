@@ -9,6 +9,9 @@
                 <option value="{loc}" {#if header.getLocale() is loc.toString()} selected{/if}>{loc.getDisplayLanguage(loc)}</option>
                 {/for}
             </select>
+            <noscript>
+                <input type="submit" value="GO">
+            </noscript>
         </form>
     </div>
 

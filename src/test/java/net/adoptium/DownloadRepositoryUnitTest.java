@@ -21,7 +21,7 @@ import static net.adoptium.utils.DownloadArgumentGroup.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class DownloadRepositoryUnitTest {
+class DownloadRepositoryUnitTest {
 
     @Test
     void testBuildThankYouPath() {
