@@ -12,10 +12,8 @@ import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Can't use AppMessages without @QuarkusTest -> use the english strings manually
- */
-public class IndexResourceUnitTest {
+
+class IndexResourceUnitTest {
 
     @Test
     void testNoDownloadAvailable() {
@@ -24,7 +22,8 @@ public class IndexResourceUnitTest {
         // OperatingSystem, Architecture, etc. don't matter
         Download mockDownload = new Download(new Binary(
                 new Package("mock-package", "", 1, "", "", 1, "", ""),
-                1, new DateTime(new Date()), null, null, HeapSize.normal, OperatingSystem.linux, Architecture.x64, ImageType.jdk, JvmImpl.hotspot, Project.jdk),
+                1, new DateTime(new Date()), null, null, HeapSize.normal,
+                OperatingSystem.linux, Architecture.x64, ImageType.jdk, JvmImpl.hotspot, Project.jdk),
                 "1.0.0"
         );
         String mockThankYouPath = "/mock-thank-you-path";

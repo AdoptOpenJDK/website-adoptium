@@ -14,7 +14,8 @@ public class ApplicationConfig {
     Locale defaultLocale;
 
     @Inject
-    public ApplicationConfig(@ConfigProperty(name = "quarkus.locales") List<Locale> locales, @ConfigProperty(name = "quarkus.default-locale") Locale defaultLocale) {
+    public ApplicationConfig(@ConfigProperty(name = "quarkus.locales") List<Locale> locales,
+                             @ConfigProperty(name = "quarkus.default-locale") Locale defaultLocale) {
         this.locales = locales;
         this.defaultLocale = defaultLocale;
     }
