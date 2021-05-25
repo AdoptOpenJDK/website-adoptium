@@ -36,7 +36,8 @@ public class IndexResource {
         }
 
         /**
-         * The method name of a `static native TemplateInstance` refers to the name of a .html file in templates/DownloadResource.
+         * The method name of a `static native TemplateInstance`
+         * refers to the name of a .html file in templates/DownloadResource.
          *
          * @param template all data accessible by the template
          * @return a Template with values from template filled in
@@ -51,7 +52,8 @@ public class IndexResource {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get(@HeaderParam("user-agent") String userAgent) {
+    public TemplateInstance get(@HeaderParam("user-agent") String userAgent,
+                                @HeaderParam("accept-language") String acceptLanguage){
         IndexTemplate data = getImpl(userAgent);
         return Templates.index(data).data("header", routingContext.get("header"));
     }
