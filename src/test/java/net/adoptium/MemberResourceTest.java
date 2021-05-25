@@ -1,6 +1,7 @@
 package net.adoptium;
 
 import io.quarkus.test.junit.QuarkusTest;
+import net.adoptium.model.Member;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
