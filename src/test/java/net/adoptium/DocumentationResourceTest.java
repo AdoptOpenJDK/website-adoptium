@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-public class DocumentationResourceTest {
+class DocumentationResourceTest {
 
     private static final String existingDocPageName = "testdoc1";
 

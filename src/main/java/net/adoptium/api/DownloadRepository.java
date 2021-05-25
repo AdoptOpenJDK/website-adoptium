@@ -10,7 +10,6 @@ import org.jboss.resteasy.client.exception.ResteasyWebApplicationException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
