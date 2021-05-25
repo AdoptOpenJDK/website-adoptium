@@ -27,6 +27,7 @@ public class UserAgentParser {
     }
 
     private static final Map<Architecture, String[]> archMap;
+
     static {
         archMap = new LinkedHashMap<>();
         archMap.put(Architecture.x64, new String[]{"x64", "win64", "wow64", "x86_64", "x86-64", "amd64"});
@@ -41,6 +42,7 @@ public class UserAgentParser {
     }
 
     private static final Map<OperatingSystem, Architecture> defaultArchOfOS;
+
     static {
         defaultArchOfOS = new LinkedHashMap<>();
         defaultArchOfOS.put(OperatingSystem.linux, Architecture.x64);
@@ -60,8 +62,8 @@ public class UserAgentParser {
     }
 
     private static Architecture parseArch(String ua, OperatingSystem os) {
-        Architecture arch = (Architecture)getSupportedOsArchFromMap(ua, archMap);
-        if(arch == null) {
+        Architecture arch = (Architecture) getSupportedOsArchFromMap(ua, archMap);
+        if (arch == null) {
             arch = setDefaultArchOfOS(os);
         }
         return arch;
@@ -69,7 +71,7 @@ public class UserAgentParser {
 
     private static Architecture setDefaultArchOfOS(OperatingSystem os) {
         for (Map.Entry<OperatingSystem, Architecture> defaultEntry : defaultArchOfOS.entrySet()) {
-            if(os.equals(defaultEntry.getKey())){
+            if (os.equals(defaultEntry.getKey())) {
                 return defaultEntry.getValue();
             }
         }
@@ -78,15 +80,13 @@ public class UserAgentParser {
 
 
     private static OperatingSystem parseOS(String ua) {
-        return (OperatingSystem)getSupportedOsArchFromMap(ua, osMap);
+        return (OperatingSystem) getSupportedOsArchFromMap(ua, osMap);
     }
 
     private static Object getSupportedOsArchFromMap(String ua, Map<?, String[]> map) {
         for (Map.Entry<?, String[]> entry : map.entrySet()) {
-            for(int i =0; i < entry.getValue().length; i++)
-            {
-                if(ua.contains(entry.getValue()[i]))
-                {
+            for (int i = 0; i < entry.getValue().length; i++) {
+                if (ua.contains(entry.getValue()[i])) {
                     return entry.getKey();
                 }
             }

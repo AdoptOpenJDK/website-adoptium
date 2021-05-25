@@ -17,7 +17,6 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Locale;
 
 // index.html in META-INF.resources is used as static resource (not template)
 @Path("/")
@@ -39,7 +38,8 @@ public class IndexResource {
         }
 
         /**
-         * The method name of a `static native TemplateInstance` refers to the name of a .html file in templates/DownloadResource.
+         * The method name of a `static native TemplateInstance`
+         * refers to the name of a .html file in templates/DownloadResource.
          *
          * @param template all data accessible by the template
          * @return a Template with values from template filled in
@@ -55,7 +55,8 @@ public class IndexResource {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get(@HeaderParam("user-agent") String userAgent, @HeaderParam("accept-language") String acceptLanguage){
+    public TemplateInstance get(@HeaderParam("user-agent") String userAgent,
+                                @HeaderParam("accept-language") String acceptLanguage){
         IndexTemplate data = getImpl(userAgent);
         HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), acceptLanguage);
         return Templates.index(data).data("header", header);

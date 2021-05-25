@@ -37,7 +37,8 @@ public class ApiMockServer extends Dispatcher {
     @Override
     public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
         if (responses.containsKey(request.getPath())) {
-            return new MockResponse().setHeader("Content-Type", "application/json").setBody(responses.get(request.getPath()));
+            return new MockResponse().setHeader("Content-Type",
+                    "application/json").setBody(responses.get(request.getPath()));
         }
         return new MockResponse().setResponseCode(404);
     }

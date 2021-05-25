@@ -76,7 +76,8 @@ class IndexResourceTest {
         try (Browser browser = browserType.launch()) {
             BrowserContext context = browser.newContext(new Browser.NewContextOptions()
                     // any Windows
-                    .setUserAgent("Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.7113.93 Safari/537.36")
+                    .setUserAgent("Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 " +
+                            "(KHTML, like Gecko) Chrome/99.0.7113.93 Safari/537.36")
                     .setLocale("en-US")
             );
             Page page = context.newPage();
@@ -87,8 +88,11 @@ class IndexResourceTest {
 
             AppMessages bundle = MessageBundles.get(AppMessages.class);
 
-            assertThat(page.url()).overridingErrorMessage("not redirected to /thank-you/").contains("/thank-you/");
-            assertThat(page.content()).overridingErrorMessage("thank-you page does not display download_starting").contains(bundle.thankYouDownloadStarting());
+            assertThat(page.url()).overridingErrorMessage
+                    ("not redirected to /thank-you/").contains("/thank-you/");
+            assertThat(page.content()).overridingErrorMessage
+                    ("thank-you page does not display download_starting")
+                    .contains(bundle.thankYouDownloadStarting());
         } catch (PlaywrightException e) {
             fail("failed to launch browser " + browserType.name());
         }

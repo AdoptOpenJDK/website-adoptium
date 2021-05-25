@@ -58,16 +58,6 @@ class UserAgentParserTest {
         assertThat(osArch.getOs()).isEqualTo(OperatingSystem.aix);
     }
 
-    /*
-    @Test
-    void getOsAndArchExpectedAlpineLinuxAsDefault() {
-        String userAgent = "";
-        String[] arch = {"alpine-linux", "x64"};
-        String[] osArch = UserAgentParser.getOsAndArch(userAgent);
-        assertArrayEquals(arch,osArch);
-    }
-     */
-
     @Test
     void getOsAndArchUserAgentToLowercaseWindows() {
         String userAgent = "Mozilla/5.0 (WiNdOwS NT 10.0; WIN32; rv:87.0) Gecko/20100101 Firefox/87.0";

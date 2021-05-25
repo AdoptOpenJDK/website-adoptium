@@ -43,7 +43,8 @@ public class DownloadRepository {
      * @return a binary, preferably with installer, but this isn't available for all os/arch combinations. Nullable.
      */
     public Download getUserDownload(OperatingSystem os, Architecture arch) {
-        List<BinaryAssetView> availableReleaseList = api.getAvailableReleases(RECOMMENDED_JAVA_VERSION, RECOMMENDED_JVM_IMPL);
+        List<BinaryAssetView> availableReleaseList = api.getAvailableReleases(
+                RECOMMENDED_JAVA_VERSION, RECOMMENDED_JVM_IMPL);
         Download response = null;
 
         for (BinaryAssetView release : availableReleaseList) {
@@ -72,11 +73,15 @@ public class DownloadRepository {
      */
     public String buildThankYouPath(Download download) {
         Binary binary = download.getBinary();
-        return String.format("/download/thank-you/%s-%s-%s-%s-%s-%s-%s-%s-%s", binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(), binary.getImage_type(), binary.getHeap_size(), binary.getProject(), RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, download.getSemver());
+        return String.format("/download/thank-you/%s-%s-%s-%s-%s-%s-%s-%s-%s",
+                binary.getOs(), binary.getArchitecture(), binary.getJvm_impl(),
+                binary.getImage_type(), binary.getHeap_size(), binary.getProject(),
+                RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, download.getSemver());
     }
 
     // TODO i18n: only set app-messages key in error
-    public List<Release> requestDownloadVersion(Map<DownloadArgumentGroup, String> versionArguments) throws DownloadBinaryNotFoundException {
+    public List<Release> requestDownloadVersion(Map<DownloadArgumentGroup, String> versionArguments)
+            throws DownloadBinaryNotFoundException {
         try {
             return api.getRelease(versionArguments.get(VERSION),
                     versionArguments.get(ARCH),

@@ -14,7 +14,7 @@ public class Member implements Comparable<Member> {
     private boolean isURLValid = false;
     private boolean isImageFormatValid = false;
 
-    public Member(){
+    public Member() {
         // Empty constructor is needed for ObjectMapper
     }
 
@@ -38,7 +38,7 @@ public class Member implements Comparable<Member> {
         return organizationType;
     }
 
-    public boolean getIsURLValid(){
+    public boolean getIsURLValid() {
         return isURLValid;
     }
 
@@ -47,7 +47,8 @@ public class Member implements Comparable<Member> {
     }
 
     public void validateURL() {
-        String regex = "^(http://www\\.|https://www\\.|http://|https://)?[a-zA-Z0-9]+([\\-.]{1}[a-zA-Z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$";
+        String regex = "^(http://www\\.|https://www\\.|http://|https://)?" +
+                "[a-zA-Z0-9]+([\\-.]{1}[a-zA-Z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$";
 
         Pattern p = Pattern.compile(regex);
 

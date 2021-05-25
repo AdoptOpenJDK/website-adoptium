@@ -4,8 +4,8 @@ import net.adoptium.api.DownloadRepository;
 import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.Download;
 import net.adoptium.model.IndexTemplate;
-import net.adoptopenjdk.api.v3.models.*;
 import net.adoptopenjdk.api.v3.models.Package;
+import net.adoptopenjdk.api.v3.models.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -15,9 +15,7 @@ import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Can't use AppMessages without @QuarkusTest -> use the english strings manually
- */
+
 class IndexResourceUnitTest {
 
     @Test
@@ -27,7 +25,8 @@ class IndexResourceUnitTest {
         // OperatingSystem, Architecture, etc. don't matter
         Download mockDownload = new Download(new Binary(
                 new Package("mock-package", "", 1, "", "", 1, "", ""),
-                1, new DateTime(new Date()), null, null, HeapSize.normal, OperatingSystem.linux, Architecture.x64, ImageType.jdk, JvmImpl.hotspot, Project.jdk),
+                1, new DateTime(new Date()), null, null, HeapSize.normal,
+                OperatingSystem.linux, Architecture.x64, ImageType.jdk, JvmImpl.hotspot, Project.jdk),
                 "1.0.0"
         );
         String mockThankYouPath = "/mock-thank-you-path";

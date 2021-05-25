@@ -37,7 +37,8 @@ public class DownloadResource {
         }
 
         /**
-         * The method name of a `static native TemplateInstance` refers to the name of a .html file in templates/DownloadResource.
+         * The method name of a `static native TemplateInstance`
+         * refers to the name of a .html file in templates/DownloadResource.
          *
          * @param template all data accessible by the template
          * @return a Template with values from template filled in
