@@ -44,9 +44,7 @@ public class DownloadStringArgumentExtractor {
 
     public static Map<DownloadArgumentGroup, String> getVersionDetails(String stringVersionArguments) throws DownloadInvalidArgumentException {
         Matcher matcher = DOWNLOAD_PATTERN.matcher(stringVersionArguments);
-        if(!matcher.find()) {
-            throw new DownloadInvalidArgumentException("Version not found!", "Try to access this page from the root route.");
-        }
+        if(!matcher.find()) throw new DownloadInvalidArgumentException();
         return extractArgumentsToMap(matcher);
     }
 

@@ -2,10 +2,9 @@ package net.adoptium;
 
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
+import io.vertx.ext.web.RoutingContext;
 import net.adoptium.api.DownloadRepository;
-import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.Download;
-import net.adoptium.model.HeaderTemplate;
 import net.adoptium.model.IndexTemplate;
 import net.adoptium.model.UserSystem;
 import net.adoptium.utils.UserAgentParser;
@@ -17,16 +16,14 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Locale;
 
-// index.html in META-INF.resources is used as static resource (not template)
 @Path("/")
 public class IndexResource {
     private static final Logger LOG = Logger.getLogger(IndexResource.class);
-
-    private final ApplicationConfig appConfig;
-
     private final DownloadRepository repository;
+
+    @Inject
+    RoutingContext routingContext;
 
     /**
      * Checked Templates ensure type-safety in html templating.
@@ -48,17 +45,15 @@ public class IndexResource {
     }
 
     @Inject
-    public IndexResource(DownloadRepository repository, ApplicationConfig appConfig) {
+    public IndexResource(DownloadRepository repository) {
         this.repository = repository;
-        this.appConfig = appConfig;
     }
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get(@HeaderParam("user-agent") String userAgent, @HeaderParam("accept-language") String acceptLanguage){
+    public TemplateInstance get(@HeaderParam("user-agent") String userAgent) {
         IndexTemplate data = getImpl(userAgent);
-        HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), acceptLanguage);
-        return Templates.index(data).data("header", header);
+        return Templates.index(data).data("header", routingContext.get("header"));
     }
 
     IndexTemplate getImpl(String userAgent) {

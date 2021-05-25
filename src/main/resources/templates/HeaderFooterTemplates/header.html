@@ -1,4 +1,5 @@
 <div class="header">
+
     {msg:headerAdoptium}
 
     <div class="container" id="locales">
@@ -8,8 +9,10 @@
                 <option value="{loc}" {#if header.getLocale() is loc.toString()} selected{/if}>{loc.getDisplayLanguage(loc)}</option>
                 {/for}
             </select>
+            <noscript>
+                <input type="submit" value="{msg:literalOk}">
+            </noscript>
         </form>
     </div>
 
 </div>
-

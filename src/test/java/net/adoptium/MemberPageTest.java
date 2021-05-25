@@ -4,6 +4,7 @@ import com.microsoft.playwright.*;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
+import net.adoptium.model.Member;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 

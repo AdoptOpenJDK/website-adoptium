@@ -52,7 +52,6 @@ public class LocaleMiddleware {
             }
         }
 
-        //TODO HOW to access RoutingContext in Handler?
         HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), localeCookie.getValue());
         rc.put("header", header);
 
