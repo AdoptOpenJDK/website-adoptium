@@ -18,3 +18,21 @@ or
 
 ### How long are PR-Previews available?
 A PR-Preview has a life span of 30 days after the last commit on the branch that will be merged in to the Main branch.
+
+
+## How to add new Documentation to the Website
+
+1. Write the doc in [AsciiDoc](https://asciidoctor.org/docs/asciidoc-writers-guide/)
+2. Add ```ifndef::imagesdir[:imagesdir: ../images]``` to the start of the AsciiDoc
+3. Create a new folder for your doc: ```website-adoptium/src/documentation/[docName]```
+
+![Image 3.](https://github.com/AdoptOpenJDK/website-adoptium/blob/main/docs/images/create_new_folder_for_doc.PNG)
+
+4. Add the AsciiDoc into this folder with the name index.adoc (for english) or index_[lang].adoc (ex. German: index_de.adoc)
+
+![Image 4.](https://github.com/AdoptOpenJDK/website-adoptium/blob/main/docs/images/insert_adoc_into_folder.PNG)
+
+5. Add images and other resources into the ```website-adoptium/src/documentation/images``` folder
+6. Push the changes onto GitHub
+
+The doc should be viewable on the website under ```/documentation/[docName]```.
