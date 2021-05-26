@@ -6,6 +6,9 @@
 - [Creating issues](https://github.com/AdoptOpenJDK/website-adoptium/wiki/ZENHUB:-Creating-and-Working-with-Issues#creating-issues) (templates, labels and more...)
 - [How to create PR-Previews](https://github.com/AdoptOpenJDK/website-adoptium/blob/main/CONTRIBUTING.md)
 
+### Adding Docs to the Website
+- [How to add new documentation to the website](https://github.com/AdoptOpenJDK/website-adoptium/blob/main/CONTRIBUTING.md#how-to-add-new-documentation-to-the-website)
+
 ## Running the server
 Also available here: https://quarkus.io/guides/getting-started#packaging-and-run-the-application
 ```shell
