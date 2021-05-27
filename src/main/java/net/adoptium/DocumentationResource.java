@@ -2,10 +2,9 @@ package net.adoptium;
 
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
+import io.vertx.ext.web.RoutingContext;
 import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.DocumentationTemplate;
-import net.adoptium.model.HeaderTemplate;
-import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
@@ -17,10 +16,12 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/documentation")
 public class DocumentationResource {
-    private static final Logger LOG = Logger.getLogger(DownloadResource.class);
 
     @Inject
     ApplicationConfig appConfig;
+
+    @Inject
+    RoutingContext routingContext;
 
     /**
      * Checked Templates ensure type-safety in html templating.
@@ -39,14 +40,8 @@ public class DocumentationResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/{doc-name}")
-    public TemplateInstance get(@PathParam("doc-name") String docName, @HeaderParam("accept-language") String acceptLanguage) {
-        DocumentationTemplate template = getImpl(docName);
-        HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), acceptLanguage);
-        return DocumentationResource.Templates.documentation(template).data("header", header);
-    }
-
-    private DocumentationTemplate getImpl(String docName) {
-        LOG.infof("/download/%s page called", docName);
-        return new DocumentationTemplate(docName);
+    public TemplateInstance get(@PathParam("doc-name") String docName, @HeaderParam("Accept-Language") String acceptLanguage) {
+        DocumentationTemplate template = new DocumentationTemplate(docName, acceptLanguage, appConfig.getDefaultLocale().getLanguage());
+        return DocumentationResource.Templates.documentation(template).data("header", routingContext.get("header"));
     }
 }

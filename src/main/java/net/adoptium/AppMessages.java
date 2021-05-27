@@ -48,6 +48,9 @@ public interface AppMessages {
     @Message("Version not found")
     String exceptionVersionNotFound();
 
+    @Message("Not found")
+    String exceptionFileNotFound();
+
     @Message("Try visiting the <a href=\"/\">home page</a>")
     String exceptionGenericHint();
 
