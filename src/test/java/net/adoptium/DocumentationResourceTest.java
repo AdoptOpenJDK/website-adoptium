@@ -13,7 +13,8 @@ import java.io.IOException;
 import java.net.URL;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @QuarkusTest
 public class DocumentationResourceTest {
@@ -37,15 +38,35 @@ public class DocumentationResourceTest {
             BrowserContext context = browser.newContext(new Browser.NewContextOptions().setLocale("en-US"));
             Page page = context.newPage();
 
-            page.navigate(documentationURL + "/" + existingDocPageName);
+            assertThat(page.title()).isEqualTo(existingDocPageName);
 
             assertEquals(existingDocPageName, page.title());
-
         } catch (PlaywrightException e) {
             fail("failed to launch browser " + browserType.name());
         }
     }
 
+    @Test
+    void testGetDocLocalized() {
+        Playwright playwright = Playwright.create();
+
+        // TODO use global config
+        BrowserType browserType = playwright.firefox();
+
+        try (Browser browser = browserType.launch()) {
+            BrowserContext context = browser.newContext(new Browser.NewContextOptions().setLocale("de-CH"));
+            Page page = context.newPage();
+
+            page.navigate(documentationURL + "/" + existingDocPageName);
+
+            assertThat(page.title()).isEqualTo(existingDocPageName);
+
+            // explicit german text
+            assertThat(page.content()).contains("DEUTSCH TESTDOC1");
+        } catch (PlaywrightException e) {
+            fail("failed to launch browser " + browserType.name());
+        }
+    }
 
     @Test
     void testDocumentationNotFoundException() throws IOException {
