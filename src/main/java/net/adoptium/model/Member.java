@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Member implements Comparable<Member> {
+    // These private fields are necessary for mapping the JSON file objects. IDE doesn't recognize that.
     private String memberName;
     private String memberLink;
     private String memberLogo;
@@ -14,9 +15,10 @@ public class Member implements Comparable<Member> {
     private boolean isURLValid = false;
     private boolean isImageFormatValid = false;
 
-    public Member() {
-        // Empty constructor is needed for ObjectMapper
-    }
+    /**
+     * Empty constructor is needed for mapping JSON fields to objects with an ObjectMapper in MemberResource.java
+     */
+    public Member() { }
 
     public String getMemberName() {
         return memberName;
