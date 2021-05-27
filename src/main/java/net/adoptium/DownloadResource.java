@@ -33,10 +33,6 @@ public class DownloadResource {
     @CheckedTemplate
     public static class Templates {
 
-        private Templates() {
-            throw new IllegalStateException("This is an utility class and should not get instantiated");
-        }
-
         /**
          * The method name of a `static native TemplateInstance`
          * refers to the name of a .html file in templates/DownloadResource.
@@ -54,6 +50,12 @@ public class DownloadResource {
         this.repository = repository;
     }
 
+    /**
+     * After clicking the download button, users will be redirected to this page.
+     *
+     * @param args hyphenated string of different properties identifying a specific binary version
+     * @return rendered ThankYouTemplate
+     */
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("thank-you/{args}")

@@ -41,10 +41,6 @@ public class DownloadStringArgumentExtractor {
 
     private static final Pattern DOWNLOAD_PATTERN = Pattern.compile(REGEX_DOWNLOAD, Pattern.CASE_INSENSITIVE);
 
-    private DownloadStringArgumentExtractor() {
-        throw new IllegalStateException("This is an utility class and should not get instantiated");
-    }
-
     public static Map<DownloadArgumentGroup, String> getVersionDetails(String stringVersionArguments)
             throws DownloadInvalidArgumentException {
         Matcher matcher = DOWNLOAD_PATTERN.matcher(stringVersionArguments);

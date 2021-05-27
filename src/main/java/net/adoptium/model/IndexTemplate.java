@@ -4,7 +4,6 @@ public class IndexTemplate {
     private Download download;
     private final String redirectPath;
 
-
     /**
      * if client os could not be detected, or no download for client platform is available
      */

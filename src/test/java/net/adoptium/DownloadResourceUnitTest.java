@@ -19,7 +19,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class DownloadResourceTest {
+class DownloadResourceUnitTest {
 
     private final DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
 
