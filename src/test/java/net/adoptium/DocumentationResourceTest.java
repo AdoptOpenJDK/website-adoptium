@@ -38,9 +38,9 @@ public class DocumentationResourceTest {
             BrowserContext context = browser.newContext(new Browser.NewContextOptions().setLocale("en-US"));
             Page page = context.newPage();
 
-            assertThat(page.title()).isEqualTo(existingDocPageName);
+            page.navigate(documentationURL + "/" + existingDocPageName);
 
-            assertEquals(existingDocPageName, page.title());
+            assertThat(page.title()).isEqualTo(existingDocPageName);
         } catch (PlaywrightException e) {
             fail("failed to launch browser " + browserType.name());
         }
