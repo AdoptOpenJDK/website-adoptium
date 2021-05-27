@@ -72,7 +72,7 @@ public class DownloadRepository {
                 RECOMMENDED_RELEASE_TYPE, RECOMMENDED_VENDOR, download.getSemver());
     }
 
-    private List<Release> requestDownloadVersion(Map<DownloadArgumentGroup, String> versionArguments)
+    public List<Release> requestDownloadVersion(Map<DownloadArgumentGroup, String> versionArguments)
             throws DownloadBinaryNotFoundException {
         try {
             return api.getRelease(versionArguments.get(VERSION),
