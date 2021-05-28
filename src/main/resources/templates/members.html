@@ -5,7 +5,7 @@
     <title>website-adoptium - 1.0.0-SNAPSHOT</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="dist/assets/favicon.ico" type="image/x-icon">
     <link rel="icon" href="dist/assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
@@ -78,9 +78,12 @@
                     {/for}
                 </ul>
             </div>
-    {#else}
-        <p>Couldn't Load Members..</p>
-    {/if}
-</div>
+        {#else}
+            <p>Couldn't Load Members..</p>
+        {/if}
+    </main>
+
+    {#include HeaderFooterTemplates/footer /}
+
 </body>
 </html>

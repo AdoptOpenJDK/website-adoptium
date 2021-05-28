@@ -6,6 +6,7 @@ import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.HeaderTemplate;
+import net.adoptium.model.Member;
 import net.adoptium.model.OrganizationType;
 import org.jboss.logging.Logger;
 

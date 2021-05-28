@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>{template.getDocName()}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="dist/assets/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="dist/assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 </head>
-<body>
+<body class="blue-bg vsc-initialized">
     {#include HeaderFooterTemplates/header /}
 
-    <div class="site-content">
+    <main class="grey-bg home-main">
         <div class="doc">
             {template.contents}
         </div>
-    </div>
+    </main>
 
     {#include HeaderFooterTemplates/footer /}
 </body>

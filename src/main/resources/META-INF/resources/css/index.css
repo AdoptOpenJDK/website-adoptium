@@ -103,9 +103,9 @@ body {
 }
 .footer {
     flex-shrink: 0;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-    margin-left: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    padding-left: 1rem;
     background: #14003c;
     font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
     color: #fff;
