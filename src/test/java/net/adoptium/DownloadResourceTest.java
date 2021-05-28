@@ -22,7 +22,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
-public class DownloadResourceTest {
+class DownloadResourceTest {
 
     OkHttpClient client = new OkHttpClient();
 

@@ -75,14 +75,14 @@ public class MemberResource {
     protected void checkValidationOfMemberLink(Member member) {
         member.validateURL();
         if (!member.getIsURLValid()) {
-            LOG.warnf("Invalid URL of Member: %s", member.getMemberName());
+            LOG.warnf("Invalid URL of Member: %s. Format: (http(s)?:)//(www.)?([a-zA-Z0-9-]{1,20}.){1,5}[a-zA-Z0-9-]{2,5}(/)?", member.getMemberName());
         }
     }
 
     protected void checkValidationOfMemberLogo(Member member) {
         member.validateImageFormat();
         if (!member.getIsImageFormatValid()) {
-            LOG.warnf("Invalid Logo Format/Path of Member: %s. Format: ([a-zA-Z0-9-_]+/)*[a-zA-Z0-9-_]+\\.(svg)",
+            LOG.warnf("Invalid Logo Format/Path of Member: %s. Format: ([a-zA-Z0-9-_]{1,20}/){1,10}[a-zA-Z0-9-_]+.(svg)",
                     member.getMemberName());
         }
     }
