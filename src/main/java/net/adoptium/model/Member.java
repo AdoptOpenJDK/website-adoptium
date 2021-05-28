@@ -49,7 +49,7 @@ public class Member implements Comparable<Member> {
     }
 
     public void validateURL() {
-        String regex = "(http(s)?:)//(www\\.)?([a-zA-Z0-9-]{1,10}\\.){1,5}[a-zA-Z0-9-]{3}";
+        String regex = "(http(s)?:)//(www\\.)?([a-zA-Z0-9-]{1,10}\\.){1,5}[a-zA-Z0-9-]{3}(/)?";
 
         Pattern p = Pattern.compile(regex);
 
