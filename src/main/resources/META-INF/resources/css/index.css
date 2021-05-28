@@ -89,5 +89,14 @@ table, th, td {
 
 #minor-links {
     margin-top: 0.5rem;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
+}
+
+#minor-links > a, #minor-links > a:visited, #minor-links > a:active {
+    color: white;
+    text-decoration: none;
+}
+
+#minor-links > a:hover {
+    color: #a0a0a0;
 }
