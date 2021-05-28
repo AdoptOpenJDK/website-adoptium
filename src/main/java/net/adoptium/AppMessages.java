@@ -8,6 +8,13 @@ import net.adoptopenjdk.api.v3.models.*;
 @MessageBundle
 public interface AppMessages {
 
+    @Message("Prebuilt OpenJDK Binaries for Free!")
+    String headerText();
+
+    @Message("Java™ is the world's leading programming language and platform.\n" +
+            "The Adoptium Working Group promotes and supports high-quality runtimes and associated technology for use across the Java™ ecosystem.")
+    String headerDesc();
+
     @Message("Adoptium")
     String adoptium();
 

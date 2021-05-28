@@ -23,18 +23,14 @@
             <div class="strategic">
                 <ul>
                     {#for strategicMember in strategicMembers}
-                        {#if strategicMember.isURLValid}
-                            <li><a href={strategicMember.memberLink} target="_blank" rel="noopener noreferrer">
-                                {#if strategicMember.isImageFormatValid}
-                                    <img alt={strategicMember.memberAltText} src={strategicMember.memberLogo}
-                                         width=15%" height="15%">
-                                {#else}
-                                    {strategicMember.memberAltText}
-                                {/if}
-                            </a></li>
-                        {#else}
-                            <li><a>{strategicMember.memberAltText}</a></li>
-                        {/if}
+                        <li><a {#if strategicMember.isURLValid} href={strategicMember.memberLink} target="_blank" rel="noopener noreferrer" {/if}>
+                            {#if strategicMember.isImageFormatValid}
+                                <img alt={strategicMember.memberAltText} src={strategicMember.memberLogo}
+                                    width=15%" height="15%">
+                            {#else}
+                                {strategicMember.memberAltText}
+                            {/if}
+                        </a></li>
                     {/for}
                 </ul>
             </div>
@@ -43,18 +39,14 @@
             <div class="enterprise">
                 <ul>
                     {#for enterpriseMember in enterpriseMembers}
-                        {#if enterpriseMember.isURLValid}
-                        <li><a href={enterpriseMember.memberLink} target="_blank" rel="noopener noreferrer">
+                        <li><a {#if enterpriseMember.isURLValid} href={enterpriseMember.memberLink} target="_blank" rel="noopener noreferrer" {/if}>
                             {#if enterpriseMember.isImageFormatValid}
                                 <img alt={enterpriseMember.memberAltText} src={enterpriseMember.memberLogo}
-                                     width=15%" height="15%">
+                                    width=15%" height="15%">
                             {#else}
                                 {enterpriseMember.memberAltText}
                             {/if}
                         </a></li>
-                        {#else}
-                        <li><a>{enterpriseMember.memberAltText}</a></li>
-                        {/if}
                     {/for}
                 </ul>
             </div>
@@ -63,18 +55,14 @@
             <div class="participant">
                 <ul>
                     {#for participantMember in participantMembers}
-                        {#if participantMember.isURLValid}
-                        <li><a href={participantMember.memberLink} target="_blank" rel="noopener noreferrer">
+                        <li><a {#if participantMember.isURLValid} href={participantMember.memberLink} target="_blank" rel="noopener noreferrer" {/if}>
                             {#if participantMember.isImageFormatValid}
                                 <img alt={participantMember.memberAltText} src={participantMember.memberLogo}
-                                     width=15%" height="15%">
+                                    width=15%" height="15%">
                             {#else}
                                 {participantMember.memberAltText}
                             {/if}
                         </a></li>
-                        {#else}
-                            <li><a>{participantMember.memberAltText}</a></li>
-                        {/if}
                     {/for}
                 </ul>
             </div>
