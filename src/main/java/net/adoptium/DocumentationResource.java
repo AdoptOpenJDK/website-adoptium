@@ -16,6 +16,8 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/documentation")
 public class DocumentationResource {
+    private static final Logger LOG = Logger.getLogger(DocumentationResource.class);
+
 
     @Inject
     ApplicationConfig appConfig;

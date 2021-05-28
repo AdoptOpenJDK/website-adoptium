@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @QuarkusTest
-public class DocumentationResourceTest {
+class DocumentationResourceTest {
 
     OkHttpClient client = new OkHttpClient();
 
