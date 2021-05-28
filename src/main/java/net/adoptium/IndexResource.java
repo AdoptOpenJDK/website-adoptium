@@ -31,10 +31,6 @@ public class IndexResource {
     @CheckedTemplate
     public static class Templates {
 
-        private Templates() {
-            throw new IllegalStateException("This is an utility class and should not get instantiated");
-        }
-
         /**
          * The method name of a `static native TemplateInstance`
          * refers to the name of a .html file in templates/DownloadResource.
@@ -50,10 +46,18 @@ public class IndexResource {
         this.repository = repository;
     }
 
+    /**
+     * Renders a page with a download button. The button itself is only a redirect to the thank-you page, where the
+     * actual download is then started. We don't start the download here to ensure users always reach the thank-you page.
+     *
+     * @param userAgent      client userAgent
+     * @param acceptLanguage client acceptLanguage
+     * @return rendered IndexTemplate
+     */
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get(@HeaderParam("user-agent") String userAgent,
-                                @HeaderParam("accept-language") String acceptLanguage){
+                                @HeaderParam("accept-language") String acceptLanguage) {
         IndexTemplate data = getImpl(userAgent);
         return Templates.index(data).data("header", routingContext.get("header"));
     }

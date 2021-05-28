@@ -13,8 +13,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+/**
+ * A generic exception handler for bad routes, used by documentation routes.
+ */
 @Provider
-public class DownloadBinaryNotFoundExceptionHandler implements ExceptionMapper<DownloadBinaryNotFoundException> {
+public class DocumentNotFoundExceptionHandler implements ExceptionMapper<DocumentNotFoundException> {
 
     @Inject
     Engine engine;
@@ -24,12 +27,12 @@ public class DownloadBinaryNotFoundExceptionHandler implements ExceptionMapper<D
 
     @Override
     @Produces(MediaType.TEXT_HTML)
-    public Response toResponse(DownloadBinaryNotFoundException exception) {
+    public Response toResponse(DocumentNotFoundException exception) {
         HeaderTemplate header = rc.get("header");
 
         String template = DownloadResource.Templates.error(
                 new DownloadErrorTemplate(
-                        getI18N(header.getLocale(), "exceptionDownloadNotFound"), getI18N(header.getLocale(), "exceptionGenericHint")
+                        getI18N(header.getLocale(), "exceptionFileNotFound"), getI18N(header.getLocale(), "exceptionGenericHint")
                 ))
                 .setAttribute("locale", header.getLocale()).data("header", header).render();
         return Response.status(Response.Status.NOT_FOUND).entity(template).type(MediaType.TEXT_HTML).build();
@@ -37,8 +40,8 @@ public class DownloadBinaryNotFoundExceptionHandler implements ExceptionMapper<D
 
     /**
      * TODO: as soon as <a href="https://github.com/quarkusio/quarkus/issues/12792">quarkus issue #12792</a> is resolved,
-     *       all ExceptionHandlers can be cleaned up
-     *       as of 18.05.2020, it's merged in main
+     * all ExceptionHandlers can be cleaned up
+     * as of 18.05.2020, it's merged in main
      * Qute does not support converting a string id inside a template variable to it's translation.
      * {msg:exceptionGenericHint} works, {msg:{variable-name}} (and similar) cannot be resolved.
      */
