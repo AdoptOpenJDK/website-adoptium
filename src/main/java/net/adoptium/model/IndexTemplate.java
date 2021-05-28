@@ -15,7 +15,6 @@ public class IndexTemplate {
      */
     public IndexTemplate() {
         this.error = true;
-        // TODO define constants for paths (application.properties ?)
         this.redirectPath = "/releases";
     }
 
