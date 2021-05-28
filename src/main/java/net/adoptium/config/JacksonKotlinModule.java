@@ -13,7 +13,8 @@ import javax.inject.Singleton;
 /**
  * JacksonKotlinModule configures Jackson to handle openjdk api models correctly.
  * Those models are written in Kotlin so we need to inject KotlinModule.
- * Additionally, openjdk api models use certain other modules, like JavaTimeModule, which we need for formatting compatibility.
+ * Additionally, openjdk api models use certain other modules,
+ * like JavaTimeModule, which we need for formatting compatibility.
  */
 public class JacksonKotlinModule {
 

@@ -14,18 +14,37 @@ import java.util.Locale;
 
 import static io.quarkus.qute.i18n.MessageBundles.ATTRIBUTE_LOCALE;
 
+/**
+ * Middleware run for all requests.
+ */
 public class LocaleMiddleware {
     private static final Logger LOG = Logger.getLogger(LocaleMiddleware.class);
+
+    /**
+     * Defines how long the locale cookie should be stored in the client's browser.
+     * If no concrete time-span were defined, browsers would delete the cookie when the client session ends.
+     */
+    private static final long LOCALE_COOKIE_LIFETIME = 60 * 60 * 24 * 360L;
 
     @Inject
     ApplicationConfig appConfig;
 
+    /**
+     * Determines the language to use for the client when rendering.
+     * <p>
+     * By default the 'Accept-Language' header is parsed, but if a `locale` cookie is set, it will be preferred.
+     * The value of this cookie can be overridden by setting the `locale` query parameter (this is done by the
+     * 'change language' dropdown).
+     * The cookie is always updated to reflect the latest language choice.
+     * <p>
+     * Since Qute considers the 'Accept-Language' header during rendering, we always override it to match the value we
+     * determined. Additionally, an instance of {@link HeaderTemplate} is passed to future request handlers which
+     * is already configured with all locale related fields it needs and ready to be rendered.
+     *
+     * @param rc current RoutineContext
+     */
     @RouteFilter
     public void localeMiddleware(RoutingContext rc) {
-        // @CookieParam(ATTRIBUTE_LOCALE) String locale
-        // order: query, cookie, header
-        // if query parameter `locale` is set, update cookie and Accept-Language header
-        // qute uses the Accept-Language header
         String defaultLocale = appConfig.getDefaultLocale().getLanguage();
         Cookie localeCookie = rc.getCookie(ATTRIBUTE_LOCALE);
 
@@ -46,23 +65,21 @@ public class LocaleMiddleware {
                     LOG.info("locale - bad Accept-Language, using default");
                     localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, defaultLocale);
                 } else {
+                    // for now we don't include country specific locales since we'd then need to define a fallback from
+                    // en-GB to en-US to en. Eg: doc files with the extension index_en.adoc need to be served for en-GB
+                    // locales as well), which isn't implemented yet
                     acceptLanguage = parsedHeaderLocale.getLanguage();
                     localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, acceptLanguage);
                 }
             }
         }
 
-        //TODO HOW to access RoutingContext in Handler?
         HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), localeCookie.getValue());
         rc.put("header", header);
 
-        // qute did the Accept-Language parsing for us, but to set the correct cookie we need to parse it outselves
-        // how does quarks/qute do it'
         localeCookie.setPath("/");
         localeCookie.setHttpOnly(true);
-        // if not set it's deleted when the session sends
-        // set it to 1 year?
-        localeCookie.setMaxAge(60 * 60 * 24 * 360L);
+        localeCookie.setMaxAge(LOCALE_COOKIE_LIFETIME);
         rc.response().addCookie(localeCookie);
         rc.request().headers().set("Accept-Language", localeCookie.getValue());
         rc.next();

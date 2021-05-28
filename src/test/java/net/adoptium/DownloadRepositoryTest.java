@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DownloadRepositoryTest {
+class DownloadRepositoryTest {
 
     /**
      * mockWebServer mocks the api by returning responses from json files in test/resources/api-stating
@@ -49,23 +49,32 @@ public class DownloadRepositoryTest {
                 .build(ApiService.class);
     }
 
+    /**
+     * current procedure for determining the correct binary: manually searching for it
+     * based on the criteria used in getUserDownload (CTRL-F "linux")
+     * NOTE: for OS.windows (which usually includes installers) the first match will be used,
+     * while OS.linux generally accepts the last one (since it's trying to find an installer)
+     * NOTE: when requirements change, these tests have to be adapted by hand...
+     * NOTE: UserAgentParser guarantees that, if the OS is set, Architecture is set
+     */
     @Test
     void testUserDownload() {
-        // current procedure for determining the correct binary: manually searching for it based on the criteria used in getUserDownload (CTRL-F "linux")
-        // NOTE: for OS.windows (which usually includes installers) the first match will be used,
-        //       while OS.linux generally accepts the last one (since it's trying to find an installer)
-        // NOTE: when requirements change, these tests have to be adapted by hand...
-        // NOTE: UserAgentParser guarantees that, if the OS is set, Architecture is set
         HashMap<UserSystem, String> tests = new HashMap<>() {{
-            put(new UserSystem(OperatingSystem.windows, Architecture.x64), "f12011de94a72e1f14c9e68ce63bdd537aab1bf51eb336eba6d6061bc307baeb");
-            put(new UserSystem(OperatingSystem.windows, Architecture.x32), "440c538a95770aa4a5e2f30cda3af1e2b730f8d889b8b6ea4b5d6c070b08024a");
-            put(new UserSystem(OperatingSystem.linux, Architecture.x64), "ae78aa45f84642545c01e8ef786dfd700d2226f8b12881c844d6a1f71789cb99");
+            put(new UserSystem(OperatingSystem.windows, Architecture.x64),
+                    "f12011de94a72e1f14c9e68ce63bdd537aab1bf51eb336eba6d6061bc307baeb");
+            put(new UserSystem(OperatingSystem.windows, Architecture.x32),
+                    "440c538a95770aa4a5e2f30cda3af1e2b730f8d889b8b6ea4b5d6c070b08024a");
+            put(new UserSystem(OperatingSystem.linux, Architecture.x64),
+                    "ae78aa45f84642545c01e8ef786dfd700d2226f8b12881c844d6a1f71789cb99");
             put(new UserSystem(OperatingSystem.linux, Architecture.x32), null);
             // eg. Raspberry PI
-            put(new UserSystem(OperatingSystem.linux, Architecture.arm), "34908da9c200f5ef71b8766398b79fd166f8be44d87f97510667698b456c8d44");
-            put(new UserSystem(OperatingSystem.linux, Architecture.aarch64), "420c5d1e5dc66b2ed7dedd30a7bdf94bfaed10d5e1b07dc579722bf60a8114a9");
-            put(new UserSystem(OperatingSystem.mac, Architecture.x64), "5c9a54d3bbed00d993183dc4b7bcbc305e2e6ab1bbf48c57dea7fea6c47cb9d2");
-            put(new UserSystem(OperatingSystem.mac, Architecture.aarch64), null); // TODO M1 = aarch64?
+            put(new UserSystem(OperatingSystem.linux, Architecture.arm),
+                    "34908da9c200f5ef71b8766398b79fd166f8be44d87f97510667698b456c8d44");
+            put(new UserSystem(OperatingSystem.linux, Architecture.aarch64),
+                    "420c5d1e5dc66b2ed7dedd30a7bdf94bfaed10d5e1b07dc579722bf60a8114a9");
+            put(new UserSystem(OperatingSystem.mac, Architecture.x64),
+                    "5c9a54d3bbed00d993183dc4b7bcbc305e2e6ab1bbf48c57dea7fea6c47cb9d2");
+            put(new UserSystem(OperatingSystem.mac, Architecture.aarch64), null);
         }};
 
         DownloadRepository repository = new DownloadRepository(remoteApi);
@@ -76,9 +85,11 @@ public class DownloadRepositoryTest {
 
             Binary recommendedBinary = recommended.getBinary();
             if (recommendedBinary.getInstaller() != null) {
-                assertThat(checksum).overridingErrorMessage("client: " + userSystem).isEqualTo(recommendedBinary.getInstaller().getChecksum());
+                assertThat(checksum).overridingErrorMessage("client: "
+                        + userSystem).isEqualTo(recommendedBinary.getInstaller().getChecksum());
             } else {
-                assertThat(checksum).overridingErrorMessage("client: " + userSystem).isEqualTo(recommendedBinary.getPackage().getChecksum());
+                assertThat(checksum).overridingErrorMessage("client: "
+                        + userSystem).isEqualTo(recommendedBinary.getPackage().getChecksum());
             }
         });
     }

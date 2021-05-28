@@ -25,8 +25,15 @@ public interface ApiService {
     List<BinaryAssetView> getAvailableReleases(@PathParam("feature_version") int featureVersion,
                                                @PathParam("jvm_impl") JvmImpl jvmImpl);
 
+    /**
+     * Gets the correct Release Version
+     * String example:
+     *
+     * ?architecture={arch}&heap_size={heapSize}&image_type=
+     * {imageType}&jvm_impl={jvmImpl}&os={os}&project={project}&release_type={releaseType}&vendor={vendor}
+     */
     @GET
-    @Path("/assets/version/{version}") //?architecture={arch}&heap_size={heapSize}&image_type={imageType}&jvm_impl={jvmImpl}&os={os}&project={project}&release_type={releaseType}&vendor={vendor}
+    @Path("/assets/version/{version}")
     @Produces(MediaType.APPLICATION_JSON)
     List<Release> getRelease(@PathParam("version") String version,
                              @QueryParam("architecture") String arch,

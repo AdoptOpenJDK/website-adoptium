@@ -1,0 +1,42 @@
+= ENGLISH testdoc1
+Firstname Lastname <author@asciidoctor.org>
+3.0, July 29, 2022: AsciiDoc article template
+:toc:
+:icons: font
+:url-quickref: https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/
+ifndef::imagesdir[:imagesdir: ../images]
+
+== DEUTSCH TESTDOC1 (1st Level Heading)
+
+This is some example text. Please ignore.
+
+image::testdoc1/1.png[I am the image alt text.]
+image::testdocshared/share.jpg[I am the image alt text.]
+
+=== 2nd Level Heading
+
+* bullet points
+** more bullet points
+*** even more
+**** and more
+***** and more...
+
+==== 3rd Level Heading
+Look at this table.
+[cols="1,1"]
+|===
+|Cell in column 1, row 1
+|Cell in column 2, row 1
+
+|Cell in column 1, row 2
+|Cell in column 2, row 2
+
+|Cell in column 1, row 3
+|Cell in column 2, row 3
+|===
+
+and this https://www.google.com/[link].
+
+and this video:
+
+video::Y9chepoB7QM[youtube]

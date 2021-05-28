@@ -1,58 +1,73 @@
 package net.adoptium;
 
+import io.quarkus.test.common.http.TestHTTPEndpoint;
+import io.quarkus.test.common.http.TestHTTPResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import net.adoptium.api.DownloadRepository;
-import net.adoptium.config.ApplicationConfig;
-import net.adoptium.exceptions.DownloadInvalidArgumentException;
-import net.adoptium.model.ThankYouTemplate;
+import net.adoptium.exceptions.DownloadBinaryNotFoundException;
 import net.adoptium.utils.DownloadArgumentGroup;
 import net.adoptium.utils.DownloadStringArgumentExtractor;
-import net.adoptopenjdk.api.v3.models.Package;
-import net.adoptopenjdk.api.v3.models.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * TODO test 404 status code?
- */
+@QuarkusTest
 public class DownloadResourceTest {
 
-    private final DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
+    OkHttpClient client = new OkHttpClient();
+
+    @TestHTTPEndpoint(DownloadResource.class)
+    @TestHTTPResource
+    URL downloadURL;
+
+    @InjectMock
+    DownloadRepository mockRepository;
 
     @Test
-    void testDownloadLink() {
+    void testBinaryNotFoundException() throws IOException {
         String args = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9";
-
-        // mockBinary is effectively ignored, as long as ThankYouTemplate is populated with the correct link
-        // using args as downloadLink to ensure it's unique per test
-        Binary mockBinary = new Binary(new Package(
-                "", args, 1, "", "", 1, "", ""
-        ), 1, new DateTime(new Date()), null, null, HeapSize.normal, OperatingSystem.linux, Architecture.x64, ImageType.jdk, JvmImpl.hotspot, Project.jdk);
-
-        // parse download arguments so we can mock getBinary with the correct parameters
         Map<DownloadArgumentGroup, String> expectedVersionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
-        Mockito.when(mockRepository.getBinary(expectedVersionDetails)).thenReturn(mockBinary);
 
-        ApplicationConfig testConfig = new ApplicationConfig(List.of(Locale.ENGLISH), Locale.ENGLISH);
-        DownloadResource download = new DownloadResource(mockRepository, testConfig);
+        // empty list -> API has no matching binary
+        Mockito.when(mockRepository.getBinary(expectedVersionDetails)).thenThrow(new DownloadBinaryNotFoundException());
 
-        ThankYouTemplate got = download.getImpl(args);
-        assertThat(got.getDownloadLink()).isEqualTo(args);
+        Request request = new Request.Builder()
+                .url(downloadURL.toString() + "/thank-you/" + args)
+                .build();
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
+
+        assertThat(body).isNotNull();
+        assertThat(response.code()).isEqualTo(404);
+
+        // exceptionDownloadNotFound
+        assertThat(body.string()).contains("Download not found");
     }
 
     @Test
-    void testArgParsingMissingArg() {
-        String args = "windows-x64-hotspot-jdk-jdk-ga-adoptopenjdk-11.0.10+9";
-        ApplicationConfig testConfig = new ApplicationConfig(List.of(Locale.ENGLISH), Locale.ENGLISH);
-        DownloadResource download = new DownloadResource(mockRepository, testConfig);
+    void testInvalidArgumentException() throws IOException {
+        String args = "bad-args";
 
-        assertThatThrownBy(() -> download.getImpl(args)).isExactlyInstanceOf(DownloadInvalidArgumentException.class);
+        Request request = new Request.Builder()
+                .url(downloadURL.toString() + "/thank-you/" + args)
+                .build();
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
+
+        assertThat(body).isNotNull();
+        assertThat(response.code()).isEqualTo(404);
+
+        // exceptionVersionNotFound
+        assertThat(body.string()).contains("Version not found");
     }
 }

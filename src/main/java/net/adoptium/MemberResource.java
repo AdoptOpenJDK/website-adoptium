@@ -15,7 +15,8 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,11 +42,11 @@ public class MemberResource {
         setUpMembers(JSON_PATH);
     }
 
-    public MemberResource(String jsonPath){
+    public MemberResource(String jsonPath) {
         setUpMembers(jsonPath);
     }
 
-    protected void setUpMembers(String jsonPath){
+    protected void setUpMembers(String jsonPath) {
         URL jsonUrl = null;
         try {
             jsonUrl = loadJSONURL(jsonPath);
@@ -54,7 +55,7 @@ public class MemberResource {
 
             sortMemberListAlphabetically(memberList);
 
-            for(Member member : memberList){
+            for (Member member : memberList) {
                 checkValidationOfMemberLink(member);
                 checkValidationOfMemberLogo(member);
                 filterMembersByOrganisationType(member);
@@ -65,7 +66,7 @@ public class MemberResource {
         } catch (IOException e) {
             canLoadJSON = false;
             LOG.errorf("Could not deserialize JSON URL to Member Objects. Error: %s", e.getMessage());
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             canLoadJSON = false;
             LOG.errorf("Error: MemberList is empty!");
         }
@@ -77,19 +78,20 @@ public class MemberResource {
 
     protected void checkValidationOfMemberLink(Member member) {
         member.validateURL();
-        if(!member.getIsURLValid()){
+        if (!member.getIsURLValid()) {
             LOG.warnf("Invalid URL of Member: %s", member.getMemberName());
         }
     }
 
     protected void checkValidationOfMemberLogo(Member member) {
         member.validateImageFormat();
-        if(!member.getIsImageFormatValid()){
-            LOG.warnf("Invalid Logo Format/Path of Member: %s. Format: ([a-zA-Z0-9-_]+/)*[a-zA-Z0-9-_]+\\.(svg)", member.getMemberName());
+        if (!member.getIsImageFormatValid()) {
+            LOG.warnf("Invalid Logo Format/Path of Member: %s. Format: ([a-zA-Z0-9-_]+/)*[a-zA-Z0-9-_]+\\.(svg)",
+                    member.getMemberName());
         }
     }
 
-    protected void filterMembersByOrganisationType(Member member){
+    protected void filterMembersByOrganisationType(Member member) {
         try {
             addMemberToCorrespondingMemberList(member);
         } catch (IllegalArgumentException e) {
@@ -111,6 +113,7 @@ public class MemberResource {
             case PARTICIPANT:
                 participantMembers.add(member);
                 break;
+            default:
         }
     }
 
@@ -118,13 +121,14 @@ public class MemberResource {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Member> listOfMembers;
         // objectMapper.readValue() throws IOException when JSON couldn't be deserialized
-        listOfMembers =  objectMapper.readValue(url, new TypeReference<List<Member>>(){});
+        listOfMembers = objectMapper.readValue(url, new TypeReference<List<Member>>() {
+        });
         return listOfMembers;
     }
 
     protected URL loadJSONURL(String is) throws FileNotFoundException {
         URL jsonURL = getClass().getClassLoader().getResource(is);
-        if(jsonURL == null){
+        if (jsonURL == null) {
             throw new FileNotFoundException("Invalid JSON path.");
         }
         return jsonURL;

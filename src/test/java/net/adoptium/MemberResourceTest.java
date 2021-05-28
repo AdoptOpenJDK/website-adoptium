@@ -1,22 +1,28 @@
 package net.adoptium;
 
 import io.quarkus.test.junit.QuarkusTest;
+import net.adoptium.model.Member;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class MemberResourceTest{
+class MemberResourceTest {
     private MemberResource memberResource;
     private URL validURL, invalidFieldURL, invalidFormatURL, invalidLinkURL, invalidLogoURL, invalidOrgTypeURL;
     // Path of the testing json files
-    private final String VALID_JSON =  "/json/members_valid.json";
+    private final String VALID_JSON = "/json/members_valid.json";
     private final String INVALID_FIELD_JSON = "/json/members_invalidField.json";
     private final String INVALID_FORMAT_JSON = "/json/members_invalidFormat.json";
     private final String INVALID_PATH_JSON = "/josn/members_valid.json";
@@ -25,7 +31,7 @@ public class MemberResourceTest{
     private final String INVALID_ORGTYPE_JSON = "/json/members_invalidOrgType.json";
 
     @BeforeAll
-    void initialize(){
+    void initialize() {
         memberResource = new MemberResource(VALID_JSON);
         try {
             validURL = memberResource.loadJSONURL(VALID_JSON);
@@ -34,7 +40,7 @@ public class MemberResourceTest{
             invalidLinkURL = memberResource.loadJSONURL(INVALID_LINK_JSON);
             invalidLogoURL = memberResource.loadJSONURL(INVALID_LOGO_JSON);
             invalidOrgTypeURL = memberResource.loadJSONURL(INVALID_ORGTYPE_JSON);
-        }catch(IOException e){
+        } catch (IOException e) {
             fail();
         }
     }
@@ -53,124 +59,125 @@ public class MemberResourceTest{
     }
 
     @Test
-    void getListOfValidMembers(){
+    void getListOfValidMembers() {
         try {
             List<Member> memberList = memberResource.getListOfMembers(validURL);
             assertEquals(3, memberList.size());
-        } catch(IOException e){
+        } catch (IOException e) {
             fail();
         }
     }
 
     @Test
-    void getListOfInvalidMembers(){
+    void getListOfInvalidMembers() {
         assertThrows(IOException.class, () -> memberResource.getListOfMembers(invalidFieldURL));
         assertThrows(IOException.class, () -> memberResource.getListOfMembers(invalidFormatURL));
     }
 
     @Test
-    void sortMemberListAlphabetically(){
+    void sortMemberListAlphabetically() {
         try {
             List<Member> memberList = memberResource.getListOfMembers(validURL);
             memberResource.sortMemberListAlphabetically(memberList);
             assertEquals("IBM", memberList.get(0).getMemberName());
             assertEquals("Microsoft", memberList.get(1).getMemberName());
             assertEquals("New Relic", memberList.get(2).getMemberName());
-        } catch(IOException | NullPointerException e){
+        } catch (IOException | NullPointerException e) {
             fail();
         }
     }
 
     @Test
-    void sortEmptyMemberListAlphabetically(){
+    void sortEmptyMemberListAlphabetically() {
         List<Member> emptyList = null;
         assertThrows(NullPointerException.class, () -> memberResource.sortMemberListAlphabetically(emptyList));
     }
 
     @Test
-    void checkValidationOfMemberLink(){
+    void checkValidationOfMemberLink() {
         try {
             List<Member> memberList = memberResource.getListOfMembers(validURL);
 
-            for(Member member : memberList){
+            for (Member member : memberList) {
                 memberResource.checkValidationOfMemberLink(member);
                 assertTrue(member.getIsURLValid());
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             fail();
         }
     }
 
     @Test
-    void checkValidationOfInvalidMemberLink(){
+    void checkValidationOfInvalidMemberLink() {
         try {
             List<Member> memberList = memberResource.getListOfMembers(invalidLinkURL);
 
-            for(Member member : memberList){
+            for (Member member : memberList) {
                 memberResource.checkValidationOfMemberLink(member);
                 assertFalse(member.getIsURLValid());
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             fail();
         }
     }
 
     @Test
-    void checkValidationOfMemberLogo(){
+    void checkValidationOfMemberLogo() {
         try {
             List<Member> memberList = memberResource.getListOfMembers(validURL);
 
-            for(Member member : memberList){
+            for (Member member : memberList) {
                 memberResource.checkValidationOfMemberLogo(member);
                 assertTrue(member.getIsImageFormatValid());
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             fail();
         }
     }
 
     @Test
-    void checkValidationOfInvalidMemberLogo(){
+    void checkValidationOfInvalidMemberLogo() {
         try {
             List<Member> memberList = memberResource.getListOfMembers(invalidLogoURL);
 
-            for(Member member : memberList){
+            for (Member member : memberList) {
                 memberResource.checkValidationOfMemberLogo(member);
                 assertFalse(member.getIsImageFormatValid());
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             fail();
         }
     }
 
     @Test
-    void addMemberToCorrespondingMemberList(){
+    void addMemberToCorrespondingMemberList() {
         try {
             List<Member> memberList = memberResource.getListOfMembers(validURL);
 
-            for(Member member : memberList){
+            for (Member member : memberList) {
                 assertDoesNotThrow(() -> memberResource.addMemberToCorrespondingMemberList(member));
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             fail();
         }
     }
 
     @Test
-    void addMemberWithInvalidOrgTypeToCorrespondingMemberList(){
+    void addMemberWithInvalidOrgTypeToCorrespondingMemberList() {
         try {
             List<Member> memberList = memberResource.getListOfMembers(invalidOrgTypeURL);
 
-            for(Member member : memberList){
-                assertThrows(IllegalArgumentException.class, () -> memberResource.addMemberToCorrespondingMemberList(member));
+            for (Member member : memberList) {
+                assertThrows(IllegalArgumentException.class, () ->
+                        memberResource.addMemberToCorrespondingMemberList(member));
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             fail();
         }
     }
 
     @Test
-    void IntegrationTest(){
+    void IntegrationTest() {
         String memberName1 = "Microsoft";
         String memberLink1 = "https://microsoft.com/";
         String memberLogo1 = "assets/memberLogos/microsoft.svg";

@@ -7,18 +7,17 @@
     </head>
 
     <body>
-
         {#include HeaderFooterTemplates/header /}
 
         <div class="site-content">
             <div class="container">
                 <div class="left-column">
-                    <p id="error">{msg}</p>
-                    <p>{suggestion}</p>
+                    <p id="error">{template.getErrorMessage().raw}</p>
+                    <p>{template.getSuggestion().raw}</p>
                 </div>
             </div>
         </div>
-        {#include HeaderFooterTemplates/footer /}
 
+        {#include HeaderFooterTemplates/footer /}
     </body>
 </html>

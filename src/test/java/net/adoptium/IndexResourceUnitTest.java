@@ -1,24 +1,19 @@
 package net.adoptium;
 
 import net.adoptium.api.DownloadRepository;
-import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.Download;
 import net.adoptium.model.IndexTemplate;
-import net.adoptopenjdk.api.v3.models.*;
 import net.adoptopenjdk.api.v3.models.Package;
+import net.adoptopenjdk.api.v3.models.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Can't use AppMessages without @QuarkusTest -> use the english strings manually
- */
-public class IndexResourceUnitTest {
+
+class IndexResourceUnitTest {
 
     @Test
     void testNoDownloadAvailable() {
@@ -27,7 +22,8 @@ public class IndexResourceUnitTest {
         // OperatingSystem, Architecture, etc. don't matter
         Download mockDownload = new Download(new Binary(
                 new Package("mock-package", "", 1, "", "", 1, "", ""),
-                1, new DateTime(new Date()), null, null, HeapSize.normal, OperatingSystem.linux, Architecture.x64, ImageType.jdk, JvmImpl.hotspot, Project.jdk),
+                1, new DateTime(new Date()), null, null, HeapSize.normal,
+                OperatingSystem.linux, Architecture.x64, ImageType.jdk, JvmImpl.hotspot, Project.jdk),
                 "1.0.0"
         );
         String mockThankYouPath = "/mock-thank-you-path";
@@ -38,8 +34,7 @@ public class IndexResourceUnitTest {
 
         Mockito.when(mockRepository.buildThankYouPath(mockDownload)).thenReturn(mockThankYouPath);
 
-        ApplicationConfig testConfig = new ApplicationConfig(List.of(Locale.ENGLISH), Locale.ENGLISH);
-        IndexResource index = new IndexResource(mockRepository, testConfig);
+        IndexResource index = new IndexResource(mockRepository);
 
         // welcomeMainText and errorText are mutually exclusive, if welcomeMainText is shown there was no error
         IndexTemplate got = index.getImpl("linux x64");
