@@ -49,7 +49,7 @@ public class Member implements Comparable<Member> {
     }
 
     public void validateURL() {
-        String regex = "(http(s)?:)//(www\\.)?([a-zA-Z0-9-]{1,10}\\.){1,5}[a-zA-Z0-9-]{3}(/)?";
+        String regex = "(http(s)?:)//(www\\.)?([a-zA-Z0-9-]{1,20}\\.){1,5}[a-zA-Z0-9-]{2,5}(/)?";
 
         Pattern p = Pattern.compile(regex);
 
@@ -60,7 +60,7 @@ public class Member implements Comparable<Member> {
     }
 
     public void validateImageFormat() {
-        String regex = "([a-zA-Z0-9-_]{1,15}/){1,10}[a-zA-Z0-9-_]+\\.(svg)";
+        String regex = "([a-zA-Z0-9-_]{1,20}/){1,10}[a-zA-Z0-9-_]+\\.(svg)";
 
         Pattern p = Pattern.compile(regex);
 
