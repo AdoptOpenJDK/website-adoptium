@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{template.getDocName()}</title>
-    <link rel="stylesheet" href="/css/index.css">
-</head>
-<body>
-    {#include HeaderFooterTemplates/header /}
+    <head>
+        <meta charset="UTF-8">
+        <title>{template.getDocName()}</title>
+        <link rel="stylesheet" href="/css/index.css">
+    </head>
+    <body>
+        {#include HeaderFooterTemplates/header /}
 
-    <div class="site-content">
-        <div class="doc">
-            {template.contents}
+        <div class="site-content">
+            <div class="doc">
+                {template.contents}
+            </div>
         </div>
-    </div>
 
-    {#include HeaderFooterTemplates/footer /}
-</body>
+        {#include HeaderFooterTemplates/footer /}
+    </body>
 </html>

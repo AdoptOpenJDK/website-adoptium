@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
+import io.vertx.ext.web.RoutingContext;
 import net.adoptium.model.Member;
 import net.adoptium.model.OrganizationType;
 import org.jboss.logging.Logger;
@@ -33,6 +34,9 @@ public class MemberResource {
 
     @Inject
     Template members;
+
+    @Inject
+    RoutingContext routingContext;
 
     public MemberResource() {
         setUpMembers(JSON_PATH);
@@ -148,6 +152,7 @@ public class MemberResource {
         return members.data("strategicMembers", strategicMembers)
                 .data("enterpriseMembers", enterpriseMembers)
                 .data("participantMembers", participantMembers)
-                .data("canLoadJSON", canLoadJSON);
+                .data("canLoadJSON", canLoadJSON)
+                .data("header", routingContext.get("header"));
     }
 }

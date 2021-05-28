@@ -1,49 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Website-Adoptium</title>
-    <link rel="stylesheet" href="/css/index.css">
-</head>
-<body>
-    {#include HeaderFooterTemplates/header /}
-
-    <div class="site-content">
-        <div class="container">
-            {#if template.isError()}
-            {msg:welcomeClientOsUnsupported}
-            {#else}
-            {msg:welcomeMainText}
-            {/if}
-        </div>
-        <div class="container" id="main">
-            <a href="{template.getRedirectPath()}" class="button" id="download_btn">
-                <div id="dl-version">
-                    <i id="dl-icon" class="fa fa-download" aria-hidden="true"></i>
-                    {#if template.isError()}
-                    <span>{msg:welcomeDownloadButtonFallback}</span>
-                    {#else}
-                    <span>{msg:welcomeDownloadButtonHeader}</span>
-                    {/if}
-                    <i id="dl-icon-2" class="fa fa-arrow-circle-o-right hide" aria-hidden="true"></i>
-                </div>
-                {#if !template.isError()}
-                <div class="dl-description">
-                    {msg:welcomeDownloadButtonBody(template.getDownload().getSemver(), template.getDownload().getBinary().getOs(), template.getDownload().getBinary().getArchitecture())}
-                </div>
+    <head>
+        <meta charset="UTF-8">
+        <title>Website-Adoptium</title>
+        <link rel="stylesheet" href="/css/index.css">
+    </head>
+    <body>
+        {#include HeaderFooterTemplates/header /}
+        <div class="site-content">
+            <div class="container">
+                {#if template.isError()}
+                {msg:welcomeClientOsUnsupported}
+                {#else}
+                {msg:welcomeMainText}
                 {/if}
-            </a>
+            </div>
+            <div class="container" id="main">
+                <a href="{template.getRedirectPath()}" class="button" id="download_btn">
+                    <div id="dl-version">
+                        <i id="dl-icon" class="fa fa-download" aria-hidden="true"></i>
+                        {#if template.isError()}
+                        <span>{msg:welcomeDownloadButtonFallback}</span>
+                        {#else}
+                        <span>{msg:welcomeDownloadButtonHeader}</span>
+                        {/if}
+                        <i id="dl-icon-2" class="fa fa-arrow-circle-o-right hide" aria-hidden="true"></i>
+                    </div>
+                    {#if !template.isError()}
+                    <div class="dl-description">
+                        {msg:welcomeDownloadButtonBody(template.getDownload().getSemver(), template.getDownload().getBinary().getOs(), template.getDownload().getBinary().getArchitecture())}
+                    </div>
+                    {/if}
+                </a>
+            </div>
         </div>
-
-        <div>
-            <a href="/members">Members Page</a>
-            <span> | </span>
-            <a href="/documentation/testdoc1">Test Document 1</a>
-            <span> | </span>
-            <a href="/documentation/testdoc2">Test Document 2</a>
-        </div>
-    </div>
-
-    {#include HeaderFooterTemplates/footer /}
-</body>
+        {#include HeaderFooterTemplates/footer /}
+    </body>
 </html>

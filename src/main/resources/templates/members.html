@@ -1,70 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>website-adoptium - 1.0.0-SNAPSHOT</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-    <link rel="stylesheet" href="css/members.css">
-</head>
-<body>
-<div class="Members">
-    <div class="banner lead">
-        {msg:adoptium}
-    </div>
+    <head>
+        <meta charset="UTF-8">
+        <title>website-adoptium - 1.0.0-SNAPSHOT</title>
+        <link rel="stylesheet" href="/css/index.css">
+    </head>
+    <body>
+    {#include HeaderFooterTemplates/header /}
+        <div>
+            {#if canLoadJSON}
+                <h2>Working Group Members</h2>
+                <h3>Strategic Members</h3>
+                    <div class="strategic">
+                        <ul>
+                            {#for strategicMember in strategicMembers}
+                                <li><a {#if strategicMember.isURLValid} href={strategicMember.memberLink} target="_blank" rel="noopener noreferrer" {/if}>
+                                    {#if strategicMember.isImageFormatValid}
+                                        <img alt={strategicMember.memberAltText} src={strategicMember.memberLogo}
+                                             width=15%" height="15%">
+                                    {#else}
+                                        {strategicMember.memberAltText}
+                                    {/if}
+                                </a></li>
+                            {/for}
+                        </ul>
+                    </div>
 
-    {#if canLoadJSON}
-        <h2>Working Group Members</h2>
+                <h3>Enterprise Members</h3>
+                    <div class="enterprise">
+                        <ul>
+                            {#for enterpriseMember in enterpriseMembers}
+                                <li><a {#if enterpriseMember.isURLValid} href={enterpriseMember.memberLink} target="_blank" rel="noopener noreferrer" {/if}>
+                                    {#if enterpriseMember.isImageFormatValid}
+                                        <img alt={enterpriseMember.memberAltText} src={enterpriseMember.memberLogo}
+                                            width=15%" height="15%">
+                                    {#else}
+                                        {enterpriseMember.memberAltText}
+                                    {/if}
+                                </a></li>
+                            {/for}
+                        </ul>
+                    </div>
 
-        <h3>Strategic Members</h3>
-            <div class="strategic">
-                <ul>
-                    {#for strategicMember in strategicMembers}
-                        <li><a {#if strategicMember.isURLValid} href={strategicMember.memberLink} target="_blank" rel="noopener noreferrer" {/if}>
-                            {#if strategicMember.isImageFormatValid}
-                                <img alt={strategicMember.memberAltText} src={strategicMember.memberLogo}
-                                     width=15%" height="15%">
-                            {#else}
-                                {strategicMember.memberAltText}
-                            {/if}
-                        </a></li>
-                    {/for}
-                </ul>
-            </div>
-
-        <h3>Enterprise Members</h3>
-            <div class="enterprise">
-                <ul>
-                    {#for enterpriseMember in enterpriseMembers}
-                        <li><a {#if enterpriseMember.isURLValid} href={enterpriseMember.memberLink} target="_blank" rel="noopener noreferrer" {/if}>
-                            {#if enterpriseMember.isImageFormatValid}
-                                <img alt={enterpriseMember.memberAltText} src={enterpriseMember.memberLogo}
-                                    width=15%" height="15%">
-                            {#else}
-                                {enterpriseMember.memberAltText}
-                            {/if}
-                        </a></li>
-                    {/for}
-                </ul>
-            </div>
-
-        <h3>Participant Members</h3>
-            <div class="participant">
-                <ul>
-                    {#for participantMember in participantMembers}
-                        <li><a {#if participantMember.isURLValid} href={participantMember.memberLink} target="_blank" rel="noopener noreferrer" {/if}>
-                            {#if participantMember.isImageFormatValid}
-                                <img alt={participantMember.memberAltText} src={participantMember.memberLogo}
-                                    width=15%" height="15%">
-                            {#else}
-                                {participantMember.memberAltText}
-                            {/if}
-                        </a></li>
-                    {/for}
-                </ul>
-            </div>
-    {#else}
-        <p>Couldn't Load Members..</p>
-    {/if}
-</div>
-</body>
+                <h3>Participant Members</h3>
+                    <div class="participant">
+                        <ul>
+                            {#for participantMember in participantMembers}
+                                <li><a {#if participantMember.isURLValid} href={participantMember.memberLink} target="_blank" rel="noopener noreferrer" {/if}>
+                                    {#if participantMember.isImageFormatValid}
+                                        <img alt={participantMember.memberAltText} src={participantMember.memberLogo}
+                                            width=15%" height="15%">
+                                    {#else}
+                                        {participantMember.memberAltText}
+                                    {/if}
+                                </a></li>
+                            {/for}
+                        </ul>
+                    </div>
+            {#else}
+                <p>Couldn't Load Members..</p>
+            {/if}
+        </div>
+    {#include HeaderFooterTemplates/footer /}
+    </body>
 </html>
