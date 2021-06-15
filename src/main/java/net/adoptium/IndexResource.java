@@ -8,7 +8,8 @@ import net.adoptium.model.Download;
 import net.adoptium.model.IndexTemplate;
 import net.adoptium.model.UserSystem;
 import net.adoptium.utils.UserAgentParser;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -19,7 +20,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/")
 public class IndexResource {
-    private static final Logger LOG = Logger.getLogger(IndexResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IndexResource.class);
     private final DownloadRepository repository;
 
     @Inject
@@ -65,18 +66,18 @@ public class IndexResource {
     IndexTemplate getImpl(String userAgent) {
         UserSystem clientSystem = UserAgentParser.getOsAndArch(userAgent);
         if (clientSystem.getOs() == null) {
-            LOG.warnf("no OS detected for userAgent: %s", userAgent);
+            LOG.warn("no OS detected for userAgent: {}", userAgent);
             return new IndexTemplate();
         }
 
         Download recommended = repository.getUserDownload(clientSystem.getOs(), clientSystem.getArch());
         if (recommended == null) {
-            LOG.warnf("no binary found for clientSystem: %s", clientSystem);
+            LOG.warn("no binary found for clientSystem: {}", clientSystem);
             return new IndexTemplate();
         }
 
         String thankYouPath = repository.buildThankYouPath(recommended);
-        LOG.infof("user: %s -> [%s] binary: %s", clientSystem, thankYouPath, recommended);
+        LOG.info("user: {} -> [{}] binary: {}", clientSystem, thankYouPath, recommended);
         return new IndexTemplate(recommended, thankYouPath);
     }
 }

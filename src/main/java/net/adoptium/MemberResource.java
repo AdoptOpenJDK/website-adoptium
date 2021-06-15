@@ -7,7 +7,8 @@ import io.quarkus.qute.TemplateInstance;
 import io.vertx.ext.web.RoutingContext;
 import net.adoptium.model.Member;
 import net.adoptium.model.OrganizationType;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -23,7 +24,7 @@ import java.util.List;
 
 @Path("/members")
 public class MemberResource {
-    private static final Logger LOG = Logger.getLogger(MemberResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MemberResource.class);
     private static final String JSON_PATH = "json/members.json";
 
     private final List<Member> strategicMembers = new ArrayList<>();
@@ -62,13 +63,13 @@ public class MemberResource {
             }
         } catch (FileNotFoundException e) {
             canLoadJSON = false;
-            LOG.errorf("Invalid JSON Path, couldn't find resource. JSON Path: %s", JSON_PATH);
+            LOG.error("Invalid JSON Path, couldn't find resource. JSON Path: {}", JSON_PATH);
         } catch (IOException e) {
             canLoadJSON = false;
-            LOG.errorf("Could not deserialize JSON URL to Member Objects. Error: %s", e.getMessage());
+            LOG.error("Could not deserialize JSON URL to Member Objects. Error: {}", e.getMessage());
         } catch (NullPointerException e) {
             canLoadJSON = false;
-            LOG.errorf("Error: MemberList is empty!");
+            LOG.error("Error: MemberList is empty!");
         }
     }
 
@@ -79,14 +80,14 @@ public class MemberResource {
     protected void checkValidationOfMemberLink(Member member) {
         member.validateURL();
         if (!member.getIsURLValid()) {
-            LOG.warnf("Invalid URL of Member: %s. Format: (http(s)?:)//(www.)?([a-zA-Z0-9-]{1,20}.){1,5}[a-zA-Z0-9-]{2,5}(/)?", member.getMemberName());
+            LOG.warn("Invalid URL of Member: {}. Format: (http(s)?:)//(www.)?([a-zA-Z0-9-]{1,20}.){1,5}[a-zA-Z0-9-]{2,5}(/)?", member.getMemberName());
         }
     }
 
     protected void checkValidationOfMemberLogo(Member member) {
         member.validateImageFormat();
         if (!member.getIsImageFormatValid()) {
-            LOG.warnf("Invalid Logo Format/Path of Member: %s. Format: ([a-zA-Z0-9-_]{1,20}/){1,10}[a-zA-Z0-9-_]+.(svg)",
+            LOG.warn("Invalid Logo Format/Path of Member: {}. Format: ([a-zA-Z0-9-_]{1,20}/){1,10}[a-zA-Z0-9-_]+.(svg)",
                     member.getMemberName());
         }
     }
@@ -95,8 +96,7 @@ public class MemberResource {
         try {
             addMemberToCorrespondingMemberList(member);
         } catch (IllegalArgumentException e) {
-            LOG.warnf("While filtering members, missing Organization type." +
-                    "\nMember Name: %s, Member OrgType: %s", member.getMemberName(), member.getOrganizationType());
+            LOG.warn("While filtering members, missing Organization type. Member Name: {}, Member OrgType: {}", member.getMemberName(), member.getOrganizationType());
         }
     }
 

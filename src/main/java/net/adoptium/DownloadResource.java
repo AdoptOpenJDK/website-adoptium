@@ -9,8 +9,9 @@ import net.adoptium.model.ThankYouTemplate;
 import net.adoptium.utils.DownloadArgumentGroup;
 import net.adoptium.utils.DownloadStringArgumentExtractor;
 import net.adoptopenjdk.api.v3.models.Binary;
-import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -21,7 +22,7 @@ import java.util.Map;
 
 @Path("/download")
 public class DownloadResource {
-    private static final Logger LOG = Logger.getLogger(DownloadResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DownloadResource.class);
     private final DownloadRepository repository;
 
     @Inject
@@ -65,7 +66,7 @@ public class DownloadResource {
     }
 
     ThankYouTemplate getImpl(String args) {
-        LOG.info("/download/thank-you page called with args: " + args);
+        LOG.info("/download/thank-you page called with args: {}", args);
         Map<DownloadArgumentGroup, String> versionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
         Binary binary = repository.getBinary(versionDetails);
         return new ThankYouTemplate(versionDetails, binary);

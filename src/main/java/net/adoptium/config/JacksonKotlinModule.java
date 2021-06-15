@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.kotlin.KotlinModule;
 import io.quarkus.jackson.ObjectMapperCustomizer;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Singleton;
@@ -18,7 +19,7 @@ import javax.inject.Singleton;
  */
 public class JacksonKotlinModule {
 
-    private static final Logger LOG = Logger.getLogger(JacksonKotlinModule.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JacksonKotlinModule.class);
 
     @Singleton
     public ObjectMapper objectMapper(Instance<ObjectMapperCustomizer> customizers) {

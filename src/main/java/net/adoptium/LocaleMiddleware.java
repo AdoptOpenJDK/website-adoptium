@@ -6,7 +6,8 @@ import io.vertx.core.http.Cookie;
 import io.vertx.ext.web.RoutingContext;
 import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.HeaderTemplate;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -18,7 +19,7 @@ import static io.quarkus.qute.i18n.MessageBundles.ATTRIBUTE_LOCALE;
  * Middleware run for all requests.
  */
 public class LocaleMiddleware {
-    private static final Logger LOG = Logger.getLogger(LocaleMiddleware.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LocaleMiddleware.class);
 
     /**
      * Defines how long the locale cookie should be stored in the client's browser.
@@ -59,7 +60,7 @@ public class LocaleMiddleware {
                 LOG.info("locale - using default");
                 localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, defaultLocale);
             } else {
-                LOG.info("locale - using Accept-Language: " + acceptLanguage);
+                LOG.info("locale - using Accept-Language: {}", acceptLanguage);
                 Locale parsedHeaderLocale = new LocaleConverter().convert(acceptLanguage);
                 if (parsedHeaderLocale == null) {
                     LOG.info("locale - bad Accept-Language, using default");

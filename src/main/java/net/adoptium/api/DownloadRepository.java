@@ -5,8 +5,9 @@ import net.adoptium.model.Download;
 import net.adoptium.utils.DownloadArgumentGroup;
 import net.adoptopenjdk.api.v3.models.*;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.jboss.logging.Logger;
 import org.jboss.resteasy.client.exception.ResteasyWebApplicationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -17,13 +18,21 @@ import static net.adoptium.utils.DownloadArgumentGroup.*;
 
 @ApplicationScoped
 public class DownloadRepository {
-    private static final Logger LOG = Logger.getLogger(DownloadRepository.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(DownloadRepository.class);
+
     public static final int RECOMMENDED_JAVA_VERSION = 11;
+
     public static final JvmImpl RECOMMENDED_JVM_IMPL = JvmImpl.hotspot;
+
     public static final ImageType RECOMMENDED_IMAGE_TYPE = ImageType.jdk;
+
     public static final Project RECOMMENDED_PROJECT = Project.jdk;
+
     public static final HeapSize RECOMMENDED_HEAP_SIZE = HeapSize.normal;
+
     public static final ReleaseType RECOMMENDED_RELEASE_TYPE = ReleaseType.ga;
+
     public static final Vendor RECOMMENDED_VENDOR = Vendor.adoptopenjdk;
 
     private final ApiService api;
@@ -109,7 +118,7 @@ public class DownloadRepository {
         if (binaries.length == 0) {
             throw new DownloadBinaryNotFoundException();
         } else if (binaries.length > 1) {
-            LOG.errorf("There are " + binaries.length + " binaries available! Expected just one. versionDetails: %s", versionDetails);
+            LOG.error("There are {} binaries available! Expected just one. versionDetails: {}",  binaries.length, versionDetails);
         }
         return binaries[0];
     }
