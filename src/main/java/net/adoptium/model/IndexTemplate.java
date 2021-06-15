@@ -1,13 +1,15 @@
 package net.adoptium.model;
 
 public class IndexTemplate {
-    private Download download;
+
+    private final Download download;
+
     private final String redirectPath;
 
     /**
      * if client os could not be detected, or no download for client platform is available
      */
-    private boolean error = false;
+    private final boolean error;
 
     /**
      * Constructor for error case, with no os/arch or binary set.
@@ -15,6 +17,7 @@ public class IndexTemplate {
      */
     public IndexTemplate() {
         this.error = true;
+        this.download = null;
         this.redirectPath = "/releases";
     }
 
@@ -24,7 +27,8 @@ public class IndexTemplate {
      * @param download     recommended downlaod for client
      * @param redirectPath absolut path to thank you page
      */
-    public IndexTemplate(Download download, String redirectPath) {
+    public IndexTemplate(final Download download, final String redirectPath) {
+        this.error = false;
         this.download = download;
         this.redirectPath = redirectPath;
     }

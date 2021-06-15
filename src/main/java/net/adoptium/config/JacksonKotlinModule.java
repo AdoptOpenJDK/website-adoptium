@@ -22,11 +22,11 @@ public class JacksonKotlinModule {
     private static final Logger LOG = LoggerFactory.getLogger(JacksonKotlinModule.class);
 
     @Singleton
-    public ObjectMapper objectMapper(Instance<ObjectMapperCustomizer> customizers) {
-        ObjectMapper mapper = new ObjectMapper(); // Custom `ObjectMapper`
+    public ObjectMapper objectMapper(final Instance<ObjectMapperCustomizer> customizers) {
+        final ObjectMapper mapper = new ObjectMapper(); // Custom `ObjectMapper`
 
         // Apply all ObjectMapperCustomizer beans (incl. Quarkus)
-        for (ObjectMapperCustomizer customizer : customizers) {
+        for (final ObjectMapperCustomizer customizer : customizers) {
             customizer.customize(mapper);
         }
 

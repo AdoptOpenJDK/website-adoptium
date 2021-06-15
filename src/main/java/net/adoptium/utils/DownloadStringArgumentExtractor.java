@@ -2,10 +2,10 @@ package net.adoptium.utils;
 
 import net.adoptium.exceptions.DownloadInvalidArgumentException;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static net.adoptium.utils.DownloadArgumentGroup.*;
 
@@ -30,28 +30,28 @@ public class DownloadStringArgumentExtractor {
      * windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9
      */
     private static final String REGEX_DOWNLOAD = "^(?<" + OS + ">[^-]*)-" +
-                                                "(?<" + ARCH + ">[^-]*)-" +
-                                                "(?<" + JVM_IMPL + ">[^-]*)-" +
-                                                "(?<" + IMAGE_TYPE + ">[^-]*)-" +
-                                                "(?<" + HEAP_SIZE + ">[^-]*)-" +
-                                                "(?<" + PROJECT + ">[^-]*)-" +
-                                                "(?<" + RELEASE_TYPE + ">[^-]*)-" +
-                                                "(?<" + VENDOR + ">[^-]*)-" +
-                                                "(?<" + VERSION + ">.*)$";
+            "(?<" + ARCH + ">[^-]*)-" +
+            "(?<" + JVM_IMPL + ">[^-]*)-" +
+            "(?<" + IMAGE_TYPE + ">[^-]*)-" +
+            "(?<" + HEAP_SIZE + ">[^-]*)-" +
+            "(?<" + PROJECT + ">[^-]*)-" +
+            "(?<" + RELEASE_TYPE + ">[^-]*)-" +
+            "(?<" + VENDOR + ">[^-]*)-" +
+            "(?<" + VERSION + ">.*)$";
 
     private static final Pattern DOWNLOAD_PATTERN = Pattern.compile(REGEX_DOWNLOAD, Pattern.CASE_INSENSITIVE);
 
-    public static Map<DownloadArgumentGroup, String> getVersionDetails(String stringVersionArguments)
+    public static Map<DownloadArgumentGroup, String> getVersionDetails(final String stringVersionArguments)
             throws DownloadInvalidArgumentException {
-        Matcher matcher = DOWNLOAD_PATTERN.matcher(stringVersionArguments);
-        if(!matcher.find()) throw new DownloadInvalidArgumentException();
+        final Matcher matcher = DOWNLOAD_PATTERN.matcher(stringVersionArguments);
+        if (!matcher.find()) throw new DownloadInvalidArgumentException();
         return extractArgumentsToMap(matcher);
     }
 
-    private static Map<DownloadArgumentGroup, String> extractArgumentsToMap(Matcher matcher) {
-        Map<DownloadArgumentGroup, String> versionDetails = new EnumMap<>(DownloadArgumentGroup.class);
-        for (DownloadArgumentGroup downloadArgGroup : DownloadArgumentGroup.values()) {
-            String argument = matcher.group(downloadArgGroup.toString());
+    private static Map<DownloadArgumentGroup, String> extractArgumentsToMap(final Matcher matcher) {
+        final Map<DownloadArgumentGroup, String> versionDetails = new EnumMap<>(DownloadArgumentGroup.class);
+        for (final DownloadArgumentGroup downloadArgGroup : DownloadArgumentGroup.values()) {
+            final String argument = matcher.group(downloadArgGroup.toString());
             versionDetails.put(downloadArgGroup, argument);
         }
         return versionDetails;

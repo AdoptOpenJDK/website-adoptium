@@ -49,15 +49,15 @@ public class UserAgentParser {
         defaultArchOfOS.put(OperatingSystem.valueOf("alpine-linux"), Architecture.x64);
     }
 
-    public static UserSystem getOsAndArch(String userAgent) {
+    public static UserSystem getOsAndArch(final String userAgent) {
         userAgent = userAgent.toLowerCase(Locale.ENGLISH);
-        OperatingSystem os = parseOS(userAgent);
+        final OperatingSystem os = parseOS(userAgent);
 
         // only call parseArch if os is not null
         return new UserSystem(os, os != null ? parseArch(userAgent, os) : null);
     }
 
-    private static Architecture parseArch(String ua, OperatingSystem os) {
+    private static Architecture parseArch(final String ua, final OperatingSystem os) {
         Architecture arch = (Architecture) getSupportedOsArchFromMap(ua, archMap);
         if (arch == null) {
             arch = setDefaultArchOfOS(os);
@@ -65,8 +65,8 @@ public class UserAgentParser {
         return arch;
     }
 
-    private static Architecture setDefaultArchOfOS(OperatingSystem os) {
-        for (Map.Entry<OperatingSystem, Architecture> defaultEntry : defaultArchOfOS.entrySet()) {
+    private static Architecture setDefaultArchOfOS(final OperatingSystem os) {
+        for (final Map.Entry<OperatingSystem, Architecture> defaultEntry : defaultArchOfOS.entrySet()) {
             if (os.equals(defaultEntry.getKey())) {
                 return defaultEntry.getValue();
             }
@@ -75,12 +75,12 @@ public class UserAgentParser {
     }
 
 
-    private static OperatingSystem parseOS(String ua) {
+    private static OperatingSystem parseOS(final String ua) {
         return (OperatingSystem) getSupportedOsArchFromMap(ua, osMap);
     }
 
-    private static Object getSupportedOsArchFromMap(String ua, Map<?, String[]> map) {
-        for (Map.Entry<?, String[]> entry : map.entrySet()) {
+    private static Object getSupportedOsArchFromMap(final String ua, final Map<?, String[]> map) {
+        for (final Map.Entry<?, String[]> entry : map.entrySet()) {
             for (int i = 0; i < entry.getValue().length; i++) {
                 if (ua.contains(entry.getValue()[i])) {
                     return entry.getKey();

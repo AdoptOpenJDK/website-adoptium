@@ -9,20 +9,24 @@ import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
 public class DocumentationTemplate {
+
     private final String docName;
+
     private final String locale;
+
     private final String defaultLocale;
+
     private final RawString contents;
 
-    public DocumentationTemplate(String docName, String locale, String defaultLocale) {
+    public DocumentationTemplate(final String docName, final String locale, final String defaultLocale) {
         this.docName = docName;
         this.locale = locale;
         this.defaultLocale = defaultLocale;
 
-        try (InputStream inputStream = DocumentationTemplate.class.getResourceAsStream(getDocPath());
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+        try (final InputStream inputStream = DocumentationTemplate.class.getResourceAsStream(getDocPath());
+             final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             contents = new RawString(reader.lines().collect(Collectors.joining(System.lineSeparator())));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new DocumentNotFoundException("Cannot find the \"" + getDocName() + "\" document in " + getDocPath());
         }
     }

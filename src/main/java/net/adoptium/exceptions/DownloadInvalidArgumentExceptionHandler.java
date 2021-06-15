@@ -17,17 +17,17 @@ import javax.ws.rs.ext.Provider;
 public class DownloadInvalidArgumentExceptionHandler implements ExceptionMapper<DownloadInvalidArgumentException> {
 
     @Inject
-    Engine engine;
+    private Engine engine;
 
     @Inject
-    RoutingContext rc;
+    private RoutingContext rc;
 
     @Override
     @Produces(MediaType.TEXT_HTML)
-    public Response toResponse(DownloadInvalidArgumentException exception) {
-        HeaderTemplate header = rc.get("header");
+    public Response toResponse(final DownloadInvalidArgumentException exception) {
+        final HeaderTemplate header = rc.get("header");
 
-        String template = DownloadResource.Templates.error(
+        final String template = DownloadResource.Templates.error(
                 new DownloadErrorTemplate(
                         getI18N(header.getLocale(), "exceptionVersionNotFound"), getI18N(header.getLocale(), "exceptionGenericHint")
                 ))
@@ -37,12 +37,12 @@ public class DownloadInvalidArgumentExceptionHandler implements ExceptionMapper<
 
     /**
      * TODO: as soon as <a href="https://github.com/quarkusio/quarkus/issues/12792">quarkus issue #12792</a> is resolved,
-     *       all ExceptionHandlers can be cleaned up
-     *       as of 18.05.2020, it's merged in main
+     * all ExceptionHandlers can be cleaned up
+     * as of 18.05.2020, it's merged in main
      * Qute does not support converting a string id inside a template variable to it's translation.
      * {msg:exceptionGenericHint} works, {msg:{variable-name}} (and similar) cannot be resolved.
      */
-    private String getI18N(String locale, String id) {
+    private String getI18N(final String locale, final String id) {
         return engine.parse("{msg:" + id + "}").instance().setAttribute("locale", locale).render();
     }
 }

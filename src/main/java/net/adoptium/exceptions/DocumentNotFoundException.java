@@ -4,7 +4,7 @@ import javax.ws.rs.WebApplicationException;
 
 public class DocumentNotFoundException extends WebApplicationException {
 
-    public DocumentNotFoundException(String message) {
+    public DocumentNotFoundException(final String message) {
         super(message);
     }
 }
