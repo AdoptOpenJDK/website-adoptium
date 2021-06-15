@@ -38,10 +38,10 @@ public class MemberResource {
     private boolean canLoadJSON = true;
 
     @Inject
-    private Template members;
+    Template members;
 
     @Inject
-    private RoutingContext routingContext;
+    RoutingContext routingContext;
 
     public MemberResource() {
         setUpMembers(JSON_PATH);

@@ -17,11 +17,15 @@ import javax.ws.rs.core.MediaType;
 @Path("/documentation")
 public class DocumentationResource {
 
-    @Inject
-    private ApplicationConfig appConfig;
+    private final ApplicationConfig appConfig;
+
+    private final RoutingContext routingContext;
 
     @Inject
-    private RoutingContext routingContext;
+    public DocumentationResource(final ApplicationConfig appConfig, final RoutingContext routingContext) {
+        this.appConfig = appConfig;
+        this.routingContext = routingContext;
+    }
 
     /**
      * Checked Templates ensure type-safety in html templating.

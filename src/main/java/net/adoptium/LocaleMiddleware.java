@@ -19,7 +19,7 @@ import static io.quarkus.qute.i18n.MessageBundles.ATTRIBUTE_LOCALE;
  * Middleware run for all requests.
  */
 public class LocaleMiddleware {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(LocaleMiddleware.class);
 
     /**
@@ -28,8 +28,12 @@ public class LocaleMiddleware {
      */
     private static final long LOCALE_COOKIE_LIFETIME = 60 * 60 * 24 * 360L;
 
+    private final ApplicationConfig appConfig;
+
     @Inject
-    private ApplicationConfig appConfig;
+    public LocaleMiddleware(final ApplicationConfig appConfig) {
+        this.appConfig = appConfig;
+    }
 
     /**
      * Determines the language to use for the client when rendering.

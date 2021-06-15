@@ -1,7 +1,6 @@
 package net.adoptium;
 
 import net.adoptium.api.DownloadRepository;
-import net.adoptium.config.ApplicationConfig;
 import net.adoptium.exceptions.DownloadInvalidArgumentException;
 import net.adoptium.model.ThankYouTemplate;
 import net.adoptium.utils.DownloadArgumentGroup;
@@ -12,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,28 +22,28 @@ class DownloadResourceUnitTest {
 
     @Test
     void testDownloadLink() {
-        String args = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9";
+        final String args = "windows-x64-hotspot-jdk-normal-jdk-ga-adoptopenjdk-11.0.10+9";
 
         // mockBinary is effectively ignored, as long as ThankYouTemplate is populated with the correct link
         // using args as downloadLink to ensure it's unique per test
-        Binary mockBinary = new Binary(new Package(
+        final Binary mockBinary = new Binary(new Package(
                 "", args, 1, "", "", 1, "", ""
         ), 1, new DateTime(new Date()), null, null, HeapSize.normal, OperatingSystem.linux, Architecture.x64, ImageType.jdk, JvmImpl.hotspot, Project.jdk);
 
         // parse download arguments so we can mock getBinary with the correct parameters
-        Map<DownloadArgumentGroup, String> expectedVersionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
+        final Map<DownloadArgumentGroup, String> expectedVersionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
         Mockito.when(mockRepository.getBinary(expectedVersionDetails)).thenReturn(mockBinary);
 
-        DownloadResource download = new DownloadResource(mockRepository);
+        final DownloadResource download = new DownloadResource(mockRepository, null);
 
-        ThankYouTemplate got = download.getImpl(args);
+        final ThankYouTemplate got = download.getImpl(args);
         assertThat(got.getDownloadLink()).isEqualTo(args);
     }
 
     @Test
     void testArgParsingMissingArg() {
-        String args = "windows-x64-hotspot-jdk-jdk-ga-adoptopenjdk-11.0.10+9";
-        DownloadResource download = new DownloadResource(mockRepository);
+        final String args = "windows-x64-hotspot-jdk-jdk-ga-adoptopenjdk-11.0.10+9";
+        final DownloadResource download = new DownloadResource(mockRepository, null);
 
         assertThatThrownBy(() -> download.getImpl(args)).isExactlyInstanceOf(DownloadInvalidArgumentException.class);
     }

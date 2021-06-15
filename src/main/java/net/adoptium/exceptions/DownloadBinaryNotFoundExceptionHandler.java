@@ -17,10 +17,10 @@ import javax.ws.rs.ext.Provider;
 public class DownloadBinaryNotFoundExceptionHandler implements ExceptionMapper<DownloadBinaryNotFoundException> {
 
     @Inject
-    private Engine engine;
+    Engine engine;
 
     @Inject
-    private RoutingContext rc;
+    RoutingContext rc;
 
     @Override
     @Produces(MediaType.TEXT_HTML)

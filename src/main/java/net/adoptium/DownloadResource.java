@@ -27,8 +27,8 @@ public class DownloadResource {
 
     private final DownloadRepository repository;
 
-    @Inject
-    private RoutingContext routingContext;
+    private final RoutingContext routingContext;
+
 
     /**
      * Checked Templates ensure type-safety in html templating.
@@ -49,8 +49,9 @@ public class DownloadResource {
     }
 
     @Inject
-    public DownloadResource(final DownloadRepository repository) {
+    public DownloadResource(final DownloadRepository repository, final RoutingContext routingContext) {
         this.repository = repository;
+        this.routingContext = routingContext;
     }
 
     /**

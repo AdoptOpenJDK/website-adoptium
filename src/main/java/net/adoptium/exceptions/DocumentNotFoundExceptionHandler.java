@@ -20,10 +20,10 @@ import javax.ws.rs.ext.Provider;
 public class DocumentNotFoundExceptionHandler implements ExceptionMapper<DocumentNotFoundException> {
 
     @Inject
-    private Engine engine;
+    Engine engine;
 
     @Inject
-    private RoutingContext rc;
+    RoutingContext rc;
 
     @Override
     @Produces(MediaType.TEXT_HTML)

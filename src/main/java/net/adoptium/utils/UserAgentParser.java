@@ -50,11 +50,11 @@ public class UserAgentParser {
     }
 
     public static UserSystem getOsAndArch(final String userAgent) {
-        userAgent = userAgent.toLowerCase(Locale.ENGLISH);
-        final OperatingSystem os = parseOS(userAgent);
+        final String userAgentLowerCase = userAgent.toLowerCase(Locale.ENGLISH);
+        final OperatingSystem os = parseOS(userAgentLowerCase);
 
         // only call parseArch if os is not null
-        return new UserSystem(os, os != null ? parseArch(userAgent, os) : null);
+        return new UserSystem(os, os != null ? parseArch(userAgentLowerCase, os) : null);
     }
 
     private static Architecture parseArch(final String ua, final OperatingSystem os) {

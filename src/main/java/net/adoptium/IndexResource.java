@@ -25,8 +25,7 @@ public class IndexResource {
 
     private final DownloadRepository repository;
 
-    @Inject
-    private RoutingContext routingContext;
+    private final RoutingContext routingContext;
 
     /**
      * Checked Templates ensure type-safety in html templating.
@@ -45,8 +44,9 @@ public class IndexResource {
     }
 
     @Inject
-    public IndexResource(final DownloadRepository repository) {
+    public IndexResource(final DownloadRepository repository, final RoutingContext routingContext) {
         this.repository = repository;
+        this.routingContext = routingContext;
     }
 
     /**
