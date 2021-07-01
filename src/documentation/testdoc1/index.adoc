@@ -8,7 +8,7 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 == ENGLISH TESTDOC1 (1st Level Heading)
 
-This is some example text. Please ignore.
+This is some text. Please ignore.
 
 image::testdoc1/1.png[I am the image alt text.]
 image::testdocshared/share.jpg[I am the image alt text.]
