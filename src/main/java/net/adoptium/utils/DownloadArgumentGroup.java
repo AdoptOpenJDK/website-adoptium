@@ -17,7 +17,7 @@ public enum DownloadArgumentGroup {
 
     private final String groupName;
 
-    DownloadArgumentGroup(String groupName) {
+    DownloadArgumentGroup(final String groupName) {
         this.groupName = groupName;
     }
 

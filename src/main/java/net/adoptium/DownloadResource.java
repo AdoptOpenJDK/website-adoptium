@@ -9,8 +9,9 @@ import net.adoptium.model.ThankYouTemplate;
 import net.adoptium.utils.DownloadArgumentGroup;
 import net.adoptium.utils.DownloadStringArgumentExtractor;
 import net.adoptopenjdk.api.v3.models.Binary;
-import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -21,11 +22,13 @@ import java.util.Map;
 
 @Path("/download")
 public class DownloadResource {
-    private static final Logger LOG = Logger.getLogger(DownloadResource.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(DownloadResource.class);
+
     private final DownloadRepository repository;
 
-    @Inject
-    RoutingContext routingContext;
+    private final RoutingContext routingContext;
+
 
     /**
      * Checked Templates ensure type-safety in html templating.
@@ -46,8 +49,9 @@ public class DownloadResource {
     }
 
     @Inject
-    public DownloadResource(DownloadRepository repository) {
+    public DownloadResource(final DownloadRepository repository, final RoutingContext routingContext) {
         this.repository = repository;
+        this.routingContext = routingContext;
     }
 
     /**
@@ -59,15 +63,15 @@ public class DownloadResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("thank-you/{args}")
-    public TemplateInstance get(@PathParam("args") String args) {
-        ThankYouTemplate template = getImpl(args);
+    public TemplateInstance get(@PathParam("args") final String args) {
+        final ThankYouTemplate template = getImpl(args);
         return Templates.download(template).data("header", routingContext.get("header"));
     }
 
-    ThankYouTemplate getImpl(String args) {
-        LOG.info("/download/thank-you page called with args: " + args);
-        Map<DownloadArgumentGroup, String> versionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
-        Binary binary = repository.getBinary(versionDetails);
+    ThankYouTemplate getImpl(final String args) {
+        LOG.info("/download/thank-you page called with args: {}", args);
+        final Map<DownloadArgumentGroup, String> versionDetails = DownloadStringArgumentExtractor.getVersionDetails(args);
+        final Binary binary = repository.getBinary(versionDetails);
         return new ThankYouTemplate(versionDetails, binary);
     }
 }

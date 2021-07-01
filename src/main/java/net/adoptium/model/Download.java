@@ -9,10 +9,12 @@ import java.util.Objects;
  * This is what we effectively pass to /thank-you/{binary}
  */
 public class Download {
+
     private final Binary binary;
+
     private final String semver;
 
-    public Download(Binary binary, String semver) {
+    public Download(final Binary binary, final String semver) {
         this.binary = binary;
         this.semver = semver;
     }
@@ -34,10 +36,10 @@ public class Download {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Download download = (Download) o;
+        final Download download = (Download) o;
         return binary.equals(download.binary) && semver.equals(download.semver);
     }
 

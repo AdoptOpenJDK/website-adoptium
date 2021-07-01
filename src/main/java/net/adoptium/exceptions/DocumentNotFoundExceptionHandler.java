@@ -27,10 +27,10 @@ public class DocumentNotFoundExceptionHandler implements ExceptionMapper<Documen
 
     @Override
     @Produces(MediaType.TEXT_HTML)
-    public Response toResponse(DocumentNotFoundException exception) {
-        HeaderTemplate header = rc.get("header");
+    public Response toResponse(final DocumentNotFoundException exception) {
+        final HeaderTemplate header = rc.get("header");
 
-        String template = DownloadResource.Templates.error(
+        final String template = DownloadResource.Templates.error(
                 new DownloadErrorTemplate(
                         getI18N(header.getLocale(), "exceptionFileNotFound"), getI18N(header.getLocale(), "exceptionGenericHint")
                 ))
@@ -45,7 +45,7 @@ public class DocumentNotFoundExceptionHandler implements ExceptionMapper<Documen
      * Qute does not support converting a string id inside a template variable to it's translation.
      * {msg:exceptionGenericHint} works, {msg:{variable-name}} (and similar) cannot be resolved.
      */
-    private String getI18N(String locale, String id) {
+    private String getI18N(final String locale, final String id) {
         return engine.parse("{msg:" + id + "}").instance().setAttribute("locale", locale).render();
     }
 }

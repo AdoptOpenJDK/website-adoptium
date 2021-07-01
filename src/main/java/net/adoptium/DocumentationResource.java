@@ -17,11 +17,15 @@ import javax.ws.rs.core.MediaType;
 @Path("/documentation")
 public class DocumentationResource {
 
-    @Inject
-    ApplicationConfig appConfig;
+    private final ApplicationConfig appConfig;
+
+    private final RoutingContext routingContext;
 
     @Inject
-    RoutingContext routingContext;
+    public DocumentationResource(final ApplicationConfig appConfig, final RoutingContext routingContext) {
+        this.appConfig = appConfig;
+        this.routingContext = routingContext;
+    }
 
     /**
      * Checked Templates ensure type-safety in html templating.
@@ -40,8 +44,8 @@ public class DocumentationResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/{doc-name}")
-    public TemplateInstance get(@PathParam("doc-name") String docName, @HeaderParam("Accept-Language") String acceptLanguage) {
-        DocumentationTemplate template = new DocumentationTemplate(docName, acceptLanguage, appConfig.getDefaultLocale().getLanguage());
+    public TemplateInstance get(@PathParam("doc-name") final String docName, @HeaderParam("Accept-Language") final String acceptLanguage) {
+        final DocumentationTemplate template = new DocumentationTemplate(docName, acceptLanguage, appConfig.getDefaultLocale().getLanguage());
         return DocumentationResource.Templates.documentation(template).data("header", routingContext.get("header"));
     }
 }

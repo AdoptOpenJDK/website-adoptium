@@ -17,16 +17,16 @@ class IndexResourceUnitTest {
 
     @Test
     void testNoDownloadAvailable() {
-        DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
+        final DownloadRepository mockRepository = Mockito.mock(DownloadRepository.class);
 
         // OperatingSystem, Architecture, etc. don't matter
-        Download mockDownload = new Download(new Binary(
+        final Download mockDownload = new Download(new Binary(
                 new Package("mock-package", "", 1, "", "", 1, "", ""),
                 1, new DateTime(new Date()), null, null, HeapSize.normal,
                 OperatingSystem.linux, Architecture.x64, ImageType.jdk, JvmImpl.hotspot, Project.jdk),
                 "1.0.0"
         );
-        String mockThankYouPath = "/mock-thank-you-path";
+        final String mockThankYouPath = "/mock-thank-you-path";
 
         // define which downloads exist
         Mockito.when(mockRepository.getUserDownload(OperatingSystem.linux, Architecture.x64)).thenReturn(mockDownload);
@@ -34,7 +34,7 @@ class IndexResourceUnitTest {
 
         Mockito.when(mockRepository.buildThankYouPath(mockDownload)).thenReturn(mockThankYouPath);
 
-        IndexResource index = new IndexResource(mockRepository);
+        final IndexResource index = new IndexResource(mockRepository, null);
 
         // welcomeMainText and errorText are mutually exclusive, if welcomeMainText is shown there was no error
         IndexTemplate got = index.getImpl("linux x64");

@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Locale;
 
 public class HeaderTemplate {
+
     private final List<Locale> locales;
+
     private final String locale;
 
-    public HeaderTemplate(List<Locale> locales, String locale) {
+    public HeaderTemplate(final List<Locale> locales, final String locale) {
         this.locales = locales;
         this.locale = locale;
     }

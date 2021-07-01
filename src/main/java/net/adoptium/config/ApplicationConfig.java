@@ -9,13 +9,14 @@ import java.util.Locale;
 
 @ApplicationScoped
 public class ApplicationConfig {
-    List<Locale> locales;
 
-    Locale defaultLocale;
+    private final List<Locale> locales;
+
+    private final Locale defaultLocale;
 
     @Inject
-    public ApplicationConfig(@ConfigProperty(name = "quarkus.locales") List<Locale> locales,
-                             @ConfigProperty(name = "quarkus.default-locale") Locale defaultLocale) {
+    public ApplicationConfig(@ConfigProperty(name = "quarkus.locales") final List<Locale> locales,
+                             @ConfigProperty(name = "quarkus.default-locale") final Locale defaultLocale) {
         this.locales = locales;
         this.defaultLocale = defaultLocale;
     }

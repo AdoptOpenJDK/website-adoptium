@@ -6,7 +6,8 @@ import io.vertx.core.http.Cookie;
 import io.vertx.ext.web.RoutingContext;
 import net.adoptium.config.ApplicationConfig;
 import net.adoptium.model.HeaderTemplate;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -18,7 +19,8 @@ import static io.quarkus.qute.i18n.MessageBundles.ATTRIBUTE_LOCALE;
  * Middleware run for all requests.
  */
 public class LocaleMiddleware {
-    private static final Logger LOG = Logger.getLogger(LocaleMiddleware.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(LocaleMiddleware.class);
 
     /**
      * Defines how long the locale cookie should be stored in the client's browser.
@@ -26,8 +28,12 @@ public class LocaleMiddleware {
      */
     private static final long LOCALE_COOKIE_LIFETIME = 60 * 60 * 24 * 360L;
 
+    private final ApplicationConfig appConfig;
+
     @Inject
-    ApplicationConfig appConfig;
+    public LocaleMiddleware(final ApplicationConfig appConfig) {
+        this.appConfig = appConfig;
+    }
 
     /**
      * Determines the language to use for the client when rendering.
@@ -44,11 +50,11 @@ public class LocaleMiddleware {
      * @param rc current RoutineContext
      */
     @RouteFilter
-    public void localeMiddleware(RoutingContext rc) {
-        String defaultLocale = appConfig.getDefaultLocale().getLanguage();
+    public void localeMiddleware(final RoutingContext rc) {
+        final String defaultLocale = appConfig.getDefaultLocale().getLanguage();
         Cookie localeCookie = rc.getCookie(ATTRIBUTE_LOCALE);
 
-        List<String> localeQuery = rc.queryParam(ATTRIBUTE_LOCALE);
+        final List<String> localeQuery = rc.queryParam(ATTRIBUTE_LOCALE);
         if (!localeQuery.isEmpty())
             localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, localeQuery.get(0));
 
@@ -59,8 +65,8 @@ public class LocaleMiddleware {
                 LOG.info("locale - using default");
                 localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, defaultLocale);
             } else {
-                LOG.info("locale - using Accept-Language: " + acceptLanguage);
-                Locale parsedHeaderLocale = new LocaleConverter().convert(acceptLanguage);
+                LOG.info("locale - using Accept-Language: {}", acceptLanguage);
+                final Locale parsedHeaderLocale = new LocaleConverter().convert(acceptLanguage);
                 if (parsedHeaderLocale == null) {
                     LOG.info("locale - bad Accept-Language, using default");
                     localeCookie = Cookie.cookie(ATTRIBUTE_LOCALE, defaultLocale);
@@ -74,7 +80,7 @@ public class LocaleMiddleware {
             }
         }
 
-        HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), localeCookie.getValue());
+        final HeaderTemplate header = new HeaderTemplate(appConfig.getLocales(), localeCookie.getValue());
         rc.put("header", header);
 
         localeCookie.setPath("/");
